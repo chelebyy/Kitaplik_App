@@ -1,24 +1,26 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  TextInput, 
-  TouchableOpacity, 
-  Image, 
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Image,
   FlatList,
   Platform,
   StatusBar
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search, Plus, MoreVertical, Filter, Bookmark, Sun, Moon } from 'lucide-react-native';
+import { Search, Plus, MoreVertical, Sun, Moon, Sparkles, User } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../../context/ThemeContext';
 import { useBooks, Book } from '../../context/BooksContext';
+import RecommendationModal from '../../components/RecommendationModal';
+import ProfileModal from '../../components/ProfileModal';
 
 // Görseldeki tasarıma özel renk paleti (Sabit renkler)
 const DASHBOARD_COLORS = {
-  accent: '#F79009', 
+  accent: '#F79009',
   blueAccent: '#448AFF',
   fab: '#0F172A'
 };
@@ -27,23 +29,24 @@ const CATEGORIES = ['Tümü', 'Roman', 'Bilim Kurgu', 'Tarih', 'Fantastik', 'Ki�
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { colors, toggleTheme, isDarkMode } = useTheme(); 
+  const { colors, toggleTheme, isDarkMode } = useTheme();
   const { books } = useBooks();
-  
+
   const [activeCategory, setActiveCategory] = useState('Tümü');
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Yeni Filtre State'i: Sadece 'Okunuyor' olanları göster
-  const [showOnlyReading, setShowOnlyReading] = useState(false);
+  const [isRecommendationModalVisible, setRecommendationModalVisible] = useState(false);
+  const [isProfileModalVisible, setProfileModalVisible] = useState(false);
+
+
 
   // İstatistik Hesaplama
   const stats = useMemo(() => {
     const totalBooks = books.length;
-    const uniqueAuthors = new Set(books.map(b => b.author)).size;
     const readBooks = books.filter(b => b.status === 'Okundu').length;
+    const readingBooks = books.filter(b => b.status === 'Okunuyor').length;
     const toReadBooks = books.filter(b => b.status === 'Okunacak').length;
 
-    return { totalBooks, uniqueAuthors, readBooks, toReadBooks };
+    return { totalBooks, readBooks, readingBooks, toReadBooks };
   }, [books]);
 
   // Filtreleme Mantığı
@@ -51,18 +54,15 @@ export default function HomeScreen() {
     return books.filter(book => {
       // 1. Kategori Filtresi
       const matchesCategory = activeCategory === 'Tümü' || book.genre === activeCategory;
-      
+
       // 2. Arama Filtresi
-      const matchesSearch = 
-        book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      const matchesSearch =
+        book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         book.author.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      // 3. "Sadece Okunanlar" Filtresi (Buton ile tetiklenir)
-      const matchesStatus = showOnlyReading ? book.status === 'Okunuyor' : true;
-      
-      return matchesCategory && matchesSearch && matchesStatus;
+
+      return matchesCategory && matchesSearch;
     });
-  }, [books, activeCategory, searchQuery, showOnlyReading]);
+  }, [books, activeCategory, searchQuery]);
 
   const handleBookPress = (book: Book) => {
     router.push({
@@ -71,9 +71,7 @@ export default function HomeScreen() {
     });
   };
 
-  const toggleFilter = () => {
-    setShowOnlyReading(!showOnlyReading);
-  };
+
 
   // --- Alt Bileşenler ---
 
@@ -81,20 +79,40 @@ export default function HomeScreen() {
     <View style={styles.headerContainer}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Text style={[styles.dashboardTitle, { color: colors.text }]}>Yönetim Paneli</Text>
-        
-        {/* Karanlık Mod Toggle Butonu */}
-        <TouchableOpacity 
-          onPress={toggleTheme}
-          style={[styles.themeButton, { backgroundColor: colors.card, borderColor: colors.border }]}
-          activeOpacity={0.7}
-        >
-          {isDarkMode ? (
-            <Sun size={22} color={colors.text} />
-          ) : (
-            <Moon size={22} color={colors.text} />
-          )}
-        </TouchableOpacity>
+        <Text style={[styles.dashboardTitle, { color: colors.text }]}>Kitaplığım</Text>
+
+        <View style={{ flexDirection: 'row', gap: 12 }}>
+          {/* Profil Butonu */}
+          <TouchableOpacity
+            onPress={() => setProfileModalVisible(true)}
+            style={[styles.themeButton, { backgroundColor: colors.card, borderColor: colors.border }]}
+            activeOpacity={0.7}
+          >
+            <User size={20} color={colors.text} />
+          </TouchableOpacity>
+
+          {/* Öneri Butonu */}
+          <TouchableOpacity
+            onPress={() => setRecommendationModalVisible(true)}
+            style={[styles.themeButton, { backgroundColor: colors.card, borderColor: colors.border }]}
+            activeOpacity={0.7}
+          >
+            <Sparkles size={20} color="#F79009" />
+          </TouchableOpacity>
+
+          {/* Karanlık Mod Toggle Butonu */}
+          <TouchableOpacity
+            onPress={toggleTheme}
+            style={[styles.themeButton, { backgroundColor: colors.card, borderColor: colors.border }]}
+            activeOpacity={0.7}
+          >
+            {isDarkMode ? (
+              <Sun size={22} color={colors.text} />
+            ) : (
+              <Moon size={22} color={colors.text} />
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Search Bar */}
@@ -113,34 +131,22 @@ export default function HomeScreen() {
 
       {/* Summary Card */}
       <View style={[styles.summaryCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-        <Text style={[styles.summaryTitle, { color: colors.text }]}>Kütüphane Özeti</Text>
-        
-        <View style={styles.statsGrid}>
-          {/* Row 1 */}
-          <View style={styles.statsRow}>
-            <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Toplam Kitap</Text>
-              <Text style={[styles.statValue, { color: colors.text }]}>{stats.totalBooks}</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Farklı Yazar</Text>
-              <Text style={[styles.statValue, { color: colors.text }]}>{stats.uniqueAuthors}</Text>
-            </View>
+        <View style={styles.statsRow}>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Tüm Kitaplar</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>{stats.totalBooks}</Text>
           </View>
-
-          {/* Row 2 */}
-          <View style={[styles.statsRow, { marginTop: 20 }]}>
-            <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Okunan Cilt</Text>
-              <Text style={[styles.statValue, { color: colors.text }]}>{stats.readBooks}</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Okunacak</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={[styles.statValue, { color: colors.text }]}>{stats.toReadBooks}</Text>
-                <Bookmark size={16} color={DASHBOARD_COLORS.blueAccent} fill={DASHBOARD_COLORS.blueAccent} style={{ marginLeft: 6, marginTop: 2 }} />
-              </View>
-            </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Okunan</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>{stats.readBooks}</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Okunuyor</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>{stats.readingBooks}</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Okunacak</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>{stats.toReadBooks}</Text>
           </View>
         </View>
       </View>
@@ -148,28 +154,9 @@ export default function HomeScreen() {
       {/* Section Header & Filters */}
       <View style={styles.sectionHeader}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          {showOnlyReading ? 'Okunuyor' : (activeCategory === 'Tümü' ? 'Tüm Kitaplar' : activeCategory)}
+          {activeCategory === 'Tümü' ? 'Tüm Kitaplar' : activeCategory}
         </Text>
-        <TouchableOpacity 
-          style={[
-            styles.filterButton, 
-            showOnlyReading ? { backgroundColor: colors.primary } : { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.border }
-          ]}
-          onPress={toggleFilter}
-          activeOpacity={0.7}
-        >
-          <Filter 
-            size={16} 
-            color={showOnlyReading ? '#FFFFFF' : colors.textSecondary} 
-            style={{ marginRight: 4 }} 
-          />
-          <Text style={[
-            styles.filterButtonText,
-            { color: showOnlyReading ? '#FFFFFF' : colors.textSecondary }
-          ]}>
-            {showOnlyReading ? 'Filtreyi Kaldır' : 'Filtrele'}
-          </Text>
-        </TouchableOpacity>
+
       </View>
 
       {/* Horizontal Categories */}
@@ -185,8 +172,8 @@ export default function HomeScreen() {
             <TouchableOpacity
               style={[
                 styles.categoryChip,
-                isActive 
-                  ? { backgroundColor: colors.primary, borderColor: colors.primary } 
+                isActive
+                  ? { backgroundColor: colors.primary, borderColor: colors.primary }
                   : { backgroundColor: colors.card, borderColor: colors.border }
               ]}
               onPress={() => setActiveCategory(item)}
@@ -207,16 +194,16 @@ export default function HomeScreen() {
   const renderBookItem = ({ item }: { item: Book }) => {
     // İlerleme yüzdesi (0-100)
     const progressPercent = Math.round((item.progress || 0) * 100);
-    
+
     return (
-      <TouchableOpacity 
+      <TouchableOpacity
         style={[styles.bookCard, { backgroundColor: colors.card, borderColor: colors.border }]}
         onPress={() => handleBookPress(item)}
         activeOpacity={0.9}
       >
         <View style={styles.bookCoverWrapper}>
-          <Image 
-            source={{ uri: item.coverUrl }} 
+          <Image
+            source={{ uri: item.coverUrl }}
             style={[styles.bookCover, { backgroundColor: colors.background }]}
             resizeMode="cover"
           />
@@ -250,11 +237,11 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
-      <StatusBar 
-        barStyle={isDarkMode ? "light-content" : "dark-content"} 
-        backgroundColor={colors.background} 
+      <StatusBar
+        barStyle={isDarkMode ? "light-content" : "dark-content"}
+        backgroundColor={colors.background}
       />
-      
+
       <FlatList
         data={filteredBooks}
         keyExtractor={(item) => item.id}
@@ -265,22 +252,30 @@ export default function HomeScreen() {
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyText}>
-              {showOnlyReading 
-                ? 'Şu an okuduğunuz bir kitap bulunmuyor.' 
-                : 'Bu kriterlere uygun kitap bulunamadı.'}
+              Bu kriterlere uygun kitap bulunamadı.
             </Text>
           </View>
         }
       />
 
       {/* Floating Action Button */}
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.fab}
         onPress={() => router.push('/add-book')}
         activeOpacity={0.8}
       >
         <Plus size={32} color="#FFFFFF" />
       </TouchableOpacity>
+
+      <RecommendationModal
+        visible={isRecommendationModalVisible}
+        onClose={() => setRecommendationModalVisible(false)}
+      />
+
+      <ProfileModal
+        visible={isProfileModalVisible}
+        onClose={() => setProfileModalVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -342,8 +337,8 @@ const styles = StyleSheet.create({
   summaryCard: {
     marginHorizontal: 20,
     borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
+    padding: 16,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
@@ -351,31 +346,25 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderWidth: 1,
   },
-  summaryTitle: {
-    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 20,
-  },
-  statsGrid: {
-    gap: 0,
-  },
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   statItem: {
     flex: 1,
+    alignItems: 'center',
   },
   statLabel: {
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
-    fontSize: 13,
+    fontSize: 11,
     color: '#667085',
     marginBottom: 6,
+    textAlign: 'center',
   },
   statValue: {
     fontFamily: 'Inter_700Bold',
-    fontSize: 24,
+    fontSize: 20,
+    textAlign: 'center',
   },
   // Section Header
   sectionHeader: {
@@ -390,17 +379,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: -0.5,
-  },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  filterButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 14,
   },
   // Categories
   categoriesList: {

@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  TextInput, 
-  TouchableOpacity, 
-  ScrollView, 
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
   Platform,
   KeyboardAvoidingView,
   Alert,
   ActivityIndicator,
   FlatList,
-  Image
+  Image,
+  ActionSheetIOS
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, Image as ImageIcon, ChevronDown, Search, BookOpen, PenTool } from 'lucide-react-native';
+import { ArrowLeft, Image as ImageIcon, ChevronDown, Search, BookOpen, PenTool, ScanLine } from 'lucide-react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useBooks, BookStatus } from '../context/BooksContext';
+import * as ImagePicker from 'expo-image-picker';
+import BarcodeScannerModal from '../components/BarcodeScannerModal';
 
 type InputMode = 'manual' | 'search';
 
@@ -30,6 +33,10 @@ interface GoogleBookResult {
       thumbnail: string;
     };
     categories?: string[];
+    industryIdentifiers?: {
+      type: string;
+      identifier: string;
+    }[];
   };
 }
 
@@ -37,7 +44,7 @@ export default function AddBookScreen() {
   const router = useRouter();
   const { colors, isDarkMode } = useTheme();
   const { addBook } = useBooks();
-  
+
   // Mode State
   const [mode, setMode] = useState<InputMode>('manual');
 
@@ -53,13 +60,99 @@ export default function AddBookScreen() {
   const [searchResults, setSearchResults] = useState<GoogleBookResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Scanner State
+  const [isScannerVisible, setScannerVisible] = useState(false);
+
   const statuses: BookStatus[] = ['Okunacak', 'Okunuyor', 'Okundu'];
 
+  const requestPermissions = async () => {
+    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status: libraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (cameraStatus !== 'granted' || libraryStatus !== 'granted') {
+      Alert.alert('İzin Gerekli', 'Fotoğraf çekmek veya yüklemek için kamera ve galeri izinlerine ihtiyacımız var.');
+      return false;
+    }
+    return true;
+  };
+
+  const pickImage = async () => {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) return;
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [2, 3],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setCoverUrl(result.assets[0].uri);
+    }
+  };
+
+  const takePhoto = async () => {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) return;
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [2, 3],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setCoverUrl(result.assets[0].uri);
+    }
+  };
+
   const handleUpload = () => {
-    // Gerçek bir uygulamada burada ImagePicker kullanılır
-    // Şimdilik rastgele bir resim atayalım
-    setCoverUrl('https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400&h=600');
-    Alert.alert('Bilgi', 'Örnek bir kapak resmi eklendi.');
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ['İptal', 'Fotoğraf Çek', 'Galeriden Seç'],
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) {
+            takePhoto();
+          } else if (buttonIndex === 2) {
+            pickImage();
+          }
+        }
+      );
+    } else {
+      Alert.alert(
+        'Kapak Fotoğrafı Ekle',
+        'Lütfen bir yöntem seçin',
+        [
+          { text: 'İptal', style: 'cancel' },
+          { text: 'Fotoğraf Çek', onPress: takePhoto },
+          { text: 'Galeriden Seç', onPress: pickImage },
+        ]
+      );
+    }
+  };
+
+  const handleBarcodeScanned = async (isbn: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+      const data = await response.json();
+
+      if (data.items && data.items.length > 0) {
+        const book = data.items[0];
+        selectBook(book);
+        Alert.alert('Başarılı', 'Kitap bilgileri barkoddan çekildi.');
+      } else {
+        Alert.alert('Bulunamadı', 'Bu barkoda ait kitap bulunamadı.');
+      }
+    } catch (error) {
+      Alert.alert('Hata', 'Kitap bilgileri getirilirken bir hata oluştu.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSave = () => {
@@ -104,13 +197,13 @@ export default function AddBookScreen() {
   const selectBook = (book: GoogleBookResult) => {
     setTitle(book.volumeInfo.title || '');
     setAuthor(book.volumeInfo.authors ? book.volumeInfo.authors[0] : '');
-    
+
     let image = book.volumeInfo.imageLinks?.thumbnail;
     if (image) {
       image = image.replace('http://', 'https://');
     }
     setCoverUrl(image || null);
-    
+
     if (book.volumeInfo.categories && book.volumeInfo.categories.length > 0) {
       setGenre(book.volumeInfo.categories[0]);
     }
@@ -155,12 +248,12 @@ export default function AddBookScreen() {
             ) : null
           }
           renderItem={({ item }) => (
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.resultItem, { backgroundColor: colors.card }]}
               onPress={() => selectBook(item)}
             >
-              <Image 
-                source={{ uri: item.volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://') || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/100x150/png' }} 
+              <Image
+                source={{ uri: item.volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://') || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/100x150/png' }}
                 style={styles.resultImage}
                 resizeMode="cover"
               />
@@ -190,22 +283,31 @@ export default function AddBookScreen() {
   );
 
   const renderManualMode = () => (
-    <ScrollView 
+    <ScrollView
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
+      {/* Scan Barcode Button */}
+      <TouchableOpacity
+        style={[styles.scanButton, { backgroundColor: colors.card, borderColor: colors.primary }]}
+        onPress={() => setScannerVisible(true)}
+      >
+        <ScanLine size={20} color={colors.primary} style={{ marginRight: 8 }} />
+        <Text style={[styles.scanButtonText, { color: colors.primary }]}>Barkod Tara (Otomatik Doldur)</Text>
+      </TouchableOpacity>
+
       {/* Cover Upload Area */}
       <View style={[styles.uploadContainer, { backgroundColor: isDarkMode ? colors.card : '#F8F9FA', borderColor: colors.border }]}>
         {coverUrl ? (
-           <View style={styles.previewContainer}>
-             <Image source={{ uri: coverUrl }} style={styles.coverPreview} resizeMode="contain" />
-             <TouchableOpacity 
-                style={[styles.removeCoverButton, { backgroundColor: 'rgba(0,0,0,0.6)' }]} 
-                onPress={() => setCoverUrl(null)}
-             >
-               <Text style={{ color: '#FFF', fontSize: 12, fontFamily: 'Inter_600SemiBold' }}>Kaldır</Text>
-             </TouchableOpacity>
-           </View>
+          <View style={styles.previewContainer}>
+            <Image source={{ uri: coverUrl }} style={styles.coverPreview} resizeMode="contain" />
+            <TouchableOpacity
+              style={[styles.removeCoverButton, { backgroundColor: 'rgba(0,0,0,0.6)' }]}
+              onPress={() => setCoverUrl(null)}
+            >
+              <Text style={{ color: '#FFF', fontSize: 12, fontFamily: 'Inter_600SemiBold' }}>Kaldır</Text>
+            </TouchableOpacity>
+          </View>
         ) : (
           <>
             <View style={[styles.uploadIconCircle, { backgroundColor: colors.iconBackground }]}>
@@ -246,12 +348,12 @@ export default function AddBookScreen() {
       <View style={styles.formGroup}>
         <Text style={[styles.label, { color: colors.text }]}>Tür</Text>
         <View style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 0, height: 50 }]}>
-          <TextInput 
-             style={{ flex: 1, color: colors.text, height: '100%', fontFamily: 'Inter_400Regular' }}
-             placeholder="Tür girin (Örn: Roman)"
-             placeholderTextColor={colors.placeholder}
-             value={genre}
-             onChangeText={setGenre}
+          <TextInput
+            style={{ flex: 1, color: colors.text, height: '100%', fontFamily: 'Inter_400Regular' }}
+            placeholder="Tür girin (Örn: Roman)"
+            placeholderTextColor={colors.placeholder}
+            value={genre}
+            onChangeText={setGenre}
           />
           <ChevronDown size={20} color={colors.textSecondary} />
         </View>
@@ -294,19 +396,19 @@ export default function AddBookScreen() {
           <ArrowLeft size={24} color={colors.text} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: colors.text }]}>Yeni Kitap Ekle</Text>
-        <View style={{ width: 24 }} /> 
+        <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.modeSwitcherContainer}>
         <View style={[styles.modeSwitcher, { backgroundColor: colors.chipBackground }]}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.modeButton, mode === 'manual' && { backgroundColor: colors.card, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 2, elevation: 2 }]}
             onPress={() => setMode('manual')}
           >
             <PenTool size={16} color={mode === 'manual' ? colors.primary : colors.textSecondary} style={{ marginRight: 6 }} />
             <Text style={[styles.modeText, { color: mode === 'manual' ? colors.text : colors.textSecondary }]}>Manuel</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.modeButton, mode === 'search' && { backgroundColor: colors.card, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 2, elevation: 2 }]}
             onPress={() => setMode('search')}
           >
@@ -316,7 +418,7 @@ export default function AddBookScreen() {
         </View>
       </View>
 
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
@@ -324,8 +426,8 @@ export default function AddBookScreen() {
 
         {mode === 'manual' && (
           <View style={[styles.footer, { backgroundColor: colors.background, borderTopColor: colors.border }]}>
-            <TouchableOpacity 
-              style={styles.saveButton} 
+            <TouchableOpacity
+              style={styles.saveButton}
               onPress={handleSave}
             >
               <Text style={styles.saveButtonText}>Kaydet</Text>
@@ -333,6 +435,19 @@ export default function AddBookScreen() {
           </View>
         )}
       </KeyboardAvoidingView>
+
+      <BarcodeScannerModal
+        visible={isScannerVisible}
+        onClose={() => setScannerVisible(false)}
+        onScan={handleBarcodeScanned}
+      />
+
+      {isLoading && mode === 'manual' && (
+        <View style={[styles.loadingOverlay, { backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+          <ActivityIndicator size="large" color="#FFF" />
+          <Text style={{ color: '#FFF', marginTop: 10, fontFamily: 'Inter_600SemiBold' }}>Kitap bilgileri getiriliyor...</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -383,4 +498,7 @@ const styles = StyleSheet.create({
   footer: { position: 'absolute', bottom: 0, left: 0, right: 0, paddingHorizontal: 24, paddingBottom: Platform.OS === 'ios' ? 34 : 24, paddingTop: 16, borderTopWidth: 1 },
   saveButton: { backgroundColor: '#1E88E5', borderRadius: 12, paddingVertical: 16, alignItems: 'center', shadowColor: '#1E88E5', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
   saveButtonText: { fontFamily: 'Inter_700Bold', fontSize: 16, color: '#FFFFFF' },
+  scanButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 12, borderRadius: 12, borderWidth: 1, marginBottom: 24, borderStyle: 'dashed' },
+  scanButtonText: { fontFamily: 'Inter_600SemiBold', fontSize: 14 },
+  loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
 });

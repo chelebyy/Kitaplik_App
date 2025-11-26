@@ -1,4 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from './AuthContext';
+import { FirestoreService } from '../services/FirestoreService';
 
 export type BookStatus = 'Okunacak' | 'Okunuyor' | 'Okundu';
 
@@ -70,43 +74,119 @@ const INITIAL_BOOKS: Book[] = [
 ];
 
 export function BooksProvider({ children }: { children: React.ReactNode }) {
-  const [books, setBooks] = useState<Book[]>(INITIAL_BOOKS);
+  const { user } = useAuth();
+  const [books, setBooks] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const addBook = (newBookData: Omit<Book, 'id' | 'addedAt'>) => {
+  // Load books based on Auth state
+  useEffect(() => {
+    const loadBooks = async () => {
+      setIsLoading(true);
+      try {
+        if (user) {
+          // Logged In: Load from Firestore
+          const cloudBooks = await FirestoreService.getBooks(user.uid);
+
+          // Check for local books to sync (Migration scenario)
+          const localBooksJson = await AsyncStorage.getItem('books');
+          if (localBooksJson) {
+            const localBooks = JSON.parse(localBooksJson);
+            if (localBooks.length > 0) {
+              // Merge local books to cloud
+              await FirestoreService.syncLocalToCloud(user.uid, localBooks);
+
+              // Refetch to get merged data
+              const mergedBooks = await FirestoreService.getBooks(user.uid);
+              setBooks(mergedBooks);
+
+              // Clear local books to prevent confusion
+              await AsyncStorage.removeItem('books');
+            } else {
+              setBooks(cloudBooks);
+            }
+          } else {
+            setBooks(cloudBooks);
+          }
+        } else {
+          // Guest: Load from AsyncStorage
+          const storedBooks = await AsyncStorage.getItem('books');
+          if (storedBooks) {
+            setBooks(JSON.parse(storedBooks));
+          } else {
+            setBooks(INITIAL_BOOKS);
+            await AsyncStorage.setItem('books', JSON.stringify(INITIAL_BOOKS));
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load books:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadBooks();
+  }, [user]);
+
+  // Save books (Effect for Local Storage only)
+  useEffect(() => {
+    const saveLocal = async () => {
+      if (!user && !isLoading) {
+        await AsyncStorage.setItem('books', JSON.stringify(books));
+      }
+    };
+    saveLocal();
+  }, [books, user, isLoading]);
+
+  const addBook = async (newBookData: Omit<Book, 'id' | 'addedAt'>) => {
     const newBook: Book = {
-      ...newBookData,
-      id: Date.now().toString(), // Basit ID oluşturma
+      id: Date.now().toString(),
       addedAt: Date.now(),
+      ...newBookData,
       progress: newBookData.status === 'Okundu' ? 1 : (newBookData.progress || 0),
     };
+
     setBooks(prev => [newBook, ...prev]);
+
+    if (user) {
+      await FirestoreService.saveBook(user.uid, newBook);
+    }
   };
 
-  const updateBookStatus = (id: string, status: BookStatus) => {
+  const updateBookStatus = async (id: string, status: BookStatus) => {
     setBooks(prev => prev.map(book => {
       if (book.id === id) {
-        return { 
-          ...book, 
+        const updatedBook = {
+          ...book,
           status,
           progress: status === 'Okundu' ? 1 : (status === 'Okunacak' ? 0 : book.progress)
         };
+        if (user) {
+          FirestoreService.saveBook(user.uid, updatedBook);
+        }
+        return updatedBook;
       }
       return book;
     }));
   };
 
-  const updateBookNotes = (id: string, notes: string) => {
-    setBooks(prev => prev.map(book => 
-      book.id === id ? { ...book, notes } : book
-    ));
+  const updateBookNotes = async (id: string, notes: string) => {
+    setBooks(prev => prev.map(book => {
+      if (book.id === id) {
+        const updatedBook = { ...book, notes };
+        if (user) {
+          FirestoreService.saveBook(user.uid, updatedBook);
+        }
+        return updatedBook;
+      }
+      return book;
+    }));
   };
 
-  const deleteBook = (id: string) => {
-    // Güvenli silme işlemi: ID'si eşleşmeyenleri filtrele
-    setBooks(prev => {
-      const updated = prev.filter(book => book.id !== id);
-      return updated;
-    });
+  const deleteBook = async (id: string) => {
+    setBooks(prev => prev.filter(book => book.id !== id));
+    if (user) {
+      await FirestoreService.deleteBook(user.uid, id);
+    }
   };
 
   const getBookById = (id: string) => {

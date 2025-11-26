@@ -5,10 +5,11 @@ import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@e
 import { View, ActivityIndicator } from 'react-native';
 import { ThemeProvider, useTheme } from '../context/ThemeContext';
 import { BooksProvider } from '../context/BooksContext';
+import { AuthProvider } from '../context/AuthContext';
 
 function RootLayoutContent() {
   const { isDarkMode } = useTheme();
-  
+
   return (
     <>
       <Stack screenOptions={{ headerShown: false }}>
@@ -41,9 +42,11 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <BooksProvider>
-        <RootLayoutContent />
-      </BooksProvider>
+      <AuthProvider>
+        <BooksProvider>
+          <RootLayoutContent />
+        </BooksProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

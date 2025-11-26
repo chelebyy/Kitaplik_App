@@ -1,22 +1,37 @@
 {
-    "expo": {
-      "name": "react-native-expo-starter",
-      "slug": "react-native-expo-starter",
-      "version": "1.0.0",
-      "orientation": "portrait",
-      "scheme": "myapp",
-      "userInterfaceStyle": "automatic",
-      "newArchEnabled": true,
-      "ios": {
-        "supportsTablet": true
-      },
-      "web": {
-        "bundler": "metro",
-        "output": "single",
-      },
-      "plugins": ["expo-router"],
-      "experiments": {
-        "typedRoutes": true
-      }
+  "expo": {
+    "name": "react-native-expo-starter",
+    "slug": "react-native-expo-starter",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Kitap kapağı seçmek için galeriye erişim izni gerekiyor.",
+          "cameraPermission": "Kitap kapağı çekmek için kameraya erişim izni gerekiyor."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Barkod taramak için kameraya erişim izni gerekiyor."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
     }
   }
+}
