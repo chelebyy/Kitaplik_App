@@ -23,19 +23,19 @@ export const RecommendationService = {
      * Fetches a recommendation from Google Books API based on a genre.
      * If no genre is provided, it defaults to 'Fiction'.
      */
-    getDiscoveryRecommendation: async (genre: string = 'Roman'): Promise<Book | null> => {
+    getDiscoveryRecommendation: async (genre: string = 'Roman', excludedTitles: string[] = []): Promise<Book | null> => {
         try {
             console.log(`[RecommendationService] Searching for genre: ${genre}`);
 
             // 1. Try specific genre with Turkish language restriction
-            let searchUrl = `${GOOGLE_BOOKS_API_URL}?q=subject:${encodeURIComponent(genre)}&langRestrict=tr&orderBy=relevance&maxResults=20&printType=books`;
+            let searchUrl = `${GOOGLE_BOOKS_API_URL}?q=subject:${encodeURIComponent(genre)}&langRestrict=tr&orderBy=relevance&maxResults=40&printType=books`;
             let response = await fetch(searchUrl);
             let data = await response.json();
 
             // 2. Fallback: Try without language restriction
             if (!data.items || data.items.length === 0) {
                 console.log('[RecommendationService] No results with TR filter, trying global...');
-                searchUrl = `${GOOGLE_BOOKS_API_URL}?q=subject:${encodeURIComponent(genre)}&orderBy=relevance&maxResults=20&printType=books`;
+                searchUrl = `${GOOGLE_BOOKS_API_URL}?q=subject:${encodeURIComponent(genre)}&orderBy=relevance&maxResults=40&printType=books`;
                 response = await fetch(searchUrl);
                 data = await response.json();
             }
@@ -43,7 +43,7 @@ export const RecommendationService = {
             // 3. Fallback: Try generic query (just the genre name)
             if (!data.items || data.items.length === 0) {
                 console.log('[RecommendationService] No results with subject, trying generic query...');
-                searchUrl = `${GOOGLE_BOOKS_API_URL}?q=${encodeURIComponent(genre)}&maxResults=20&printType=books`;
+                searchUrl = `${GOOGLE_BOOKS_API_URL}?q=${encodeURIComponent(genre)}&maxResults=40&printType=books`;
                 response = await fetch(searchUrl);
                 data = await response.json();
             }
@@ -53,9 +53,20 @@ export const RecommendationService = {
                 return null;
             }
 
-            // Pick a random book from the results
-            const randomIndex = Math.floor(Math.random() * data.items.length);
-            const item = data.items[randomIndex];
+            // Filter out books that are in the excluded list
+            const candidates = data.items.filter((item: any) => {
+                const title = item.volumeInfo.title;
+                return title && !excludedTitles.some(excluded => excluded.toLowerCase() === title.toLowerCase());
+            });
+
+            if (candidates.length === 0) {
+                console.log('[RecommendationService] All found books are already in the library.');
+                return null;
+            }
+
+            // Pick a random book from the candidates
+            const randomIndex = Math.floor(Math.random() * candidates.length);
+            const item = candidates[randomIndex];
             const volumeInfo = item.volumeInfo;
 
             // Map Google Books API result to our Book interface
@@ -69,6 +80,8 @@ export const RecommendationService = {
                 progress: 0,
                 addedAt: Date.now(),
                 notes: volumeInfo.description || '',
+                pageCount: volumeInfo.pageCount || 0,
+                currentPage: 0,
             };
         } catch (error) {
             console.error('[RecommendationService] Error fetching recommendation:', error);

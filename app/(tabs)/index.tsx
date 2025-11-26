@@ -25,19 +25,17 @@ const DASHBOARD_COLORS = {
   fab: '#0F172A'
 };
 
-const CATEGORIES = ['Tümü', 'Roman', 'Bilim Kurgu', 'Tarih', 'Fantastik', 'Kişisel Gelişim'];
+const FILTERS = ['Tümü', 'Okunuyor', 'Okunacak', 'Okundu'];
 
 export default function HomeScreen() {
   const router = useRouter();
   const { colors, toggleTheme, isDarkMode } = useTheme();
   const { books } = useBooks();
 
-  const [activeCategory, setActiveCategory] = useState('Tümü');
+  const [activeFilter, setActiveFilter] = useState('Tümü');
   const [searchQuery, setSearchQuery] = useState('');
   const [isRecommendationModalVisible, setRecommendationModalVisible] = useState(false);
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
-
-
 
   // İstatistik Hesaplama
   const stats = useMemo(() => {
@@ -52,17 +50,17 @@ export default function HomeScreen() {
   // Filtreleme Mantığı
   const filteredBooks = useMemo(() => {
     return books.filter(book => {
-      // 1. Kategori Filtresi
-      const matchesCategory = activeCategory === 'Tümü' || book.genre === activeCategory;
+      // 1. Durum Filtresi
+      const matchesStatus = activeFilter === 'Tümü' || book.status === activeFilter;
 
       // 2. Arama Filtresi
       const matchesSearch =
         book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         book.author.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchesCategory && matchesSearch;
+      return matchesStatus && matchesSearch;
     });
-  }, [books, activeCategory, searchQuery]);
+  }, [books, activeFilter, searchQuery]);
 
   const handleBookPress = (book: Book) => {
     router.push({
@@ -70,8 +68,6 @@ export default function HomeScreen() {
       params: { id: book.id }
     });
   };
-
-
 
   // --- Alt Bileşenler ---
 
@@ -154,29 +150,24 @@ export default function HomeScreen() {
       {/* Section Header & Filters */}
       <View style={styles.sectionHeader}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          {activeCategory === 'Tümü' ? 'Tüm Kitaplar' : activeCategory}
+          {activeFilter === 'Tümü' ? 'Tüm Kitaplar' : activeFilter}
         </Text>
-
       </View>
 
       {/* Horizontal Categories */}
-      <FlatList
-        data={CATEGORIES}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.categoriesList}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => {
-          const isActive = activeCategory === item;
+      <View style={styles.filterContainer}>
+        {FILTERS.map((item) => {
+          const isActive = activeFilter === item;
           return (
             <TouchableOpacity
+              key={item}
               style={[
                 styles.categoryChip,
                 isActive
                   ? { backgroundColor: colors.primary, borderColor: colors.primary }
                   : { backgroundColor: colors.card, borderColor: colors.border }
               ]}
-              onPress={() => setActiveCategory(item)}
+              onPress={() => setActiveFilter(item)}
             >
               <Text style={[
                 styles.categoryText,
@@ -186,14 +177,34 @@ export default function HomeScreen() {
               </Text>
             </TouchableOpacity>
           );
-        }}
-      />
+        })}
+      </View>
     </View>
   );
 
   const renderBookItem = ({ item }: { item: Book }) => {
-    // İlerleme yüzdesi (0-100)
-    const progressPercent = Math.round((item.progress || 0) * 100);
+    const isReading = item.status === 'Okunuyor';
+
+    // Calculate progress display
+    let progressText = '';
+    let progressPercent = item.progress || 0;
+
+    if (item.status === 'Okundu') {
+      progressPercent = 1;
+      progressText = 'Tamamlandı';
+    } else if (item.status === 'Okunacak') {
+      progressPercent = 0;
+      progressText = 'Henüz başlanmadı';
+    } else {
+      // Reading status
+      if (item.pageCount && item.currentPage !== undefined) {
+        progressText = `${item.currentPage} / ${item.pageCount} Sayfa`;
+        // Ensure percent is accurate based on pages if available
+        progressPercent = item.pageCount > 0 ? item.currentPage / item.pageCount : 0;
+      } else {
+        progressText = `%${Math.round(progressPercent * 100)}`;
+      }
+    }
 
     return (
       <TouchableOpacity
@@ -222,14 +233,27 @@ export default function HomeScreen() {
 
           <View style={styles.progressContainer}>
             <View style={[styles.progressBarBg, { backgroundColor: isDarkMode ? '#333' : '#F2F4F7' }]}>
-              <View style={[styles.progressBarFill, { width: `${progressPercent}%`, backgroundColor: colors.primary }]} />
+              <View
+                style={[
+                  styles.progressBarFill,
+                  {
+                    width: `${Math.min(Math.max(progressPercent * 100, 0), 100)}%`,
+                    backgroundColor: item.status === 'Okundu' ? '#4CAF50' : colors.primary
+                  }
+                ]}
+              />
             </View>
-            <Text style={styles.progressText}>{progressPercent}%</Text>
+            <View style={styles.statusRow}>
+              <Text style={styles.lastReadText}>
+                Durum: <Text style={{ fontWeight: '600', color: colors.text }}>{item.status}</Text>
+              </Text>
+              {isReading && (
+                <Text style={[styles.progressText, { color: colors.textSecondary, fontSize: 11 }]}>
+                  {progressText}
+                </Text>
+              )}
+            </View>
           </View>
-
-          <Text style={styles.lastReadText}>
-            Durum: <Text style={{ fontWeight: '600', color: colors.text }}>{item.status}</Text>
-          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -381,20 +405,24 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   // Categories
-  categoriesList: {
+  filterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    marginBottom: 20,
   },
   categoryChip: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 24,
-    marginRight: 12,
     borderWidth: 1,
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: 4,
   },
   categoryText: {
     fontFamily: 'Inter_500Medium',
-    fontSize: 14,
+    fontSize: 12,
   },
   // Book Card
   bookCard: {
@@ -444,59 +472,58 @@ const styles = StyleSheet.create({
     color: '#667085',
   },
   progressContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginTop: 8,
   },
   progressBarBg: {
-    flex: 1,
     height: 6,
     borderRadius: 3,
-    marginRight: 12,
+    marginBottom: 6,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
     borderRadius: 3,
   },
+  statusRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   progressText: {
     fontFamily: 'Inter_500Medium',
     fontSize: 12,
     color: '#667085',
-    width: 35,
-    textAlign: 'right',
   },
   lastReadText: {
     fontFamily: 'Inter_400Regular',
     fontSize: 12,
-    color: '#98A2B3',
-    marginTop: 8,
-  },
-  // Empty State
-  emptyState: {
-    padding: 40,
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontFamily: 'Inter_400Regular',
     color: '#667085',
-    textAlign: 'center',
   },
   // FAB
   fab: {
     position: 'absolute',
     bottom: 24,
     right: 24,
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: DASHBOARD_COLORS.fab,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  emptyState: {
+    padding: 40,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    color: '#667085',
+    textAlign: 'center',
   },
 });

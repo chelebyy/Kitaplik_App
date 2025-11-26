@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  Image, 
-  TouchableOpacity, 
-  ScrollView, 
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
   TextInput,
   Platform,
   KeyboardAvoidingView,
@@ -21,19 +21,23 @@ export default function BookDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { colors } = useTheme();
-  const { getBookById, updateBookStatus, updateBookNotes, deleteBook } = useBooks();
-  
+  const { getBookById, updateBookStatus, updateBookNotes, updateBookProgress, deleteBook } = useBooks();
+
   // params.id'yi güvenli bir şekilde al
   const bookId = Array.isArray(params.id) ? params.id[0] : params.id;
-  
+
   // Kitap verisini al
   const book = getBookById(bookId || '');
 
   const [notes, setNotes] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
 
   useEffect(() => {
     if (book) {
       setNotes(book.notes || '');
+      setCurrentPage(book.currentPage || 0);
+      setPageCount(book.pageCount || 0);
     }
   }, [book]);
 
@@ -64,6 +68,18 @@ export default function BookDetailScreen() {
     updateBookNotes(bookId, text);
   };
 
+  const handleProgressChange = (current: string, total: string) => {
+    if (!bookId) return;
+
+    const currentNum = parseInt(current) || 0;
+    const totalNum = parseInt(total) || 0;
+
+    setCurrentPage(currentNum);
+    setPageCount(totalNum);
+
+    updateBookProgress(bookId, currentNum, totalNum);
+  };
+
   const handleDelete = () => {
     if (!bookId) return;
 
@@ -72,20 +88,15 @@ export default function BookDetailScreen() {
       'Bu kitabı kütüphanenizden silmek istediğinize emin misiniz?',
       [
         { text: 'Vazgeç', style: 'cancel' },
-        { 
-          text: 'Sil', 
-          style: 'destructive', 
+        {
+          text: 'Sil',
+          style: 'destructive',
           onPress: () => {
-            // Önce sayfadan çık, sonra silme işlemini gerçekleştir
-            // Bu sıralama kullanıcı deneyimi açısından daha akıcıdır
             if (router.canGoBack()) {
               router.back();
             } else {
               router.replace('/(tabs)/books');
             }
-            
-            // Navigasyon başladıktan hemen sonra sil
-            // setTimeout kullanmadan doğrudan çağırıyoruz, context güncellemesi arkaplanda olur
             deleteBook(bookId);
           }
         }
@@ -107,17 +118,17 @@ export default function BookDetailScreen() {
         </TouchableOpacity>
       </View>
 
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
-        <ScrollView 
+        <ScrollView
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.imageContainer}>
-            <Image 
-              source={{ uri: book.coverUrl }} 
+            <Image
+              source={{ uri: book.coverUrl }}
               style={styles.coverImage}
               resizeMode="cover"
             />
@@ -126,7 +137,7 @@ export default function BookDetailScreen() {
           <View style={styles.infoContainer}>
             <Text style={[styles.bookTitle, { color: colors.text }]} numberOfLines={2}>{book.title}</Text>
             <Text style={[styles.bookAuthor, { color: colors.textSecondary }]}>{book.author}</Text>
-            
+
             <View style={styles.tagsContainer}>
               <View style={[styles.tagChip, { backgroundColor: colors.chipBackground }]}>
                 <Text style={[styles.tagText, { color: colors.text }]}>{book.genre || 'Genel'}</Text>
@@ -161,6 +172,56 @@ export default function BookDetailScreen() {
           </View>
 
           <View style={styles.sectionContainer}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <Text style={[styles.sectionLabel, { color: colors.sectionHeader, marginBottom: 0 }]}>İlerleme</Text>
+              <Text style={{ fontFamily: 'Inter_500Medium', color: colors.textSecondary, fontSize: 14 }}>
+                {book.currentPage || 0} / {book.pageCount || 0} Sayfa
+              </Text>
+            </View>
+
+            <View style={[styles.progressCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              {/* Progress Bar */}
+              <View style={[styles.progressBarBg, { backgroundColor: colors.border }]}>
+                <View
+                  style={[
+                    styles.progressBarFill,
+                    {
+                      width: `${Math.min(((book.currentPage || 0) / (book.pageCount || 1)) * 100, 100)}%`,
+                      backgroundColor: book.status === 'Okundu' ? '#4CAF50' : colors.primary
+                    }
+                  ]}
+                />
+              </View>
+
+              {/* Inputs */}
+              <View style={styles.progressInputsRow}>
+                <View style={{ flex: 1, marginRight: 12 }}>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Şu Anki Sayfa</Text>
+                  <TextInput
+                    style={[styles.progressInput, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.border }]}
+                    value={String(currentPage)}
+                    onChangeText={(text) => handleProgressChange(text, String(pageCount))}
+                    keyboardType="numeric"
+                    placeholder="0"
+                    placeholderTextColor={colors.placeholder}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Toplam Sayfa</Text>
+                  <TextInput
+                    style={[styles.progressInput, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.border }]}
+                    value={String(pageCount)}
+                    onChangeText={(text) => handleProgressChange(String(currentPage), text)}
+                    keyboardType="numeric"
+                    placeholder="0"
+                    placeholderTextColor={colors.placeholder}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.sectionContainer}>
             <Text style={[styles.sectionLabel, { color: colors.sectionHeader }]}>Notlarım</Text>
             <View style={[styles.notesContainer, { backgroundColor: colors.noteBackground }]}>
               <TextInput
@@ -186,7 +247,7 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24, paddingVertical: 16 },
   headerTitle: { fontFamily: 'Inter_700Bold', fontSize: 20 },
-  iconButton: { padding: 8 }, // Tıklama alanını artırdım
+  iconButton: { padding: 8 },
   content: { paddingHorizontal: 24, paddingBottom: 24 },
   imageContainer: { alignItems: 'center', marginTop: 16, marginBottom: 24, shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.15, shadowRadius: 20, elevation: 10 },
   coverImage: { width: 180, height: 270, borderRadius: 12, backgroundColor: '#E0E0E0' },
@@ -204,4 +265,10 @@ const styles = StyleSheet.create({
   statusButtonText: { fontFamily: 'Inter_600SemiBold', fontSize: 14 },
   notesContainer: { borderRadius: 16, padding: 16, minHeight: 150 },
   notesInput: { fontFamily: 'Inter_400Regular', fontSize: 15, lineHeight: 24, height: '100%' },
+  progressCard: { borderRadius: 16, padding: 16, borderWidth: 1 },
+  progressBarBg: { height: 8, borderRadius: 4, marginBottom: 16, overflow: 'hidden' },
+  progressBarFill: { height: '100%', borderRadius: 4 },
+  progressInputsRow: { flexDirection: 'row' },
+  inputLabel: { fontFamily: 'Inter_500Medium', fontSize: 12, marginBottom: 8 },
+  progressInput: { borderWidth: 1, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 10, fontFamily: 'Inter_600SemiBold', fontSize: 14 },
 });

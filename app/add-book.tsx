@@ -33,6 +33,7 @@ interface GoogleBookResult {
       thumbnail: string;
     };
     categories?: string[];
+    pageCount?: number;
     industryIdentifiers?: {
       type: string;
       identifier: string;
@@ -53,6 +54,8 @@ export default function AddBookScreen() {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [genre, setGenre] = useState('');
+  const [pageCount, setPageCount] = useState('');
+  const [currentPage, setCurrentPage] = useState('');
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
 
   // Search State
@@ -161,13 +164,25 @@ export default function AddBookScreen() {
       return;
     }
 
+    const totalPages = parseInt(pageCount) || 0;
+    const current = parseInt(currentPage) || 0;
+
+    let progress = 0;
+    if (status === 'Okundu') {
+      progress = 1;
+    } else if (status === 'Okunuyor' && totalPages > 0) {
+      progress = Math.min(current / totalPages, 1);
+    }
+
     addBook({
       title,
       author,
       status,
       genre: genre || 'Genel',
       coverUrl: coverUrl || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400&h=600',
-      progress: status === 'Okundu' ? 1 : 0,
+      progress,
+      pageCount: totalPages,
+      currentPage: status === 'Okundu' ? totalPages : current,
     });
 
     Alert.alert('Başarılı', 'Kitap kütüphanenize eklendi!');
@@ -206,6 +221,10 @@ export default function AddBookScreen() {
 
     if (book.volumeInfo.categories && book.volumeInfo.categories.length > 0) {
       setGenre(book.volumeInfo.categories[0]);
+    }
+
+    if (book.volumeInfo.pageCount) {
+      setPageCount(book.volumeInfo.pageCount.toString());
     }
 
     setMode('manual');
@@ -270,6 +289,11 @@ export default function AddBookScreen() {
                       {item.volumeInfo.categories[0]}
                     </Text>
                   </View>
+                )}
+                {item.volumeInfo.pageCount && (
+                  <Text style={[styles.resultPageCount, { color: colors.textSecondary }]}>
+                    {item.volumeInfo.pageCount} Sayfa
+                  </Text>
                 )}
               </View>
               <View style={styles.selectButtonContainer}>
@@ -345,17 +369,30 @@ export default function AddBookScreen() {
         />
       </View>
 
-      <View style={styles.formGroup}>
-        <Text style={[styles.label, { color: colors.text }]}>Tür</Text>
-        <View style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 0, height: 50 }]}>
+      <View style={styles.row}>
+        <View style={[styles.formGroup, { flex: 1, marginRight: 12 }]}>
+          <Text style={[styles.label, { color: colors.text }]}>Tür</Text>
+          <View style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 0, height: 50 }]}>
+            <TextInput
+              style={{ flex: 1, color: colors.text, height: '100%', fontFamily: 'Inter_400Regular' }}
+              placeholder="Tür girin (Örn: Roman)"
+              placeholderTextColor={colors.placeholder}
+              value={genre}
+              onChangeText={setGenre}
+            />
+          </View>
+        </View>
+
+        <View style={[styles.formGroup, { flex: 1 }]}>
+          <Text style={[styles.label, { color: colors.text }]}>Sayfa Sayısı</Text>
           <TextInput
-            style={{ flex: 1, color: colors.text, height: '100%', fontFamily: 'Inter_400Regular' }}
-            placeholder="Tür girin (Örn: Roman)"
+            style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
+            placeholder="Toplam"
             placeholderTextColor={colors.placeholder}
-            value={genre}
-            onChangeText={setGenre}
+            value={pageCount}
+            onChangeText={setPageCount}
+            keyboardType="numeric"
           />
-          <ChevronDown size={20} color={colors.textSecondary} />
         </View>
       </View>
 
@@ -384,6 +421,20 @@ export default function AddBookScreen() {
           })}
         </View>
       </View>
+
+      {status === 'Okunuyor' && (
+        <View style={styles.formGroup}>
+          <Text style={[styles.label, { color: colors.text }]}>Şu Anki Sayfa</Text>
+          <TextInput
+            style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
+            placeholder="Kaçıncı sayfadasınız?"
+            placeholderTextColor={colors.placeholder}
+            value={currentPage}
+            onChangeText={setCurrentPage}
+            keyboardType="numeric"
+          />
+        </View>
+      )}
 
       <View style={{ height: 100 }} />
     </ScrollView>
@@ -478,6 +529,7 @@ const styles = StyleSheet.create({
   resultAuthor: { fontFamily: 'Inter_400Regular', fontSize: 13, marginBottom: 6 },
   resultTag: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4 },
   resultTagText: { fontSize: 10, fontFamily: 'Inter_500Medium' },
+  resultPageCount: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 4 },
   selectButtonContainer: { paddingLeft: 8 },
   uploadContainer: { borderWidth: 1.5, borderStyle: 'dashed', borderRadius: 16, padding: 32, alignItems: 'center', marginBottom: 32, minHeight: 200, justifyContent: 'center' },
   previewContainer: { width: '100%', alignItems: 'center' },
@@ -489,6 +541,7 @@ const styles = StyleSheet.create({
   uploadButton: { paddingHorizontal: 32, paddingVertical: 10, borderRadius: 8 },
   uploadButtonText: { fontFamily: 'Inter_600SemiBold', fontSize: 14 },
   formGroup: { marginBottom: 24 },
+  row: { flexDirection: 'row', alignItems: 'center' },
   label: { fontFamily: 'Inter_600SemiBold', fontSize: 16, marginBottom: 12 },
   input: { borderWidth: 1, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 14, fontFamily: 'Inter_400Regular', fontSize: 16 },
   statusContainer: { flexDirection: 'row', borderRadius: 12, padding: 4 },

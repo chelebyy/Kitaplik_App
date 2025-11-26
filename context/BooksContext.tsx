@@ -13,7 +13,9 @@ export interface Book {
   status: BookStatus;
   coverUrl: string;
   genre?: string;
-  progress?: number; // 0 ile 1 arası
+  progress?: number; // 0 ile 1 arası (Yüzdelik gösterim için korunuyor)
+  pageCount?: number; // Toplam sayfa sayısı
+  currentPage?: number; // Şu anki sayfa
   notes?: string;
   addedAt: number;
 }
@@ -23,6 +25,7 @@ interface BooksContextType {
   addBook: (book: Omit<Book, 'id' | 'addedAt'>) => void;
   updateBookStatus: (id: string, status: BookStatus) => void;
   updateBookNotes: (id: string, notes: string) => void;
+  updateBookProgress: (id: string, currentPage: number, pageCount: number) => void;
   deleteBook: (id: string) => void;
   getBookById: (id: string) => Book | undefined;
 }
@@ -39,6 +42,8 @@ const INITIAL_BOOKS: Book[] = [
     coverUrl: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400&h=600',
     genre: 'Roman',
     progress: 0.6,
+    pageCount: 110,
+    currentPage: 66,
     addedAt: Date.now(),
   },
   {
@@ -49,6 +54,8 @@ const INITIAL_BOOKS: Book[] = [
     coverUrl: 'https://images.unsplash.com/photo-1535905557558-afc4877a26fc?auto=format&fit=crop&q=80&w=400&h=600',
     genre: 'Bilim Kurgu',
     progress: 0.2,
+    pageCount: 350,
+    currentPage: 70,
     addedAt: Date.now() - 10000,
   },
   {
@@ -59,6 +66,8 @@ const INITIAL_BOOKS: Book[] = [
     coverUrl: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=400&h=600',
     genre: 'Roman',
     progress: 1,
+    pageCount: 188,
+    currentPage: 188,
     addedAt: Date.now() - 20000,
   },
   {
@@ -69,6 +78,8 @@ const INITIAL_BOOKS: Book[] = [
     coverUrl: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400&h=600',
     genre: 'Bilim Kurgu',
     progress: 0,
+    pageCount: 712,
+    currentPage: 0,
     addedAt: Date.now() - 30000,
   },
 ];
@@ -182,6 +193,26 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
     }));
   };
 
+  const updateBookProgress = async (id: string, currentPage: number, pageCount: number) => {
+    setBooks(prev => prev.map(book => {
+      if (book.id === id) {
+        const progress = pageCount > 0 ? Math.min(currentPage / pageCount, 1) : 0;
+        const updatedBook = {
+          ...book,
+          currentPage,
+          pageCount,
+          progress,
+          status: progress === 1 ? 'Okundu' : (progress > 0 ? 'Okunuyor' : book.status)
+        };
+        if (user) {
+          FirestoreService.saveBook(user.uid, updatedBook);
+        }
+        return updatedBook;
+      }
+      return book;
+    }));
+  };
+
   const deleteBook = async (id: string) => {
     setBooks(prev => prev.filter(book => book.id !== id));
     if (user) {
@@ -194,7 +225,7 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <BooksContext.Provider value={{ books, addBook, updateBookStatus, updateBookNotes, deleteBook, getBookById }}>
+    <BooksContext.Provider value={{ books, addBook, updateBookStatus, updateBookNotes, updateBookProgress, deleteBook, getBookById }}>
       {children}
     </BooksContext.Provider>
   );

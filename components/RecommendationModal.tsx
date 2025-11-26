@@ -62,22 +62,15 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
         setSource('external');
 
         const favoriteGenre = RecommendationService.getFavoriteGenre(books);
+        const excludedTitles = books.map(b => b.title);
 
         try {
-            const book = await RecommendationService.getDiscoveryRecommendation(favoriteGenre);
+            const book = await RecommendationService.getDiscoveryRecommendation(favoriteGenre, excludedTitles);
             if (book) {
-                // Check if we already have this book (by title match roughly)
-                const exists = books.some(b => b.title.toLowerCase() === book.title.toLowerCase());
-                if (exists) {
-                    // Retry once if duplicate
-                    const retryBook = await RecommendationService.getDiscoveryRecommendation(favoriteGenre);
-                    setRecommendedBook(retryBook || book);
-                } else {
-                    setRecommendedBook(book);
-                }
+                setRecommendedBook(book);
                 setStep('result');
             } else {
-                setError('Öneri bulunamadı. İnternet bağlantınızı kontrol edin.');
+                setError('Öneri bulunamadı veya tüm öneriler zaten kütüphanenizde.');
                 setStep('result');
             }
         } catch (e) {
@@ -102,11 +95,21 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                 status: 'Okunacak',
                 coverUrl: recommendedBook.coverUrl,
                 genre: recommendedBook.genre,
-                notes: recommendedBook.notes
+                notes: recommendedBook.notes,
+                pageCount: recommendedBook.pageCount,
+                currentPage: recommendedBook.currentPage
             });
             handleClose();
             // Navigate to the new book (we'd need the new ID, but for now just closing is fine, or we can find it by title)
             // Simple UX: just close and show success toast (or just close)
+        }
+    };
+
+    const handleRetry = () => {
+        if (source === 'library') {
+            handleGetLocalRecommendation();
+        } else {
+            handleGetExternalRecommendation();
         }
     };
 
@@ -230,7 +233,7 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
 
                                             <TouchableOpacity
                                                 style={{ marginTop: 12 }}
-                                                onPress={() => setStep('selection')}
+                                                onPress={handleRetry}
                                             >
                                                 <Text style={{ color: colors.textSecondary, fontSize: 13 }}>Başka bir tane seç</Text>
                                             </TouchableOpacity>
