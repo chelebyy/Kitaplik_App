@@ -11,6 +11,7 @@ import {
   StatusBar
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Search, Plus, MoreVertical, Sun, Moon, Sparkles, User } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../../context/ThemeContext';
@@ -24,8 +25,6 @@ const DASHBOARD_COLORS = {
   blueAccent: '#448AFF',
   fab: '#0F172A'
 };
-
-const FILTERS = ['Tümü', 'Okunuyor', 'Okunacak', 'Okundu'];
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -68,8 +67,6 @@ export default function HomeScreen() {
       params: { id: book.id }
     });
   };
-
-  // --- Alt Bileşenler ---
 
   const renderHeader = () => (
     <View style={styles.headerContainer}>
@@ -125,59 +122,53 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* Summary Card */}
-      <View style={[styles.summaryCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      {/* Summary Card (Interactive Filters) */}
+      <LinearGradient
+        colors={isDarkMode ? ['#1E293B', '#27221F'] : ['#FFFFFF', '#FFF7ED']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[styles.summaryCard, { borderColor: colors.border }]}
+      >
         <View style={styles.statsRow}>
-          <View style={styles.statItem}>
+          <TouchableOpacity
+            style={[styles.statItem, { opacity: activeFilter === 'Tümü' ? 1 : 0.5 }]}
+            onPress={() => setActiveFilter('Tümü')}
+          >
             <Text style={styles.statLabel}>Tüm Kitaplar</Text>
             <Text style={[styles.statValue, { color: colors.text }]}>{stats.totalBooks}</Text>
-          </View>
-          <View style={styles.statItem}>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.statItem, { opacity: activeFilter === 'Okundu' ? 1 : 0.5 }]}
+            onPress={() => setActiveFilter('Okundu')}
+          >
             <Text style={styles.statLabel}>Okunan</Text>
             <Text style={[styles.statValue, { color: colors.text }]}>{stats.readBooks}</Text>
-          </View>
-          <View style={styles.statItem}>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.statItem, { opacity: activeFilter === 'Okunuyor' ? 1 : 0.5 }]}
+            onPress={() => setActiveFilter('Okunuyor')}
+          >
             <Text style={styles.statLabel}>Okunuyor</Text>
             <Text style={[styles.statValue, { color: colors.text }]}>{stats.readingBooks}</Text>
-          </View>
-          <View style={styles.statItem}>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.statItem, { opacity: activeFilter === 'Okunacak' ? 1 : 0.5 }]}
+            onPress={() => setActiveFilter('Okunacak')}
+          >
             <Text style={styles.statLabel}>Okunacak</Text>
             <Text style={[styles.statValue, { color: colors.text }]}>{stats.toReadBooks}</Text>
-          </View>
+          </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
 
-      {/* Section Header & Filters */}
+      {/* Section Header */}
       <View style={styles.sectionHeader}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
           {activeFilter === 'Tümü' ? 'Tüm Kitaplar' : activeFilter}
         </Text>
-      </View>
-
-      {/* Horizontal Categories */}
-      <View style={styles.filterContainer}>
-        {FILTERS.map((item) => {
-          const isActive = activeFilter === item;
-          return (
-            <TouchableOpacity
-              key={item}
-              style={[
-                styles.categoryChip,
-                isActive
-                  ? { backgroundColor: colors.primary, borderColor: colors.primary }
-                  : { backgroundColor: colors.card, borderColor: colors.border }
-              ]}
-              onPress={() => setActiveFilter(item)}
-            >
-              <Text style={[
-                styles.categoryText,
-                { color: isActive ? '#FFFFFF' : colors.text }
-              ]}>
-                {item}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
       </View>
     </View>
   );
