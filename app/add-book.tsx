@@ -353,15 +353,13 @@ export default function AddBookScreen() {
       <View style={styles.row}>
         <View style={[styles.formGroup, { flex: 1, marginRight: 12 }]}>
           <Text style={[styles.label, { color: colors.text }]}>Tür</Text>
-          <View style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 0, height: 50 }]}>
-            <TextInput
-              style={{ flex: 1, color: colors.text, height: '100%', fontFamily: 'Inter_400Regular' }}
-              placeholder="Tür girin (Örn: Roman)"
-              placeholderTextColor={colors.placeholder}
-              value={genre}
-              onChangeText={setGenre}
-            />
-          </View>
+          <TextInput
+            style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
+            placeholder="Tür Girin"
+            placeholderTextColor={colors.placeholder}
+            value={genre}
+            onChangeText={setGenre}
+          />
         </View>
 
         <View style={[styles.formGroup, { flex: 1 }]}>
@@ -524,7 +522,7 @@ const styles = StyleSheet.create({
   formGroup: { marginBottom: 24 },
   row: { flexDirection: 'row', alignItems: 'center' },
   label: { fontFamily: 'Inter_600SemiBold', fontSize: 16, marginBottom: 12 },
-  input: { borderWidth: 1, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 14, fontFamily: 'Inter_400Regular', fontSize: 16 },
+  input: { borderWidth: 1, borderRadius: 12, paddingHorizontal: 16, height: 50, paddingVertical: 0, textAlignVertical: 'center', fontFamily: 'Inter_400Regular', fontSize: 16 },
   statusContainer: { flexDirection: 'row', borderRadius: 12, padding: 4 },
   statusButton: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 8 },
   statusButtonActive: { backgroundColor: '#448AFF', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 2 },

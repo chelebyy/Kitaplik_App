@@ -12,10 +12,11 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Search, Plus, MoreVertical, Sun, Moon, Sparkles, User } from 'lucide-react-native';
+import { Search, Plus, MoreVertical, Sun, Moon, Sparkles, User, BookOpen } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../../context/ThemeContext';
 import { useBooks, Book } from '../../context/BooksContext';
+import { useAuth } from '../../context/AuthContext';
 import RecommendationModal from '../../components/RecommendationModal';
 import ProfileModal from '../../components/ProfileModal';
 
@@ -30,6 +31,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { colors, toggleTheme, isDarkMode } = useTheme();
   const { books } = useBooks();
+  const { user } = useAuth();
 
   const [activeFilter, setActiveFilter] = useState('Tümü');
   const [searchQuery, setSearchQuery] = useState('');
@@ -67,12 +69,33 @@ export default function HomeScreen() {
       params: { id: book.id }
     });
   };
-
   const renderHeader = () => (
     <View style={styles.headerContainer}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Text style={[styles.dashboardTitle, { color: colors.text }]}>Kitaplığım</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+          <View style={{
+            width: 44,
+            height: 44,
+            borderRadius: 14,
+            backgroundColor: colors.primary + '15',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: 12
+          }}>
+            <Image
+              source={require('../../assets/images/logo.png')}
+              style={{ width: 28, height: 28 }}
+              resizeMode="contain"
+            />
+          </View>
+          <View>
+            <Text style={{ fontSize: 13, color: colors.textSecondary, fontFamily: 'Inter_500Medium' }}>Merhaba,</Text>
+            <Text style={[styles.dashboardTitle, { color: colors.text, fontSize: 22 }]} numberOfLines={1}>
+              {user?.displayName || 'Kitap Sever'}
+            </Text>
+          </View>
+        </View>
 
         <View style={{ flexDirection: 'row', gap: 12 }}>
           {/* Profil Butonu */}
@@ -108,6 +131,7 @@ export default function HomeScreen() {
         </View>
       </View>
 
+      {/* Search Bar */}
       {/* Search Bar */}
       <View style={styles.searchWrapper}>
         <View style={[styles.searchContainer, { backgroundColor: isDarkMode ? colors.card : '#E4E7EC' }]}>
@@ -170,7 +194,7 @@ export default function HomeScreen() {
           {activeFilter === 'Tümü' ? 'Tüm Kitaplar' : activeFilter}
         </Text>
       </View>
-    </View>
+    </View >
   );
 
   const renderBookItem = ({ item }: { item: Book }) => {

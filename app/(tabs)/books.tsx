@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import { Search, Grid, List, Plus, ArrowUpDown, BookOpen } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useBooks, Book, BookStatus } from '../../context/BooksContext';
+import { useAuth } from '../../context/AuthContext';
 import FilterDropdown from '../../components/FilterDropdown';
 
 type SortOption = 'title_asc' | 'title_desc' | 'author_asc' | 'rating_desc';
@@ -22,6 +23,7 @@ export default function BooksScreen() {
   const router = useRouter();
   const { colors } = useTheme();
   const { books } = useBooks();
+  const { user } = useAuth();
   const { width } = useWindowDimensions();
 
   // States
@@ -144,12 +146,34 @@ export default function BooksScreen() {
       );
     }
   };
-
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>Kitaplarım</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+            <View style={{
+              width: 44,
+              height: 44,
+              borderRadius: 14,
+              backgroundColor: colors.primary + '15',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 12
+            }}>
+              <Image
+                source={require('../../assets/images/logo.png')}
+                style={{ width: 28, height: 28 }}
+                resizeMode="contain"
+              />
+            </View>
+            <View>
+              <Text style={{ fontSize: 13, color: colors.textSecondary, fontFamily: 'Inter_500Medium' }}>Merhaba,</Text>
+              <Text style={[styles.headerTitle, { color: colors.text, fontSize: 22 }]} numberOfLines={1}>
+                {user?.displayName || 'Kitap Sever'}
+              </Text>
+            </View>
+          </View>
+
           <View style={{ flexDirection: 'row', gap: 8 }}>
             {/* Sort Button */}
             <TouchableOpacity
@@ -161,7 +185,7 @@ export default function BooksScreen() {
               }}
               style={[styles.iconButton, { backgroundColor: colors.card }]}
             >
-              <ArrowUpDown size={24} color={colors.text} />
+              <ArrowUpDown size={22} color={colors.text} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -169,9 +193,9 @@ export default function BooksScreen() {
               style={[styles.iconButton, { backgroundColor: colors.card }]}
             >
               {viewMode === 'grid' ? (
-                <List size={24} color={colors.text} />
+                <List size={22} color={colors.text} />
               ) : (
-                <Grid size={24} color={colors.text} />
+                <Grid size={22} color={colors.text} />
               )}
             </TouchableOpacity>
           </View>
@@ -234,8 +258,8 @@ export default function BooksScreen() {
         >
           <Plus size={32} color="#FFFFFF" />
         </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </View >
+    </SafeAreaView >
   );
 }
 

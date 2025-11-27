@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { X, LogOut, User as UserIcon, Mail } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
+import { X, LogOut, User as UserIcon, Check } from 'lucide-react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
-import * as Google from 'expo-auth-session/providers/google';
-import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { auth } from '../config/firebaseConfig';
-import { makeRedirectUri } from 'expo-auth-session';
 
 interface ProfileModalProps {
     visible: boolean;
@@ -15,20 +11,17 @@ interface ProfileModalProps {
 
 export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
     const { colors, isDarkMode } = useTheme();
-    const { user, signOut } = useAuth();
+    const { user, signIn, signOut } = useAuth();
+    const [name, setName] = useState('');
 
-    // TODO: Add your Web Client ID here from Google Cloud Console
-    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-        clientId: 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com',
-    });
-
-    useEffect(() => {
-        if (response?.type === 'success') {
-            const { id_token } = response.params;
-            const credential = GoogleAuthProvider.credential(id_token);
-            signInWithCredential(auth, credential);
+    const handleCreateProfile = async () => {
+        if (name.trim().length === 0) {
+            Alert.alert('Hata', 'Lütfen bir isim giriniz.');
+            return;
         }
-    }, [response]);
+        await signIn(name);
+        setName('');
+    };
 
     return (
         <Modal
@@ -58,11 +51,10 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
                                     style={styles.avatar}
                                 />
                                 <Text style={[styles.userName, { color: colors.text }]}>{user.displayName || 'Kullanıcı'}</Text>
-                                <Text style={[styles.userEmail, { color: colors.textSecondary }]}>{user.email}</Text>
 
                                 <View style={[styles.infoCard, { backgroundColor: isDarkMode ? '#333' : '#F3F4F6' }]}>
                                     <Text style={[styles.infoText, { color: colors.text }]}>
-                                        Hesabınız Google ile bağlı. Verileriniz bulutta güvende.
+                                        Yerel profiliniz aktif. Verileriniz bu cihazda saklanıyor.
                                     </Text>
                                 </View>
 
@@ -74,34 +66,37 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
                                     }}
                                 >
                                     <LogOut size={18} color={colors.danger} style={{ marginRight: 8 }} />
-                                    <Text style={[styles.logoutText, { color: colors.danger }]}>Çıkış Yap</Text>
+                                    <Text style={[styles.logoutText, { color: colors.danger }]}>Profili Sil</Text>
                                 </TouchableOpacity>
                             </View>
                         ) : (
-                            // Guest View
+                            // Guest View / Create Profile
                             <View style={styles.guestContainer}>
                                 <View style={[styles.iconCircle, { backgroundColor: '#E0F2FE' }]}>
                                     <UserIcon size={32} color="#0284C7" />
                                 </View>
-                                <Text style={[styles.guestTitle, { color: colors.text }]}>Hoş Geldiniz</Text>
+                                <Text style={[styles.guestTitle, { color: colors.text }]}>Profil Oluştur</Text>
                                 <Text style={[styles.guestDesc, { color: colors.textSecondary }]}>
-                                    Verilerinizi yedeklemek ve diğer cihazlardan erişmek için giriş yapın.
+                                    Uygulamayı kişiselleştirmek için bir isim belirleyin.
                                 </Text>
+
+                                <View style={[styles.inputContainer, { backgroundColor: colors.background, borderColor: colors.border }]}>
+                                    <TextInput
+                                        style={[styles.input, { color: colors.text }]}
+                                        placeholder="İsminiz"
+                                        placeholderTextColor={colors.textSecondary}
+                                        value={name}
+                                        onChangeText={setName}
+                                    />
+                                </View>
 
                                 <TouchableOpacity
-                                    style={[styles.googleButton, { backgroundColor: colors.text }]}
-                                    disabled={!request}
-                                    onPress={() => {
-                                        promptAsync();
-                                    }}
+                                    style={[styles.createButton, { backgroundColor: colors.primary }]}
+                                    onPress={handleCreateProfile}
                                 >
-                                    <Mail size={20} color={colors.background} style={{ marginRight: 12 }} />
-                                    <Text style={[styles.googleButtonText, { color: colors.background }]}>Google ile Giriş Yap</Text>
+                                    <Check size={20} color="#FFF" style={{ marginRight: 8 }} />
+                                    <Text style={styles.createButtonText}>Oluştur</Text>
                                 </TouchableOpacity>
-
-                                <Text style={[styles.noteText, { color: colors.textSecondary }]}>
-                                    Giriş yapmadan da uygulamayı kullanmaya devam edebilirsiniz.
-                                </Text>
                             </View>
                         )}
                     </View>
@@ -163,12 +158,7 @@ const styles = StyleSheet.create({
     userName: {
         fontSize: 18,
         fontFamily: 'Inter_700Bold',
-        marginBottom: 4,
-    },
-    userEmail: {
-        fontSize: 14,
-        fontFamily: 'Inter_400Regular',
-        marginBottom: 24,
+        marginBottom: 16,
     },
     infoCard: {
         padding: 16,
@@ -217,10 +207,23 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'Inter_400Regular',
         textAlign: 'center',
-        marginBottom: 32,
+        marginBottom: 24,
         lineHeight: 20,
     },
-    googleButton: {
+    inputContainer: {
+        width: '100%',
+        borderRadius: 12,
+        borderWidth: 1,
+        marginBottom: 16,
+        paddingHorizontal: 16,
+        height: 50,
+        justifyContent: 'center',
+    },
+    input: {
+        fontFamily: 'Inter_400Regular',
+        fontSize: 16,
+    },
+    createButton: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -228,14 +231,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         borderRadius: 12,
         width: '100%',
-        marginBottom: 16,
     },
-    googleButtonText: {
+    createButtonText: {
         fontSize: 16,
         fontFamily: 'Inter_600SemiBold',
-    },
-    noteText: {
-        fontSize: 12,
-        textAlign: 'center',
+        color: '#FFF',
     },
 });
