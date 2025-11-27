@@ -1,5 +1,5 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from './AuthContext';
 import { FirestoreService } from '../services/FirestoreService';
@@ -28,6 +28,8 @@ interface BooksContextType {
   updateBookProgress: (id: string, currentPage: number, pageCount: number) => void;
   deleteBook: (id: string) => void;
   getBookById: (id: string) => Book | undefined;
+  clearAllData: () => Promise<void>;
+  restoreBooks: (books: Book[]) => Promise<void>;
 }
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined);
@@ -89,47 +91,50 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load books based on Auth state
+  // Kitapları yükle
   useEffect(() => {
     const loadBooks = async () => {
-      setIsLoading(true);
       try {
         if (user) {
-          // Logged In: Load from Firestore
-          const cloudBooks = await FirestoreService.getBooks(user.uid);
+          // Kullanıcı giriş yapmışsa Firestore'dan yükle
+          const firestoreBooks = await FirestoreService.getBooks(user.uid);
 
-          // Check for local books to sync (Migration scenario)
-          const localBooksJson = await AsyncStorage.getItem('books');
-          if (localBooksJson) {
-            const localBooks = JSON.parse(localBooksJson);
-            if (localBooks.length > 0) {
-              // Merge local books to cloud
-              await FirestoreService.syncLocalToCloud(user.uid, localBooks);
-
-              // Refetch to get merged data
-              const mergedBooks = await FirestoreService.getBooks(user.uid);
-              setBooks(mergedBooks);
-
-              // Clear local books to prevent confusion
-              await AsyncStorage.removeItem('books');
+          // Eğer Firestore boşsa ama yerelde veri varsa (ilk giriş senaryosu), yerel veriyi aktar
+          if (firestoreBooks.length === 0) {
+            const localData = await AsyncStorage.getItem('books');
+            if (localData) {
+              const localBooks = JSON.parse(localData);
+              if (localBooks.length > 0) {
+                // Yerel kitapları Firestore'a kaydet
+                for (const book of localBooks) {
+                  await FirestoreService.saveBook(user.uid, book);
+                }
+                setBooks(localBooks);
+                // Yerel veriyi temizle (isteğe bağlı, ama karışıklığı önler)
+                await AsyncStorage.removeItem('books');
+              } else {
+                setBooks([]);
+              }
             } else {
-              setBooks(cloudBooks);
+              setBooks([]);
             }
           } else {
-            setBooks(cloudBooks);
+            setBooks(firestoreBooks);
           }
         } else {
-          // Guest: Load from AsyncStorage
-          const storedBooks = await AsyncStorage.getItem('books');
-          if (storedBooks) {
-            setBooks(JSON.parse(storedBooks));
+          // Misafir kullanıcı ise AsyncStorage'dan yükle
+          const savedBooks = await AsyncStorage.getItem('books');
+          if (savedBooks) {
+            setBooks(JSON.parse(savedBooks));
           } else {
+            // İlk kez açılıyorsa örnek verileri yükle
             setBooks(INITIAL_BOOKS);
             await AsyncStorage.setItem('books', JSON.stringify(INITIAL_BOOKS));
           }
         }
       } catch (error) {
-        console.error('Failed to load books:', error);
+        console.error('Error loading books:', error);
+        Alert.alert('Hata', 'Kitaplar yüklenirken bir sorun oluştu.');
       } finally {
         setIsLoading(false);
       }
@@ -138,13 +143,18 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
     loadBooks();
   }, [user]);
 
-  // Save books (Effect for Local Storage only)
+  // Kitaplar değiştiğinde yerel depolamayı güncelle (Sadece misafir kullanıcılar için)
   useEffect(() => {
     const saveLocal = async () => {
       if (!user && !isLoading) {
-        await AsyncStorage.setItem('books', JSON.stringify(books));
+        try {
+          await AsyncStorage.setItem('books', JSON.stringify(books));
+        } catch (error) {
+          console.error('Error saving books locally:', error);
+        }
       }
     };
+
     saveLocal();
   }, [books, user, isLoading]);
 
@@ -153,79 +163,157 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
       id: Date.now().toString(),
       addedAt: Date.now(),
       ...newBookData,
-      progress: newBookData.status === 'Okundu' ? 1 : (newBookData.progress || 0),
     };
 
-    setBooks(prev => [newBook, ...prev]);
+    const updatedBooks = [newBook, ...books];
+    setBooks(updatedBooks);
 
     if (user) {
-      await FirestoreService.saveBook(user.uid, newBook);
+      try {
+        await FirestoreService.saveBook(user.uid, newBook);
+      } catch (error) {
+        console.error('Error saving book to Firestore:', error);
+        Alert.alert('Hata', 'Kitap buluta kaydedilemedi.');
+      }
     }
   };
 
   const updateBookStatus = async (id: string, status: BookStatus) => {
-    setBooks(prev => prev.map(book => {
+    const updatedBooks = books.map((book) => {
       if (book.id === id) {
-        const updatedBook = {
-          ...book,
-          status,
-          progress: status === 'Okundu' ? 1 : (status === 'Okunacak' ? 0 : book.progress)
-        };
+        const updatedBook = { ...book, status };
+        // Status değiştiğinde progress güncelleme mantığı
+        if (status === 'Okundu') {
+          updatedBook.progress = 1;
+          updatedBook.currentPage = book.pageCount || book.currentPage;
+        } else if (status === 'Okunacak') {
+          updatedBook.progress = 0;
+          updatedBook.currentPage = 0;
+        }
+
         if (user) {
-          FirestoreService.saveBook(user.uid, updatedBook);
+          FirestoreService.updateBook(user.uid, updatedBook).catch(err =>
+            console.error('Error updating book status in Firestore:', err)
+          );
         }
         return updatedBook;
       }
       return book;
-    }));
+    });
+    setBooks(updatedBooks);
   };
 
   const updateBookNotes = async (id: string, notes: string) => {
-    setBooks(prev => prev.map(book => {
+    const updatedBooks = books.map((book) => {
       if (book.id === id) {
         const updatedBook = { ...book, notes };
         if (user) {
-          FirestoreService.saveBook(user.uid, updatedBook);
+          FirestoreService.updateBook(user.uid, updatedBook).catch(err =>
+            console.error('Error updating book notes in Firestore:', err)
+          );
         }
         return updatedBook;
       }
       return book;
-    }));
+    });
+    setBooks(updatedBooks);
   };
 
   const updateBookProgress = async (id: string, currentPage: number, pageCount: number) => {
-    setBooks(prev => prev.map(book => {
+    const updatedBooks = books.map((book) => {
       if (book.id === id) {
-        const progress = pageCount > 0 ? Math.min(currentPage / pageCount, 1) : 0;
+        const progress = pageCount > 0 ? currentPage / pageCount : 0;
         const updatedBook = {
           ...book,
           currentPage,
           pageCount,
-          progress,
-          status: progress === 1 ? 'Okundu' : (progress > 0 ? 'Okunuyor' : book.status)
+          progress: Math.min(Math.max(progress, 0), 1)
         };
+
         if (user) {
-          FirestoreService.saveBook(user.uid, updatedBook);
+          FirestoreService.updateBook(user.uid, updatedBook).catch(err =>
+            console.error('Error updating book progress in Firestore:', err)
+          );
         }
         return updatedBook;
       }
       return book;
-    }));
+    });
+    setBooks(updatedBooks);
   };
 
   const deleteBook = async (id: string) => {
-    setBooks(prev => prev.filter(book => book.id !== id));
+    const updatedBooks = books.filter((book) => book.id !== id);
+    setBooks(updatedBooks);
+
     if (user) {
-      await FirestoreService.deleteBook(user.uid, id);
+      try {
+        await FirestoreService.deleteBook(user.uid, id);
+      } catch (error) {
+        console.error('Error deleting book from Firestore:', error);
+        Alert.alert('Hata', 'Kitap buluttan silinemedi.');
+      }
     }
   };
 
   const getBookById = (id: string) => {
-    return books.find(book => book.id === id);
+    return books.find((book) => book.id === id);
+  };
+
+  const clearAllData = async () => {
+    try {
+      if (user) {
+        // Kullanıcı giriş yapmışsa Firestore'daki verileri silmeli miyiz? 
+        // Genellikle "Verileri Sıfırla" yerel veriyi ve state'i sıfırlar.
+        // Ancak tam bir sıfırlama isteniyorsa Firestore da temizlenmeli.
+        // Şimdilik sadece yerel state'i ve AsyncStorage'ı sıfırlıyoruz, 
+        // ama Firestore senkronizasyonu varsa oraya da yansıtmak gerekebilir.
+        // Güvenlik için şimdilik sadece yerel sıfırlama yapalım ve kullanıcıyı uyaralım.
+        Alert.alert('Bilgi', 'Bulut verileriniz korunmaktadır. Sadece yerel görünüm sıfırlandı.');
+      }
+
+      await AsyncStorage.removeItem('books');
+      setBooks(INITIAL_BOOKS);
+      Alert.alert('Başarılı', 'Tüm veriler sıfırlandı ve varsayılan kitaplar yüklendi.');
+    } catch (error) {
+      console.error('Error clearing data:', error);
+      Alert.alert('Hata', 'Veriler sıfırlanırken bir sorun oluştu.');
+    }
+  };
+
+  const restoreBooks = async (restoredBooks: Book[]) => {
+    try {
+      setBooks(restoredBooks);
+
+      if (user) {
+        Alert.alert('Uyarı', 'Bulut senkronizasyonu için her kitabın güncellenmesi gerekebilir. Bu işlem biraz zaman alabilir.');
+        // Firestore'a toplu veya tek tek kaydetme
+        for (const book of restoredBooks) {
+          await FirestoreService.saveBook(user.uid, book);
+        }
+      } else {
+        await AsyncStorage.setItem('books', JSON.stringify(restoredBooks));
+      }
+
+      Alert.alert('Başarılı', `${restoredBooks.length} kitap başarıyla geri yüklendi.`);
+    } catch (error) {
+      console.error('Restore error:', error);
+      Alert.alert('Hata', 'Veriler kaydedilirken bir sorun oluştu.');
+    }
   };
 
   return (
-    <BooksContext.Provider value={{ books, addBook, updateBookStatus, updateBookNotes, updateBookProgress, deleteBook, getBookById }}>
+    <BooksContext.Provider value={{
+      books,
+      addBook,
+      updateBookStatus,
+      updateBookNotes,
+      updateBookProgress,
+      deleteBook,
+      getBookById,
+      clearAllData,
+      restoreBooks
+    }}>
       {children}
     </BooksContext.Provider>
   );
@@ -233,7 +321,7 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
 
 export function useBooks() {
   const context = useContext(BooksContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useBooks must be used within a BooksProvider');
   }
   return context;
