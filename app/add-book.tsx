@@ -21,25 +21,9 @@ import { useTheme } from '../context/ThemeContext';
 import { useBooks, BookStatus } from '../context/BooksContext';
 import * as ImagePicker from 'expo-image-picker';
 import BarcodeScannerModal from '../components/BarcodeScannerModal';
+import { GoogleBooksService, GoogleBookResult } from '../services/GoogleBooksService';
 
 type InputMode = 'manual' | 'search';
-
-interface GoogleBookResult {
-  id: string;
-  volumeInfo: {
-    title: string;
-    authors?: string[];
-    imageLinks?: {
-      thumbnail: string;
-    };
-    categories?: string[];
-    pageCount?: number;
-    industryIdentifiers?: {
-      type: string;
-      identifier: string;
-    }[];
-  };
-}
 
 export default function AddBookScreen() {
   const router = useRouter();
@@ -141,11 +125,9 @@ export default function AddBookScreen() {
   const handleBarcodeScanned = async (isbn: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-      const data = await response.json();
+      const book = await GoogleBooksService.searchByIsbn(isbn);
 
-      if (data.items && data.items.length > 0) {
-        const book = data.items[0];
+      if (book) {
         selectBook(book);
         Alert.alert('Başarılı', 'Kitap bilgileri barkoddan çekildi.');
       } else {
@@ -194,10 +176,9 @@ export default function AddBookScreen() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchQuery)}&maxResults=10`);
-      const data = await response.json();
-      if (data.items) {
-        setSearchResults(data.items);
+      const items = await GoogleBooksService.searchBooks(searchQuery);
+      if (items.length > 0) {
+        setSearchResults(items);
       } else {
         setSearchResults([]);
         Alert.alert('Sonuç Bulunamadı', 'Aradığınız kriterlere uygun kitap bulunamadı.');
