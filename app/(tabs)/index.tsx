@@ -230,7 +230,13 @@ export default function HomeScreen() {
 
     return (
       <TouchableOpacity
-        style={[styles.bookCard, { backgroundColor: colors.card, borderColor: colors.border }]}
+        style={[
+          styles.bookCard,
+          {
+            backgroundColor: colors.card,
+            borderColor: isDarkMode ? 'rgba(168, 85, 247, 0.3)' : 'rgba(236, 72, 153, 0.2)'
+          }
+        ]}
         onPress={() => handleBookPress(item)}
         activeOpacity={0.9}
       >

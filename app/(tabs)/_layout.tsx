@@ -28,13 +28,13 @@ export default function TabLayout() {
           />
         ),
         tabBarStyle: {
-          height: Platform.OS === 'ios' ? 90 : 70,
+          height: Platform.OS === 'ios' ? 80 : 60,
           backgroundColor: 'transparent',
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
-          paddingBottom: Platform.OS === 'ios' ? 20 : 10,
-          paddingTop: 10,
+          paddingBottom: Platform.OS === 'ios' ? 28 : 8,
+          paddingTop: 8,
         },
         tabBarItemStyle: {
           justifyContent: 'center',
