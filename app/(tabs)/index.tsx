@@ -12,8 +12,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Search, Plus, MoreVertical, Sun, Moon, Sparkles, User, BookOpen } from 'lucide-react-native';
+import { Search, Plus, MoreVertical, Sun, Moon, Sparkles, User } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 import { useBooks, Book } from '../../context/BooksContext';
 import { useAuth } from '../../context/AuthContext';
@@ -29,6 +30,7 @@ const DASHBOARD_COLORS = {
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { colors, toggleTheme, isDarkMode } = useTheme();
   const { books } = useBooks();
   const { user } = useAuth();
@@ -81,7 +83,9 @@ export default function HomeScreen() {
             backgroundColor: colors.primary + '15',
             alignItems: 'center',
             justifyContent: 'center',
-            marginRight: 12
+            marginRight: 12,
+            borderWidth: 1.5,
+            borderColor: isDarkMode ? colors.primary : '#334155',
           }}>
             <Image
               source={require('../../assets/images/logo.png')}
@@ -90,9 +94,9 @@ export default function HomeScreen() {
             />
           </View>
           <View>
-            <Text style={{ fontSize: 13, color: colors.textSecondary, fontFamily: 'Inter_500Medium' }}>Merhaba,</Text>
+            <Text style={{ fontSize: 13, color: colors.textSecondary, fontFamily: 'Inter_500Medium' }}>{t('hello')},</Text>
             <Text style={[styles.dashboardTitle, { color: colors.text, fontSize: 22 }]} numberOfLines={1}>
-              {user?.displayName || 'Kitap Sever'}
+              {user?.displayName || t('book_lover')}
             </Text>
           </View>
         </View>
@@ -137,7 +141,7 @@ export default function HomeScreen() {
         <View style={[styles.searchContainer, { backgroundColor: isDarkMode ? colors.card : '#E4E7EC' }]}>
           <Search size={20} color={colors.placeholder} style={styles.searchIcon} />
           <TextInput
-            placeholder="Tüm koleksiyonda ara..."
+            placeholder={t('search_placeholder')}
             placeholderTextColor={colors.placeholder}
             style={[styles.searchInput, { color: colors.text }]}
             value={searchQuery}
@@ -158,7 +162,7 @@ export default function HomeScreen() {
             style={[styles.statItem, { opacity: activeFilter === 'Tümü' ? 1 : 0.5 }]}
             onPress={() => setActiveFilter('Tümü')}
           >
-            <Text style={styles.statLabel}>Tüm Kitaplar</Text>
+            <Text style={styles.statLabel}>{t('all_books')}</Text>
             <Text style={[styles.statValue, { color: colors.text }]}>{stats.totalBooks}</Text>
           </TouchableOpacity>
 
@@ -166,7 +170,7 @@ export default function HomeScreen() {
             style={[styles.statItem, { opacity: activeFilter === 'Okundu' ? 1 : 0.5 }]}
             onPress={() => setActiveFilter('Okundu')}
           >
-            <Text style={styles.statLabel}>Okunan</Text>
+            <Text style={styles.statLabel}>{t('read')}</Text>
             <Text style={[styles.statValue, { color: colors.text }]}>{stats.readBooks}</Text>
           </TouchableOpacity>
 
@@ -174,7 +178,7 @@ export default function HomeScreen() {
             style={[styles.statItem, { opacity: activeFilter === 'Okunuyor' ? 1 : 0.5 }]}
             onPress={() => setActiveFilter('Okunuyor')}
           >
-            <Text style={styles.statLabel}>Okunuyor</Text>
+            <Text style={styles.statLabel}>{t('reading')}</Text>
             <Text style={[styles.statValue, { color: colors.text }]}>{stats.readingBooks}</Text>
           </TouchableOpacity>
 
@@ -182,7 +186,7 @@ export default function HomeScreen() {
             style={[styles.statItem, { opacity: activeFilter === 'Okunacak' ? 1 : 0.5 }]}
             onPress={() => setActiveFilter('Okunacak')}
           >
-            <Text style={styles.statLabel}>Okunacak</Text>
+            <Text style={styles.statLabel}>{t('to_read')}</Text>
             <Text style={[styles.statValue, { color: colors.text }]}>{stats.toReadBooks}</Text>
           </TouchableOpacity>
         </View>
@@ -191,7 +195,10 @@ export default function HomeScreen() {
       {/* Section Header */}
       <View style={styles.sectionHeader}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          {activeFilter === 'Tümü' ? 'Tüm Kitaplar' : activeFilter}
+          {activeFilter === 'Tümü' ? t('all_books') :
+            activeFilter === 'Okundu' ? t('read') :
+              activeFilter === 'Okunuyor' ? t('reading') :
+                activeFilter === 'Okunacak' ? t('to_read') : activeFilter}
         </Text>
       </View>
     </View >
@@ -206,14 +213,14 @@ export default function HomeScreen() {
 
     if (item.status === 'Okundu') {
       progressPercent = 1;
-      progressText = 'Tamamlandı';
+      progressText = t('completed');
     } else if (item.status === 'Okunacak') {
       progressPercent = 0;
-      progressText = 'Henüz başlanmadı';
+      progressText = t('not_started');
     } else {
       // Reading status
       if (item.pageCount && item.currentPage !== undefined) {
-        progressText = `${item.currentPage} / ${item.pageCount} Sayfa`;
+        progressText = `${item.currentPage} / ${item.pageCount} ${t('book_detail_pages')}`;
         // Ensure percent is accurate based on pages if available
         progressPercent = item.pageCount > 0 ? item.currentPage / item.pageCount : 0;
       } else {
@@ -241,9 +248,7 @@ export default function HomeScreen() {
               <Text style={[styles.bookTitle, { color: colors.text }]} numberOfLines={1}>{item.title}</Text>
               <Text style={styles.bookAuthor} numberOfLines={1}>{item.author}</Text>
             </View>
-            <TouchableOpacity style={{ padding: 4 }}>
-              <MoreVertical size={20} color={colors.textSecondary} />
-            </TouchableOpacity>
+
           </View>
 
           <View style={styles.progressContainer}>
@@ -260,7 +265,7 @@ export default function HomeScreen() {
             </View>
             <View style={styles.statusRow}>
               <Text style={styles.lastReadText}>
-                Durum: <Text style={{ fontWeight: '600', color: colors.text }}>{item.status}</Text>
+                {t('status_label')}: <Text style={{ fontWeight: '600', color: colors.text }}>{t(item.status === 'Okundu' ? 'read' : item.status === 'Okunuyor' ? 'reading' : 'to_read')}</Text>
               </Text>
               {isReading && (
                 <Text style={[styles.progressText, { color: colors.textSecondary, fontSize: 11 }]}>
@@ -291,19 +296,33 @@ export default function HomeScreen() {
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyText}>
-              Bu kriterlere uygun kitap bulunamadı.
+              {t('no_books_found')}
             </Text>
           </View>
         }
       />
 
-      {/* Floating Action Button */}
       <TouchableOpacity
         style={styles.fab}
         onPress={() => router.push('/add-book')}
         activeOpacity={0.8}
       >
-        <Plus size={32} color="#FFFFFF" />
+        <LinearGradient
+          colors={isDarkMode ? ['#1E293B', '#27221F'] : ['#FFFFFF', '#F8FAFC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: 16,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 1.5,
+            borderColor: isDarkMode ? colors.primary : '#334155', // Dark Grey for Light Mode
+          }}
+        >
+          <Plus size={24} color={isDarkMode ? "#FFFFFF" : "#334155"} />
+        </LinearGradient>
       </TouchableOpacity>
 
       <RecommendationModal
@@ -519,16 +538,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     right: 24,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: DASHBOARD_COLORS.fab,
+    width: 50,
+    height: 50,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
     elevation: 6,
   },
   emptyState: {

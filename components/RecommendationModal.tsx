@@ -7,14 +7,13 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Image,
-    Dimensions,
-    Platform
 } from 'react-native';
 import { X, Sparkles, BookOpen, Globe, Check, RefreshCw } from 'lucide-react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Book, useBooks } from '../context/BooksContext';
 import { RecommendationService } from '../services/RecommendationService';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 interface RecommendationModalProps {
     visible: boolean;
@@ -27,6 +26,7 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
     const { colors, isDarkMode } = useTheme();
     const { books, addBook, updateBookStatus } = useBooks();
     const router = useRouter();
+    const { t } = useTranslation();
 
     const [step, setStep] = useState<Step>('selection');
     const [recommendedBook, setRecommendedBook] = useState<Book | null>(null);
@@ -51,7 +51,7 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                 setRecommendedBook(book);
                 setStep('result');
             } else {
-                setError('Okunacak listenizde hiç kitap yok!');
+                setError(t('recommendation_error_no_books'));
                 setStep('result');
             }
         }, 1500);
@@ -70,11 +70,11 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                 setRecommendedBook(book);
                 setStep('result');
             } else {
-                setError('Öneri bulunamadı veya tüm öneriler zaten kütüphanenizde.');
+                setError(t('recommendation_error_not_found'));
                 setStep('result');
             }
         } catch (e) {
-            setError('Bir hata oluştu.');
+            setError(t('recommendation_error_generic'));
             setStep('result');
         }
     };
@@ -127,7 +127,7 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                     <View style={styles.header}>
                         <View style={styles.titleContainer}>
                             <Sparkles size={20} color="#F79009" style={{ marginRight: 8 }} />
-                            <Text style={[styles.title, { color: colors.text }]}>Sihirli Öneri</Text>
+                            <Text style={[styles.title, { color: colors.text }]}>{t('recommendation_title')}</Text>
                         </View>
                         <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
                             <X size={20} color={colors.textSecondary} />
@@ -139,7 +139,7 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                         {step === 'selection' && (
                             <View style={styles.selectionContainer}>
                                 <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-                                    Bugün ne okumak istersiniz?
+                                    {t('recommendation_subtitle')}
                                 </Text>
 
                                 <TouchableOpacity
@@ -151,9 +151,9 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                                         <BookOpen size={24} color="#0284C7" />
                                     </View>
                                     <View style={styles.optionTextContainer}>
-                                        <Text style={[styles.optionTitle, { color: colors.text }]}>Rafımdan Seç</Text>
+                                        <Text style={[styles.optionTitle, { color: colors.text }]}>{t('recommendation_library')}</Text>
                                         <Text style={[styles.optionDesc, { color: colors.textSecondary }]}>
-                                            "Okunacak" listenizden rastgele bir kitap.
+                                            {t('recommendation_library_desc')}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -167,9 +167,9 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                                         <Globe size={24} color="#9333EA" />
                                     </View>
                                     <View style={styles.optionTextContainer}>
-                                        <Text style={[styles.optionTitle, { color: colors.text }]}>Yeni Keşfet</Text>
+                                        <Text style={[styles.optionTitle, { color: colors.text }]}>{t('recommendation_discover')}</Text>
                                         <Text style={[styles.optionDesc, { color: colors.textSecondary }]}>
-                                            Zevkinize uygun yeni bir kitap önerisi.
+                                            {t('recommendation_discover_desc')}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -180,7 +180,7 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                             <View style={styles.loadingContainer}>
                                 <ActivityIndicator size="large" color={colors.primary} />
                                 <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
-                                    {source === 'library' ? 'Raflar karıştırılıyor...' : 'Dünya taranıyor...'}
+                                    {source === 'library' ? t('recommendation_loading_library') : t('recommendation_loading_discover')}
                                 </Text>
                             </View>
                         )}
@@ -195,7 +195,7 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                                             onPress={() => setStep('selection')}
                                         >
                                             <RefreshCw size={16} color={colors.text} style={{ marginRight: 6 }} />
-                                            <Text style={{ color: colors.text, fontFamily: 'Inter_500Medium' }}>Tekrar Dene</Text>
+                                            <Text style={{ color: colors.text, fontFamily: 'Inter_500Medium' }}>{t('recommendation_retry')}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 ) : (
@@ -221,12 +221,12 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                                                 {source === 'library' ? (
                                                     <>
                                                         <BookOpen size={18} color="#FFF" style={{ marginRight: 8 }} />
-                                                        <Text style={styles.actionButtonText}>Okumaya Başla</Text>
+                                                        <Text style={styles.actionButtonText}>{t('recommendation_start_reading')}</Text>
                                                     </>
                                                 ) : (
                                                     <>
                                                         <Check size={18} color="#FFF" style={{ marginRight: 8 }} />
-                                                        <Text style={styles.actionButtonText}>Kütüphaneme Ekle</Text>
+                                                        <Text style={styles.actionButtonText}>{t('recommendation_add_library')}</Text>
                                                     </>
                                                 )}
                                             </TouchableOpacity>
@@ -235,7 +235,7 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                                                 style={{ marginTop: 12 }}
                                                 onPress={handleRetry}
                                             >
-                                                <Text style={{ color: colors.textSecondary, fontSize: 13 }}>Başka bir tane seç</Text>
+                                                <Text style={{ color: colors.textSecondary, fontSize: 13 }}>{t('recommendation_try_another')}</Text>
                                             </TouchableOpacity>
                                         </>
                                     )

@@ -44,8 +44,12 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
     ```bash
     npm run dev
     # veya
-    npx expo start
+    npm run build:web
     ```
+
+## 📚 Dokümantasyon
+
+Detaylı teknik dokümantasyon ve mimari analiz için [GEMINIDOCS/INDEX.md](GEMINIDOCS/INDEX.md) dosyasını inceleyebilirsiniz.
 
 ## 📂 Proje Yapısı
 

@@ -3,6 +3,7 @@ import { Modal, View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Aler
 import { X, LogOut, User as UserIcon, Check } from 'lucide-react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileModalProps {
     visible: boolean;
@@ -12,11 +13,12 @@ interface ProfileModalProps {
 export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
     const { colors, isDarkMode } = useTheme();
     const { user, signIn, signOut } = useAuth();
+    const { t } = useTranslation();
     const [name, setName] = useState('');
 
     const handleCreateProfile = async () => {
         if (name.trim().length === 0) {
-            Alert.alert('Hata', 'Lütfen bir isim giriniz.');
+            Alert.alert(t('profile_error_title'), t('profile_error_msg'));
             return;
         }
         await signIn(name);
@@ -35,7 +37,7 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
 
                     {/* Header */}
                     <View style={styles.header}>
-                        <Text style={[styles.title, { color: colors.text }]}>Profil</Text>
+                        <Text style={[styles.title, { color: colors.text }]}>{t('profile')}</Text>
                         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                             <X size={20} color={colors.textSecondary} />
                         </TouchableOpacity>
@@ -50,11 +52,11 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
                                     source={{ uri: user.photoURL || 'https://via.placeholder.com/100' }}
                                     style={styles.avatar}
                                 />
-                                <Text style={[styles.userName, { color: colors.text }]}>{user.displayName || 'Kullanıcı'}</Text>
+                                <Text style={[styles.userName, { color: colors.text }]}>{user.displayName || t('book_lover')}</Text>
 
                                 <View style={[styles.infoCard, { backgroundColor: isDarkMode ? '#333' : '#F3F4F6' }]}>
                                     <Text style={[styles.infoText, { color: colors.text }]}>
-                                        Yerel profiliniz aktif. Verileriniz bu cihazda saklanıyor.
+                                        {t('profile_local_active')}
                                     </Text>
                                 </View>
 
@@ -66,7 +68,7 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
                                     }}
                                 >
                                     <LogOut size={18} color={colors.danger} style={{ marginRight: 8 }} />
-                                    <Text style={[styles.logoutText, { color: colors.danger }]}>Profili Sil</Text>
+                                    <Text style={[styles.logoutText, { color: colors.danger }]}>{t('profile_delete')}</Text>
                                 </TouchableOpacity>
                             </View>
                         ) : (
@@ -75,15 +77,15 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
                                 <View style={[styles.iconCircle, { backgroundColor: '#E0F2FE' }]}>
                                     <UserIcon size={32} color="#0284C7" />
                                 </View>
-                                <Text style={[styles.guestTitle, { color: colors.text }]}>Profil Oluştur</Text>
+                                <Text style={[styles.guestTitle, { color: colors.text }]}>{t('profile_create')}</Text>
                                 <Text style={[styles.guestDesc, { color: colors.textSecondary }]}>
-                                    Uygulamayı kişiselleştirmek için bir isim belirleyin.
+                                    {t('profile_create_desc')}
                                 </Text>
 
                                 <View style={[styles.inputContainer, { backgroundColor: colors.background, borderColor: colors.border }]}>
                                     <TextInput
                                         style={[styles.input, { color: colors.text }]}
-                                        placeholder="İsminiz"
+                                        placeholder={t('profile_name_placeholder')}
                                         placeholderTextColor={colors.textSecondary}
                                         value={name}
                                         onChangeText={setName}
@@ -95,7 +97,7 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
                                     onPress={handleCreateProfile}
                                 >
                                     <Check size={20} color="#FFF" style={{ marginRight: 8 }} />
-                                    <Text style={styles.createButtonText}>Oluştur</Text>
+                                    <Text style={styles.createButtonText}>{t('profile_create_button')}</Text>
                                 </TouchableOpacity>
                             </View>
                         )}

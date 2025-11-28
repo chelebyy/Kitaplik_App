@@ -6,6 +6,7 @@ import { View, ActivityIndicator } from 'react-native';
 import { ThemeProvider, useTheme } from '../context/ThemeContext';
 import { BooksProvider } from '../context/BooksContext';
 import { AuthProvider } from '../context/AuthContext';
+import { LanguageProvider } from '../context/LanguageContext';
 
 function RootLayoutContent() {
   const { isDarkMode } = useTheme();
@@ -41,12 +42,14 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BooksProvider>
-          <RootLayoutContent />
-        </BooksProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <BooksProvider>
+            <RootLayoutContent />
+          </BooksProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }

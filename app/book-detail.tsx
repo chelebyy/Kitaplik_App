@@ -13,14 +13,17 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, Trash2 } from 'lucide-react-native';
+import { ArrowLeft, Trash2, ShoppingCart } from 'lucide-react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useBooks, BookStatus } from '../context/BooksContext';
+import { useTranslation } from 'react-i18next';
+import PriceComparisonModal from '../components/PriceComparisonModal';
 
 export default function BookDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { colors } = useTheme();
+  const { colors, isDarkMode } = useTheme();
+  const { t } = useTranslation();
   const { getBookById, updateBookStatus, updateBookNotes, updateBookProgress, deleteBook } = useBooks();
 
   // params.id'yi güvenli bir şekilde al
@@ -32,6 +35,7 @@ export default function BookDetailScreen() {
   const [notes, setNotes] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [isPriceModalVisible, setPriceModalVisible] = useState(false);
 
   useEffect(() => {
     if (book) {
@@ -51,7 +55,7 @@ export default function BookDetailScreen() {
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ color: colors.text }}>Kitap bulunamadı veya silindi.</Text>
+          <Text style={{ color: colors.text }}>{t('book_detail_not_found')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -84,12 +88,12 @@ export default function BookDetailScreen() {
     if (!bookId) return;
 
     Alert.alert(
-      'Kitabı Sil',
-      'Bu kitabı kütüphanenizden silmek istediğinize emin misiniz?',
+      t('book_detail_delete_title'),
+      t('book_detail_delete_msg'),
       [
-        { text: 'Vazgeç', style: 'cancel' },
+        { text: t('cancel'), style: 'cancel' },
         {
-          text: 'Sil',
+          text: t('book_detail_delete_button'),
           style: 'destructive',
           onPress: () => {
             if (router.canGoBack()) {
@@ -112,7 +116,7 @@ export default function BookDetailScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.iconButton} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
           <ArrowLeft size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>Kitap Detayı</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>{t('book_detail_title')}</Text>
         <TouchableOpacity onPress={handleDelete} style={styles.iconButton} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
           <Trash2 size={24} color={colors.danger} />
         </TouchableOpacity>
@@ -140,30 +144,45 @@ export default function BookDetailScreen() {
 
             <View style={styles.tagsContainer}>
               <View style={[styles.tagChip, { backgroundColor: colors.chipBackground }]}>
-                <Text style={[styles.tagText, { color: colors.text }]}>{book.genre || 'Genel'}</Text>
+                <Text style={[styles.tagText, { color: colors.text }]}>{book.genre || t('general')}</Text>
               </View>
             </View>
+
+            <TouchableOpacity
+              style={[styles.compareButton, { backgroundColor: colors.primary + '15' }]}
+              onPress={() => setPriceModalVisible(true)}
+            >
+              <ShoppingCart size={20} color={colors.primary} style={{ marginRight: 8 }} />
+              <Text style={[styles.compareButtonText, { color: colors.primary }]}>{t('price_compare')}</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.sectionContainer}>
-            <Text style={[styles.sectionLabel, { color: colors.sectionHeader }]}>Durum</Text>
-            <View style={[styles.statusContainer, { backgroundColor: colors.chipBackground }]}>
+            <Text style={[styles.sectionLabel, { color: colors.sectionHeader }]}>{t('book_detail_status')}</Text>
+            <View style={styles.statusContainer}>
               {statuses.map((s) => {
                 const isActive = book.status === s;
+                // Active Colors
+                const activeBg = isDarkMode ? '#1E293B' : '#334155';
+                const activeBorder = isDarkMode ? colors.primary : '#334155';
+
                 return (
                   <TouchableOpacity
                     key={s}
                     style={[
                       styles.statusButton,
-                      isActive && styles.statusButtonActive
+                      isActive
+                        ? { backgroundColor: activeBg, borderWidth: 1.5, borderColor: activeBorder }
+                        : { borderWidth: 1, borderColor: colors.border }
                     ]}
                     onPress={() => handleStatusChange(s)}
+                    activeOpacity={0.8}
                   >
                     <Text style={[
                       styles.statusButtonText,
                       { color: isActive ? '#FFFFFF' : colors.textSecondary }
                     ]}>
-                      {s}
+                      {t(s === 'Okundu' ? 'read' : s === 'Okunuyor' ? 'reading' : 'to_read')}
                     </Text>
                   </TouchableOpacity>
                 );
@@ -173,9 +192,9 @@ export default function BookDetailScreen() {
 
           <View style={styles.sectionContainer}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <Text style={[styles.sectionLabel, { color: colors.sectionHeader, marginBottom: 0 }]}>İlerleme</Text>
+              <Text style={[styles.sectionLabel, { color: colors.sectionHeader, marginBottom: 0 }]}>{t('book_detail_progress')}</Text>
               <Text style={{ fontFamily: 'Inter_500Medium', color: colors.textSecondary, fontSize: 14 }}>
-                {book.currentPage || 0} / {book.pageCount || 0} Sayfa
+                {book.currentPage || 0} / {book.pageCount || 0} {t('book_detail_pages')}
               </Text>
             </View>
 
@@ -196,7 +215,7 @@ export default function BookDetailScreen() {
               {/* Inputs */}
               <View style={styles.progressInputsRow}>
                 <View style={{ flex: 1, marginRight: 12 }}>
-                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Şu Anki Sayfa</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>{t('book_detail_current_page')}</Text>
                   <TextInput
                     style={[styles.progressInput, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.border }]}
                     value={String(currentPage)}
@@ -207,7 +226,7 @@ export default function BookDetailScreen() {
                   />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Toplam Sayfa</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>{t('book_detail_total_pages')}</Text>
                   <TextInput
                     style={[styles.progressInput, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.border }]}
                     value={String(pageCount)}
@@ -222,11 +241,11 @@ export default function BookDetailScreen() {
           </View>
 
           <View style={styles.sectionContainer}>
-            <Text style={[styles.sectionLabel, { color: colors.sectionHeader }]}>Notlarım</Text>
+            <Text style={[styles.sectionLabel, { color: colors.sectionHeader }]}>{t('book_detail_notes')}</Text>
             <View style={[styles.notesContainer, { backgroundColor: colors.noteBackground }]}>
               <TextInput
                 style={[styles.notesInput, { color: colors.text }]}
-                placeholder="Kitapla ilgili notlarınızı, alıntılarınızı veya düşüncelerinizi buraya ekleyin..."
+                placeholder={t('book_detail_notes_placeholder')}
                 placeholderTextColor={colors.placeholder}
                 multiline
                 textAlignVertical="top"
@@ -239,6 +258,13 @@ export default function BookDetailScreen() {
           <View style={{ height: 40 }} />
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <PriceComparisonModal
+        visible={isPriceModalVisible}
+        onClose={() => setPriceModalVisible(false)}
+        bookTitle={book.title}
+        bookAuthor={book.author}
+      />
     </SafeAreaView>
   );
 }
@@ -257,11 +283,13 @@ const styles = StyleSheet.create({
   tagsContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 8 },
   tagChip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
   tagText: { fontFamily: 'Inter_600SemiBold', fontSize: 12 },
+  compareButton: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 10, borderRadius: 20, marginTop: 16 },
+  compareButtonText: { fontFamily: 'Inter_600SemiBold', fontSize: 14 },
   sectionContainer: { marginBottom: 24 },
   sectionLabel: { fontFamily: 'Inter_700Bold', fontSize: 16, marginBottom: 12 },
-  statusContainer: { flexDirection: 'row', borderRadius: 12, padding: 4, height: 48 },
-  statusButton: { flex: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 8 },
-  statusButtonActive: { backgroundColor: '#1E88E5', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 2 },
+  statusContainer: { flexDirection: 'row', gap: 12 },
+  statusButton: { flex: 1, height: 44, justifyContent: 'center', alignItems: 'center', borderRadius: 12 },
+  statusButtonActive: { borderColor: 'transparent' },
   statusButtonText: { fontFamily: 'Inter_600SemiBold', fontSize: 14 },
   notesContainer: { borderRadius: 16, padding: 16, minHeight: 150 },
   notesInput: { fontFamily: 'Inter_400Regular', fontSize: 15, lineHeight: 24, height: '100%' },

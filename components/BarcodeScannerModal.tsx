@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Modal, TouchableOpacity, Dimensions } from 'react-native';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { X } from 'lucide-react-native';
 
 interface BarcodeScannerModalProps {
@@ -20,7 +20,7 @@ export default function BarcodeScannerModal({ visible, onClose, onScan }: Barcod
                 requestPermission();
             }
         }
-    }, [visible]);
+    }, [visible, permission, requestPermission]);
 
     const handleBarCodeScanned = ({ data }: { data: string }) => {
         if (scanned) return;

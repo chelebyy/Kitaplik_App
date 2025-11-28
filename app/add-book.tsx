@@ -16,12 +16,14 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, Image as ImageIcon, ChevronDown, Search, BookOpen, PenTool, ScanLine } from 'lucide-react-native';
+import { ArrowLeft, Image as ImageIcon, Search, BookOpen, PenTool, ScanLine } from 'lucide-react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useBooks, BookStatus } from '../context/BooksContext';
 import * as ImagePicker from 'expo-image-picker';
 import BarcodeScannerModal from '../components/BarcodeScannerModal';
 import { GoogleBooksService, GoogleBookResult } from '../services/GoogleBooksService';
+import { useTranslation } from 'react-i18next';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type InputMode = 'manual' | 'search';
 
@@ -29,6 +31,7 @@ export default function AddBookScreen() {
   const router = useRouter();
   const { colors, isDarkMode } = useTheme();
   const { addBook } = useBooks();
+  const { t, i18n } = useTranslation();
 
   // Mode State
   const [mode, setMode] = useState<InputMode>('manual');
@@ -57,7 +60,7 @@ export default function AddBookScreen() {
     const { status: libraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (cameraStatus !== 'granted' || libraryStatus !== 'granted') {
-      Alert.alert('İzin Gerekli', 'Fotoğraf çekmek veya yüklemek için kamera ve galeri izinlerine ihtiyacımız var.');
+      Alert.alert(t('add_book_fill_required'), t('add_book_not_found_msg'));
       return false;
     }
     return true;
@@ -111,12 +114,12 @@ export default function AddBookScreen() {
       );
     } else {
       Alert.alert(
-        'Kapak Fotoğrafı Ekle',
-        'Lütfen bir yöntem seçin',
+        t('add_book_add_cover'),
+        t('add_book_upload'),
         [
-          { text: 'İptal', style: 'cancel' },
-          { text: 'Fotoğraf Çek', onPress: takePhoto },
-          { text: 'Galeriden Seç', onPress: pickImage },
+          { text: t('cancel'), style: 'cancel' },
+          { text: t('take_photo'), onPress: takePhoto },
+          { text: t('choose_from_gallery'), onPress: pickImage },
         ]
       );
     }
@@ -125,16 +128,16 @@ export default function AddBookScreen() {
   const handleBarcodeScanned = async (isbn: string) => {
     setIsLoading(true);
     try {
-      const book = await GoogleBooksService.searchByIsbn(isbn);
+      const book = await GoogleBooksService.searchByIsbn(isbn, i18n.language?.split('-')[0]);
 
       if (book) {
         selectBook(book);
-        Alert.alert('Başarılı', 'Kitap bilgileri barkoddan çekildi.');
+        Alert.alert(t('add_book_success'), t('add_book_success_msg'));
       } else {
-        Alert.alert('Bulunamadı', 'Bu barkoda ait kitap bulunamadı.');
+        Alert.alert(t('add_book_not_found'), t('add_book_not_found_msg'));
       }
     } catch (error) {
-      Alert.alert('Hata', 'Kitap bilgileri getirilirken bir hata oluştu.');
+      Alert.alert(t('settings_restore_error'), t('settings_restore_error_msg'));
     } finally {
       setIsLoading(false);
     }
@@ -142,7 +145,7 @@ export default function AddBookScreen() {
 
   const handleSave = () => {
     if (!title.trim() || !author.trim()) {
-      Alert.alert('Eksik Bilgi', 'Lütfen en az kitap adı ve yazar adını giriniz.');
+      Alert.alert(t('add_book_fill_required'), t('add_book_fill_required_msg'));
       return;
     }
 
@@ -167,7 +170,7 @@ export default function AddBookScreen() {
       currentPage: status === 'Okundu' ? totalPages : current,
     });
 
-    Alert.alert('Başarılı', 'Kitap kütüphanenize eklendi!');
+    Alert.alert(t('add_book_success'), t('add_book_success_msg'));
     router.back();
   };
 
@@ -176,15 +179,15 @@ export default function AddBookScreen() {
 
     setIsLoading(true);
     try {
-      const items = await GoogleBooksService.searchBooks(searchQuery);
+      const items = await GoogleBooksService.searchBooks(searchQuery, i18n.language?.split('-')[0]);
       if (items.length > 0) {
         setSearchResults(items);
       } else {
         setSearchResults([]);
-        Alert.alert('Sonuç Bulunamadı', 'Aradığınız kriterlere uygun kitap bulunamadı.');
+        Alert.alert(t('add_book_not_found'), t('add_book_no_results'));
       }
     } catch (error) {
-      Alert.alert('Hata', 'Kitap aranırken bir sorun oluştu.');
+      Alert.alert(t('settings_restore_error'), t('settings_restore_error_msg'));
     } finally {
       setIsLoading(false);
     }
@@ -219,7 +222,7 @@ export default function AddBookScreen() {
         <Search size={20} color={colors.placeholder} style={styles.searchIcon} />
         <TextInput
           style={[styles.searchInput, { color: colors.text }]}
-          placeholder="Kitap adı, yazar veya ISBN..."
+          placeholder={t('add_book_search_results')}
           placeholderTextColor={colors.placeholder}
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -227,14 +230,14 @@ export default function AddBookScreen() {
           onSubmitEditing={searchGoogleBooks}
         />
         <TouchableOpacity onPress={searchGoogleBooks} style={styles.searchButton}>
-          <Text style={{ color: colors.primary, fontFamily: 'Inter_600SemiBold' }}>Ara</Text>
+          <Text style={{ color: colors.primary, fontFamily: 'Inter_600SemiBold' }}>{t('add_book_search')}</Text>
         </TouchableOpacity>
       </View>
 
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Kitaplar aranıyor...</Text>
+          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>{t('add_book_searching')}</Text>
         </View>
       ) : (
         <FlatList
@@ -244,7 +247,7 @@ export default function AddBookScreen() {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             searchResults.length === 0 && searchQuery ? (
-              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>Sonuç bulunamadı.</Text>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>{t('add_book_no_results')}</Text>
             ) : null
           }
           renderItem={({ item }) => (
@@ -253,32 +256,32 @@ export default function AddBookScreen() {
               onPress={() => selectBook(item)}
             >
               <Image
-                source={{ uri: item.volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://') || 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/100x150/png' }}
+                source={{ uri: item.volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://') || 'https://placehold.co/100x150/png' }}
                 style={styles.resultImage}
                 resizeMode="cover"
               />
               <View style={styles.resultInfo}>
                 <Text style={[styles.resultTitle, { color: colors.text }]} numberOfLines={2}>
-                  {item.volumeInfo.title}
+                  {item.volumeInfo.title || t('add_book_book_name_placeholder')}
                 </Text>
                 <Text style={[styles.resultAuthor, { color: colors.textSecondary }]} numberOfLines={1}>
-                  {item.volumeInfo.authors?.join(', ') || 'Bilinmeyen Yazar'}
+                  {item.volumeInfo.authors?.join(', ') || t('add_book_author_placeholder')}
                 </Text>
-                {item.volumeInfo.categories && (
+                {item.volumeInfo.categories && item.volumeInfo.categories.length > 0 && (
                   <View style={[styles.resultTag, { backgroundColor: colors.chipBackground }]}>
                     <Text style={[styles.resultTagText, { color: colors.textSecondary }]}>
                       {item.volumeInfo.categories[0]}
                     </Text>
                   </View>
                 )}
-                {item.volumeInfo.pageCount && (
+                {item.volumeInfo.pageCount ? (
                   <Text style={[styles.resultPageCount, { color: colors.textSecondary }]}>
-                    {item.volumeInfo.pageCount} Sayfa
+                    {item.volumeInfo.pageCount} {t('book_detail_pages')}
                   </Text>
-                )}
+                ) : null}
               </View>
               <View style={styles.selectButtonContainer}>
-                <Text style={{ color: colors.primary, fontFamily: 'Inter_600SemiBold' }}>Seç</Text>
+                <Text style={{ color: colors.primary, fontFamily: 'Inter_600SemiBold' }}>{t('add_book_upload')}</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -298,7 +301,7 @@ export default function AddBookScreen() {
         onPress={() => setScannerVisible(true)}
       >
         <ScanLine size={20} color={colors.primary} style={{ marginRight: 8 }} />
-        <Text style={[styles.scanButtonText, { color: colors.primary }]}>Barkod Tara (Otomatik Doldur)</Text>
+        <Text style={[styles.scanButtonText, { color: colors.primary }]}>{t('add_book_scan_barcode')}</Text>
       </TouchableOpacity>
 
       {/* Cover Upload Area */}
@@ -310,7 +313,7 @@ export default function AddBookScreen() {
               style={[styles.removeCoverButton, { backgroundColor: 'rgba(0,0,0,0.6)' }]}
               onPress={() => setCoverUrl(null)}
             >
-              <Text style={{ color: '#FFF', fontSize: 12, fontFamily: 'Inter_600SemiBold' }}>Kaldır</Text>
+              <Text style={{ color: '#FFF', fontSize: 12, fontFamily: 'Inter_600SemiBold' }}>{t('add_book_remove')}</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -318,10 +321,10 @@ export default function AddBookScreen() {
             <View style={[styles.uploadIconCircle, { backgroundColor: colors.iconBackground }]}>
               <ImageIcon size={32} color="#448AFF" />
             </View>
-            <Text style={[styles.uploadTitle, { color: colors.text }]}>Kitap Kapağı</Text>
-            <Text style={[styles.uploadSubtitle, { color: colors.textSecondary }]}>Kapak Ekle</Text>
+            <Text style={[styles.uploadTitle, { color: colors.text }]}>{t('add_book_cover')}</Text>
+            <Text style={[styles.uploadSubtitle, { color: colors.textSecondary }]}>{t('add_book_add_cover')}</Text>
             <TouchableOpacity style={[styles.uploadButton, { backgroundColor: colors.chipBackground }]} onPress={handleUpload}>
-              <Text style={[styles.uploadButtonText, { color: colors.text }]}>Yükle</Text>
+              <Text style={[styles.uploadButtonText, { color: colors.text }]}>{t('add_book_upload')}</Text>
             </TouchableOpacity>
           </>
         )}
@@ -329,10 +332,10 @@ export default function AddBookScreen() {
 
       {/* Form Fields */}
       <View style={styles.formGroup}>
-        <Text style={[styles.label, { color: colors.text }]}>Kitap Adı</Text>
+        <Text style={[styles.label, { color: colors.text }]}>{t('add_book_book_name')}</Text>
         <TextInput
           style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
-          placeholder="Kitap adını girin"
+          placeholder={t('add_book_book_name_placeholder')}
           placeholderTextColor={colors.placeholder}
           value={title}
           onChangeText={setTitle}
@@ -340,10 +343,10 @@ export default function AddBookScreen() {
       </View>
 
       <View style={styles.formGroup}>
-        <Text style={[styles.label, { color: colors.text }]}>Yazar Adı</Text>
+        <Text style={[styles.label, { color: colors.text }]}>{t('add_book_author')}</Text>
         <TextInput
           style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
-          placeholder="Yazar adını girin"
+          placeholder={t('add_book_author_placeholder')}
           placeholderTextColor={colors.placeholder}
           value={author}
           onChangeText={setAuthor}
@@ -352,10 +355,10 @@ export default function AddBookScreen() {
 
       <View style={styles.row}>
         <View style={[styles.formGroup, { flex: 1, marginRight: 12 }]}>
-          <Text style={[styles.label, { color: colors.text }]}>Tür</Text>
+          <Text style={[styles.label, { color: colors.text }]}>{t('add_book_genre')}</Text>
           <TextInput
             style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
-            placeholder="Tür Girin"
+            placeholder={t('add_book_genre_placeholder')}
             placeholderTextColor={colors.placeholder}
             value={genre}
             onChangeText={setGenre}
@@ -363,10 +366,10 @@ export default function AddBookScreen() {
         </View>
 
         <View style={[styles.formGroup, { flex: 1 }]}>
-          <Text style={[styles.label, { color: colors.text }]}>Sayfa Sayısı</Text>
+          <Text style={[styles.label, { color: colors.text }]}>{t('add_book_page_count')}</Text>
           <TextInput
             style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
-            placeholder="Toplam"
+            placeholder={t('add_book_page_count_placeholder')}
             placeholderTextColor={colors.placeholder}
             value={pageCount}
             onChangeText={setPageCount}
@@ -376,24 +379,31 @@ export default function AddBookScreen() {
       </View>
 
       <View style={styles.formGroup}>
-        <Text style={[styles.label, { color: colors.text }]}>Durum</Text>
-        <View style={[styles.statusContainer, { backgroundColor: colors.chipBackground }]}>
+        <Text style={[styles.label, { color: colors.text }]}>{t('add_book_status')}</Text>
+        <View style={styles.statusContainer}>
           {statuses.map((s) => {
             const isActive = status === s;
+            // Active Colors
+            const activeBg = isDarkMode ? '#1E293B' : '#334155';
+            const activeBorder = isDarkMode ? colors.primary : '#334155';
+
             return (
               <TouchableOpacity
                 key={s}
                 style={[
                   styles.statusButton,
-                  isActive && styles.statusButtonActive
+                  isActive
+                    ? { backgroundColor: activeBg, borderWidth: 1.5, borderColor: activeBorder }
+                    : { borderWidth: 1, borderColor: colors.border }
                 ]}
                 onPress={() => setStatus(s)}
+                activeOpacity={0.8}
               >
                 <Text style={[
                   styles.statusButtonText,
                   { color: isActive ? '#FFFFFF' : colors.textSecondary }
                 ]}>
-                  {s}
+                  {t(s === 'Okundu' ? 'read' : s === 'Okunuyor' ? 'reading' : 'to_read')}
                 </Text>
               </TouchableOpacity>
             );
@@ -401,19 +411,17 @@ export default function AddBookScreen() {
         </View>
       </View>
 
-      {status === 'Okunuyor' && (
-        <View style={styles.formGroup}>
-          <Text style={[styles.label, { color: colors.text }]}>Şu Anki Sayfa</Text>
-          <TextInput
-            style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
-            placeholder="Kaçıncı sayfadasınız?"
-            placeholderTextColor={colors.placeholder}
-            value={currentPage}
-            onChangeText={setCurrentPage}
-            keyboardType="numeric"
-          />
-        </View>
-      )}
+      <View style={styles.formGroup}>
+        <Text style={[styles.label, { color: colors.text }]}>{t('book_detail_current_page')}</Text>
+        <TextInput
+          style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
+          placeholder={t('current_page_placeholder')}
+          placeholderTextColor={colors.placeholder}
+          value={currentPage}
+          onChangeText={setCurrentPage}
+          keyboardType="numeric"
+        />
+      </View>
 
       <View style={{ height: 100 }} />
     </ScrollView>
@@ -425,7 +433,7 @@ export default function AddBookScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <ArrowLeft size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>Yeni Kitap Ekle</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>{t('add_book_title')}</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -436,14 +444,14 @@ export default function AddBookScreen() {
             onPress={() => setMode('manual')}
           >
             <PenTool size={16} color={mode === 'manual' ? colors.primary : colors.textSecondary} style={{ marginRight: 6 }} />
-            <Text style={[styles.modeText, { color: mode === 'manual' ? colors.text : colors.textSecondary }]}>Manuel</Text>
+            <Text style={[styles.modeText, { color: mode === 'manual' ? colors.text : colors.textSecondary }]}>{t('add_book_manual')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.modeButton, mode === 'search' && { backgroundColor: colors.card, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 2, elevation: 2 }]}
             onPress={() => setMode('search')}
           >
             <Search size={16} color={mode === 'search' ? colors.primary : colors.textSecondary} style={{ marginRight: 6 }} />
-            <Text style={[styles.modeText, { color: mode === 'search' ? colors.text : colors.textSecondary }]}>Google'da Ara</Text>
+            <Text style={[styles.modeText, { color: mode === 'search' ? colors.text : colors.textSecondary }]}>{t('add_book_search')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -459,8 +467,29 @@ export default function AddBookScreen() {
             <TouchableOpacity
               style={styles.saveButton}
               onPress={handleSave}
+              activeOpacity={0.8}
             >
-              <Text style={styles.saveButtonText}>Kaydet</Text>
+              <LinearGradient
+                colors={isDarkMode ? ['#1E293B', '#27221F'] : ['#FFFFFF', '#F8FAFC']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 16,
+                  borderWidth: 1.5,
+                  borderColor: isDarkMode ? colors.primary : '#334155',
+                }}
+              >
+                <Text style={[
+                  styles.saveButtonText,
+                  { color: isDarkMode ? colors.primary : '#334155' }
+                ]}>
+                  {t('add_book_save')}
+                </Text>
+              </LinearGradient>
             </TouchableOpacity>
           </View>
         )}
@@ -523,13 +552,13 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center' },
   label: { fontFamily: 'Inter_600SemiBold', fontSize: 16, marginBottom: 12 },
   input: { borderWidth: 1, borderRadius: 12, paddingHorizontal: 16, height: 50, paddingVertical: 0, textAlignVertical: 'center', fontFamily: 'Inter_400Regular', fontSize: 16 },
-  statusContainer: { flexDirection: 'row', borderRadius: 12, padding: 4 },
-  statusButton: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 8 },
-  statusButtonActive: { backgroundColor: '#448AFF', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 2 },
-  statusButtonText: { fontFamily: 'Inter_600SemiBold', fontSize: 14 },
+  statusContainer: { flexDirection: 'row', gap: 12 },
+  statusButton: { flex: 1, height: 44, borderRadius: 12, overflow: 'hidden', justifyContent: 'center', alignItems: 'center' },
+  statusButtonActive: { borderColor: 'transparent' },
+  statusButtonText: { fontFamily: 'Inter_600SemiBold', fontSize: 14, zIndex: 1 },
   footer: { position: 'absolute', bottom: 0, left: 0, right: 0, paddingHorizontal: 24, paddingBottom: Platform.OS === 'ios' ? 34 : 24, paddingTop: 16, borderTopWidth: 1 },
-  saveButton: { backgroundColor: '#1E88E5', borderRadius: 12, paddingVertical: 16, alignItems: 'center', shadowColor: '#1E88E5', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
-  saveButtonText: { fontFamily: 'Inter_700Bold', fontSize: 16, color: '#FFFFFF' },
+  saveButton: { height: 56, borderRadius: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 8, elevation: 4 },
+  saveButtonText: { fontFamily: 'Inter_700Bold', fontSize: 16 },
   scanButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 12, borderRadius: 12, borderWidth: 1, marginBottom: 24, borderStyle: 'dashed' },
   scanButtonText: { fontFamily: 'Inter_600SemiBold', fontSize: 14 },
   loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', zIndex: 1000 },

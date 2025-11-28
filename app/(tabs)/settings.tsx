@@ -25,22 +25,26 @@ import {
 } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useBooks } from '../../context/BooksContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { BackupService } from '../../services/BackupService';
+import { useTranslation } from 'react-i18next';
 
 export default function SettingsScreen() {
   const { colors, isDarkMode, toggleTheme } = useTheme();
   const { books, clearAllData, restoreBooks } = useBooks();
+  const { language, changeLanguage } = useLanguage();
+  const { t } = useTranslation();
   const [isAboutVisible, setAboutVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleResetData = () => {
     Alert.alert(
-      'Verileri Sıfırla',
-      'Tüm kitaplarınız silinecek ve varsayılan verilere dönülecek. Bu işlem geri alınamaz. Emin misiniz?',
+      t('settings_reset_confirm_title'),
+      t('settings_reset_confirm_msg'),
       [
-        { text: 'İptal', style: 'cancel' },
+        { text: t('cancel'), style: 'cancel' },
         {
-          text: 'Sıfırla',
+          text: t('settings_reset_confirm_button'),
           style: 'destructive',
           onPress: async () => {
             await clearAllData();
@@ -52,20 +56,20 @@ export default function SettingsScreen() {
 
   const handleBackup = async () => {
     if (books.length === 0) {
-      Alert.alert('Uyarı', 'Yedeklenecek kitap bulunamadı.');
+      Alert.alert(t('settings_backup_warning'), t('settings_backup_no_books'));
       return;
     }
 
     Alert.alert(
-      'Yedekleme Yöntemi',
-      'Yedeğinizi nereye kaydetmek istersiniz?',
+      t('settings_backup_method_title'),
+      t('settings_backup_method_msg'),
       [
         {
-          text: 'İptal',
+          text: t('cancel'),
           style: 'cancel'
         },
         {
-          text: 'Telefona Kaydet',
+          text: t('settings_backup_save_device'),
           onPress: async () => {
             setIsLoading(true);
             try {
@@ -76,7 +80,7 @@ export default function SettingsScreen() {
           }
         },
         {
-          text: 'Drive / Paylaş',
+          text: t('settings_backup_share'),
           onPress: async () => {
             setIsLoading(true);
             try {
@@ -96,15 +100,15 @@ export default function SettingsScreen() {
       const restoredBooks = await BackupService.restoreBackup();
       if (restoredBooks) {
         Alert.alert(
-          'Yedeği Geri Yükle',
-          `Dosyadan ${restoredBooks.length} kitap bulundu. Mevcut kütüphanenizin üzerine yazılacak. Onaylıyor musunuz?`,
+          t('settings_restore_confirm_title'),
+          t('settings_restore_confirm_msg', { count: restoredBooks.length }),
           [
-            { text: 'İptal', style: 'cancel' },
+            { text: t('cancel'), style: 'cancel' },
             {
-              text: 'Geri Yükle',
+              text: t('settings_restore_confirm_button'),
               onPress: async () => {
                 await restoreBooks(restoredBooks);
-                Alert.alert('Başarılı', 'Kitaplarınız başarıyla geri yüklendi.');
+                Alert.alert(t('settings_restore_success'), t('settings_restore_success_msg'));
               }
             }
           ]
@@ -112,7 +116,7 @@ export default function SettingsScreen() {
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Hata', 'Geri yükleme sırasında bir hata oluştu.');
+      Alert.alert(t('settings_restore_error'), t('settings_restore_error_msg'));
     } finally {
       setIsLoading(false);
     }
@@ -120,16 +124,16 @@ export default function SettingsScreen() {
 
   const handleRestore = () => {
     Alert.alert(
-      'Geri Yükleme Kaynağı',
-      'Yedeği nereden yüklemek istersiniz?',
+      t('settings_restore_source_title'),
+      t('settings_restore_source_msg'),
       [
-        { text: 'İptal', style: 'cancel' },
+        { text: t('cancel'), style: 'cancel' },
         {
-          text: 'Telefondan Seç',
+          text: t('settings_restore_select_device'),
           onPress: performRestore
         },
         {
-          text: 'Drive\'dan Seç',
+          text: t('settings_restore_select_drive'),
           onPress: performRestore
         }
       ]
@@ -139,7 +143,7 @@ export default function SettingsScreen() {
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
       <View style={[styles.header, { backgroundColor: colors.background }]}>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>Ayarlar</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>{t('settings')}</Text>
       </View>
 
       <ScrollView
@@ -148,13 +152,13 @@ export default function SettingsScreen() {
       >
         {/* Section: GÖRÜNÜM */}
         <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>GÖRÜNÜM</Text>
+          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>{t('settings_appearance')}</Text>
           <View style={[styles.card, { backgroundColor: colors.card }]}>
             <View style={styles.row}>
               <View style={[styles.iconContainer, { backgroundColor: colors.iconBackground }]}>
                 {isDarkMode ? <Moon size={22} color="#448AFF" /> : <Sun size={22} color="#448AFF" />}
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>Karanlık Mod</Text>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>{t('dark_mode')}</Text>
               <Switch
                 value={isDarkMode}
                 onValueChange={toggleTheme}
@@ -162,12 +166,28 @@ export default function SettingsScreen() {
                 thumbColor={isDarkMode ? '#448AFF' : '#f4f3f4'}
               />
             </View>
+
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+
+            <TouchableOpacity
+              style={styles.row}
+              activeOpacity={0.7}
+              onPress={() => changeLanguage(language === 'tr' ? 'en' : 'tr')}
+            >
+              <View style={[styles.iconContainer, { backgroundColor: colors.iconBackground }]}>
+                <Text style={{ fontSize: 20 }}>🌍</Text>
+              </View>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>{t('settings_language')}</Text>
+              <Text style={[styles.versionText, { color: colors.textSecondary }]}>
+                {language === 'tr' ? '🇹🇷 Türkçe' : '🇬🇧 English'}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
 
         {/* Section: VERİ YÖNETİMİ */}
         <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>VERİ YÖNETİMİ</Text>
+          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>{t('settings_data_management')}</Text>
           <View style={[styles.card, { backgroundColor: colors.card }]}>
             <TouchableOpacity
               style={styles.row}
@@ -178,7 +198,7 @@ export default function SettingsScreen() {
               <View style={[styles.iconContainer, { backgroundColor: colors.iconBackground }]}>
                 <CloudUpload size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>Verileri Yedekle (Dışa Aktar)</Text>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>{t('settings_backup')}</Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
 
@@ -193,7 +213,7 @@ export default function SettingsScreen() {
               <View style={[styles.iconContainer, { backgroundColor: colors.iconBackground }]}>
                 <History size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>Verileri Geri Yükle (İçe Aktar)</Text>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>{t('settings_restore')}</Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
 
@@ -208,7 +228,7 @@ export default function SettingsScreen() {
               <View style={[styles.iconContainer, { backgroundColor: 'rgba(255, 59, 48, 0.1)' }]}>
                 <Trash2 size={22} color="#FF3B30" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>Verileri Sıfırla</Text>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>{t('settings_reset')}</Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
           </View>
@@ -216,13 +236,13 @@ export default function SettingsScreen() {
 
         {/* Section: DİĞER */}
         <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>DİĞER</Text>
+          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>{t('settings_other')}</Text>
           <View style={[styles.card, { backgroundColor: colors.card }]}>
             <View style={styles.row}>
               <View style={[styles.iconContainer, { backgroundColor: colors.iconBackground }]}>
                 <Info size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>Uygulama Sürümü</Text>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>{t('settings_version')}</Text>
               <Text style={[styles.versionText, { color: colors.textSecondary }]}>1.0.0</Text>
             </View>
 
@@ -236,7 +256,7 @@ export default function SettingsScreen() {
               <View style={[styles.iconContainer, { backgroundColor: colors.iconBackground }]}>
                 <FileText size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>Hakkında</Text>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>{t('settings_about')}</Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
           </View>
@@ -248,7 +268,7 @@ export default function SettingsScreen() {
       {isLoading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: '#FFF', marginTop: 10, fontWeight: '600' }}>İşlem yapılıyor...</Text>
+          <Text style={{ color: '#FFF', marginTop: 10, fontWeight: '600' }}>{t('settings_loading')}</Text>
         </View>
       )}
 
@@ -262,7 +282,7 @@ export default function SettingsScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>Hakkında</Text>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>{t('settings_about_title')}</Text>
               <TouchableOpacity onPress={() => setAboutVisible(false)} style={styles.closeButton}>
                 <X size={24} color={colors.text} />
               </TouchableOpacity>
@@ -275,15 +295,15 @@ export default function SettingsScreen() {
                   style={{ width: 80, height: 80 }}
                 />
               </View>
-              <Text style={[styles.appName, { color: colors.text }]}>Kitaplık</Text>
+              <Text style={[styles.appName, { color: colors.text }]}>{t('settings_app_name')}</Text>
               <Text style={[styles.appDescription, { color: colors.textSecondary }]}>
-                Kişisel kütüphanenizi yönetmek, okuma alışkanlıklarınızı takip etmek ve yeni kitaplar keşfetmek için tasarlanmış modern bir mobil uygulama.
+                {t('settings_about_desc')}
               </Text>
               <Text style={[styles.developer, { color: colors.textSecondary }]}>
-                Geliştirici: Chelebyy
+                {t('settings_developer')}
               </Text>
               <Text style={[styles.copyright, { color: colors.textSecondary }]}>
-                © 2025 Tüm Hakları Saklıdır
+                {t('settings_copyright')}
               </Text>
             </View>
           </View>
