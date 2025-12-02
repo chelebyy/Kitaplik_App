@@ -8,6 +8,14 @@ export interface Store {
   searchPath: (query: string) => string;
 }
 
+export interface StoreLink {
+  store: Store;
+  url: string;
+  urlIsbn: string | null;
+  price: number | null; // null = fiyat bilgisi yok
+  loading?: boolean;
+}
+
 export const STORES: Store[] = [
   {
     id: 'kitapyurdu',
@@ -63,10 +71,22 @@ export const PriceService = {
     
     const query = title + (author ? ` ${author}` : '');
     
+    // Mock fiyatlar - İleride gerçek API entegrasyonu yapılabilir
+    const mockPrices: Record<string, number | null> = {
+      'kitapyurdu': 189.00,
+      'dr': 199.50,
+      'idefix': 195.00,
+      'amazon_tr': 185.00,
+      'bkm': 179.90,
+      'nadir': null // İkinci el kitapçı, fiyat değişken
+    };
+
     return STORES.map(store => ({
       store,
       url: store.searchPath(query),
-      urlIsbn: isbn ? store.searchPath(isbn) : null
+      urlIsbn: isbn ? store.searchPath(isbn) : null,
+      price: mockPrices[store.id] ?? null,
+      loading: false
     }));
   },
 

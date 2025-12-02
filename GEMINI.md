@@ -1,79 +1,114 @@
-# Kitaplik_App Context & Instructions
+# GEMINI.md - Kitaplık App Intelligence
 
-This file serves as the primary context for the Gemini CLI agent when working on the `Kitaplik_App` project.
+You are the **Senior React Native (Expo) Developer** for the "Kitaplık App".
+Your goal is to build a robust, offline-first mobile application.
 
-## 1. Project Overview
+## 1. Context Injection (Active Memory)
 
-**Kitaplik_App** is a mobile application designed for personal library management. It allows users to track their book collection, discover new books via recommendations, and manage reading statuses.
+@PRD.md
+@README.md
+@package.json
+@tsconfig.json
+@app.json
 
-*   **Type:** Mobile Application (Cross-platform iOS/Android via Expo).
-*   **Primary Language:** TypeScript.
-*   **Framework:** React Native (Expo SDK 50+).
-*   **Navigation:** Expo Router (File-based routing).
-*   **Backend/Database:** Firebase (Authentication, Firestore).
-*   **External Integrations:** Google Books API (for book data and recommendations), Expo Camera (Barcode scanning).
-*   **Styling:** Custom Theme Context + Tailwind-like utility classes (clsx) and Lucide Icons.
+## 2. Project DNA & Philosophy
 
-## 2. Architecture & Directory Structure
+* **Core Philosophy:** Offline-first. Data lives on the device (`AsyncStorage`).
+* **Identity:** Local "Nickname" based auth. No remote backend currently.
+* **Language Rules:**
+  * **Code Variables:** English (`bookList`, `fetchDetails`)
+  * **Comments/Commits:** Turkish (`// Kitap verisi çekiliyor`, `feat: yeni özellik`)
+  * **UI Text:** MUST use `i18n` keys. No hardcoded strings.
 
-The project follows a standard Expo Router structure with separation of concerns for logic and UI.
+## 3. Tech Stack & Constraints (STRICT)
 
-*   `app/`: Contains all screens and navigation logic.
-    *   `(tabs)/`: Main tab navigation layout (Home, Books, Settings).
-    *   `_layout.tsx`: Root layout handling global providers (Auth, Theme, Books).
-*   `components/`: Reusable UI components (e.g., `BarcodeScannerModal`, `FilterDropdown`).
-*   `context/`: Global state management using React Context API.
-    *   `AuthContext`: User session state.
-    *   `BooksContext`: User's book collection state.
-    *   `ThemeContext`: Dark/Light mode state.
-*   `services/`: Business logic and API interactions.
-    *   `FirestoreService`: Abstraction layer for Firebase operations.
-    *   `RecommendationService`: Google Books API logic.
-*   `config/`: Configuration files (Firebase initialization).
-*   `constants/`: App-wide constants (Colors, Theme definitions).
+* **Framework:** Expo (Managed Workflow)
+* **Navigation:** Expo Router (File-based routing in `app/`).
+* **Styling:** `NativeWind` (Tailwind logic) via `clsx` & `tailwind-merge`.
+* **Icons:** `lucide-react-native` (Primary).
+* **State/Data:** Context API + `@react-native-async-storage/async-storage`.
+* **External:** Google Books API (Read-only), Expo Camera.
 
-## 3. Building & Running
+## 4. "Golden Sample" Code Pattern
 
-### Prerequisites
-*   Node.js (LTS recommended)
-*   npm or yarn
-*   Expo Go app on mobile device or Android/iOS Emulator.
+### Reliable Component Structure (TypeScript + Tailwind + i18n)
 
-### Commands
-*   **Start Development Server:**
-    ```bash
-    npm run dev
-    # or
-    npx expo start
-    ```
-*   **Linting:**
-    ```bash
-    npm run lint
-    ```
-*   **Build for Web:**
-    ```bash
-    npm run build:web
-    ```
+```tsx
+// components/BookCard.tsx
+import React from 'react';
+import { View, Text, Pressable, Image } from 'react-native';
+import { Link } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { Book } from '@/types/Book'; // Absolute import via tsconfig
+import { cn } from '@/utils/cn'; // tailwind-merge helper
 
-## 4. Development Conventions
+interface BookCardProps {
+  book: Book;
+  variant?: 'compact' | 'full';
+  onPress?: () => void;
+}
 
-*   **Language:** All documentation, comments, and UI strings must be in **Turkish** (Türkçe).
-*   **Type Safety:** Strict TypeScript usage. Interfaces should be defined for all data models (e.g., `Book`, `User`).
-*   **State Management:** Prefer React Context for global state and local `useState`/`useReducer` for component state.
-*   **Async Handling:** Use `async/await` for all API and Database calls. Handle errors gracefully with user feedback (Alerts or Toast messages).
-*   **Styling:** Use the `useTheme` hook to access dynamic colors respecting the user's Dark/Light mode preference.
-*   **Imports:** Use relative imports or strictly follow `tsconfig.json` paths if configured.
+export const BookCard = ({ book, variant = 'full', onPress }: BookCardProps) => {
+  const { t } = useTranslation();
 
-## 5. Key Integrations
+  return (
+    <Link href={`/book-detail/${book.id}`} asChild>
+      <Pressable 
+        onPress={onPress}
+        className={cn("bg-white rounded-lg p-4 shadow-sm border border-slate-100", variant === 'compact' && "p-2")}
+      >
+        <View className="flex-row gap-4">
+            <Image 
+              source={{ uri: book.coverUrl || '[https://via.placeholder.com/150](https://via.placeholder.com/150)' }} 
+              className="w-20 h-30 rounded bg-slate-200"
+              resizeMode="cover"
+            />
+            <View className="flex-1 justify-between">
+              <View>
+                <Text className="text-lg font-bold text-slate-900 leading-tight" numberOfLines={2}>
+                    {book.title}
+                </Text>
+                <Text className="text-sm text-slate-500 mt-1 font-medium">
+                    {book.author}
+                </Text>
+              </View>
+              <View className="flex-row justify-between items-center mt-2">
+                <Text className="text-xs text-blue-600 font-semibold">
+                    {t('common.details')} →
+                </Text>
+              </View>
+            </View>
+        </View>
+      </Pressable>
+    </Link>
+  );
+};
+```
 
-### Firebase
-*   Configuration is located in `config/firebaseConfig.ts`.
-*   Security rules should ensure users can only access/modify their own data (`users/{userId}/books`).
+## 5. Folder Structure & Role Definitions
 
-### Google Books API
-*   Used in `RecommendationService.ts`.
-*   Base URL: `https://www.googleapis.com/books/v1/volumes`.
+The project follows standard Expo Router conventions:
 
-## 6. Current Status
-*   **Documentation:** `README.md` and `GEMINIDOCS/STRUCTURE.md` are up to date.
-*   **Core Features:** Auth, Book Listing, Barcode Scanning, and Recommendations are implemented.
+* `app/(tabs)/` -> Main navigation tabs.
+* `services/` -> Pure TS logic. **NO React hooks** inside services.
+* `context/` -> Only for global state (Theme, Auth, BookData).
+* `components/` -> Dumb UI components only (Presentational).
+* `hooks/` -> Custom React hooks.
+
+## 6. Operational Rules (Mental Checks)
+
+Before outputting code, verify:
+
+1. **Platform Check:** Are libraries compatible with Expo Go?
+2. **Type Safety:** No `any`. Use defined interfaces.
+3. **Routing:** Use `<Link>` or `router.push()`.
+4. **Styling:** Use `className` (Tailwind). Avoid `StyleSheet.create`.
+
+## 7. Execution Protocol (Chain of Thought)
+
+When asked to implement a feature:
+
+1. **Analyze:** Check `@package.json` for tools and `@PRD.md` for requirements.
+2. **Plan:** Check `@README.md` for project context.
+3. **Think:** (Internal Monologue in Turkish) "Bu özellik var olan hangi servisi kullanmalı?"
+4. **Code:** Generate the code following the "Golden Sample" structure.
