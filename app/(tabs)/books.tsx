@@ -18,6 +18,7 @@ import { useAuth } from '../../context/AuthContext';
 import FilterDropdown from '../../components/FilterDropdown';
 import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BookCard } from '../../components/BookCard';
 
 type SortOption = 'title_asc' | 'title_desc' | 'author_asc' | 'rating_desc';
 
@@ -106,74 +107,21 @@ export default function BooksScreen() {
     }
   };
 
-  const renderBookItem = ({ item }: { item: Book }) => {
-    // Progress Calculation
-    const progress = item.pageCount && item.currentPage
-      ? Math.min(item.currentPage / item.pageCount, 1)
-      : 0;
 
-    if (viewMode === 'grid') {
-      return (
-        <TouchableOpacity
-          style={[styles.bookCardGrid, { width: COLUMN_WIDTH }]}
-          onPress={() => router.push({ pathname: '/book-detail', params: { id: item.id } })}
-          activeOpacity={0.7}
-        >
-          <View style={[styles.coverContainer, { backgroundColor: colors.card }]}>
-            <Image
-              source={{ uri: item.coverUrl }}
-              style={[styles.bookCoverGrid, { height: COLUMN_WIDTH * 1.5 }]}
-              resizeMode="cover"
-            />
-            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-              <Text style={styles.statusText}>{getStatusLabel(item.status)}</Text>
-            </View>
-          </View>
-          <Text style={[styles.bookTitle, { color: colors.text }]} numberOfLines={1}>{item.title}</Text>
-          <Text style={[styles.bookAuthor, { color: colors.textSecondary }]} numberOfLines={1}>{item.author}</Text>
-        </TouchableOpacity>
-      );
-    } else {
-      // Liste Görünümü
-      return (
-        <TouchableOpacity
-          style={[styles.bookCardList, { backgroundColor: colors.card }]}
-          onPress={() => router.push({ pathname: '/book-detail', params: { id: item.id } })}
-          activeOpacity={0.7}
-        >
-          <Image
-            source={{ uri: item.coverUrl }}
-            style={styles.bookCoverList}
-            resizeMode="cover"
-          />
-          <View style={styles.bookInfoList}>
-            <View>
-              <View style={[styles.statusBadgeList, { backgroundColor: getStatusColor(item.status) }]}>
-                <Text style={styles.statusText}>{getStatusLabel(item.status)}</Text>
-              </View>
-              <Text style={[styles.bookTitle, { color: colors.text, fontSize: 18 }]} numberOfLines={2}>{item.title}</Text>
-              <Text style={[styles.bookAuthor, { color: colors.textSecondary, marginTop: 4 }]} numberOfLines={1}>{item.author}</Text>
-            </View>
+  const handleBookPress = React.useCallback((id: string) => {
+    router.push({ pathname: '/book-detail', params: { id } });
+  }, [router]);
 
-            <View>
-              {/* Progress Bar for List View */}
-              {item.status === 'Okunuyor' && (
-                <View style={styles.progressContainer}>
-                  <View style={[styles.progressBarBg, { backgroundColor: colors.border }]}>
-                    <View style={[styles.progressBarFill, { width: `${progress * 100}%`, backgroundColor: colors.primary }]} />
-                  </View>
-                  <Text style={[styles.progressText, { color: colors.textSecondary }]}>%{Math.round(progress * 100)}</Text>
-                </View>
-              )}
-              <View style={styles.genreTag}>
-                <Text style={[styles.genreText, { color: colors.textSecondary }]}>{item.genre || t('general')}</Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      );
-    }
-  };
+  const renderBookItem = React.useCallback(({ item }: { item: Book }) => (
+    <View style={{ width: viewMode === 'grid' ? COLUMN_WIDTH : '100%' }}>
+      <BookCard
+        book={item}
+        variant={viewMode}
+        onPressId={handleBookPress}
+      />
+    </View>
+  ), [viewMode, COLUMN_WIDTH, handleBookPress]);
+
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
       <View style={styles.container}>
@@ -326,30 +274,7 @@ const styles = StyleSheet.create({
   sortBadge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, borderWidth: 1, borderColor: 'rgba(0,0,0,0.05)' },
   sortText: { fontSize: 12, fontFamily: 'Inter_500Medium' },
 
-  // Grid Styles
-  bookCardGrid: {},
-  coverContainer: { position: 'relative', marginBottom: 12, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 8, elevation: 4 },
-  bookCoverGrid: { width: '100%', borderRadius: 12 },
-  statusBadge: { position: 'absolute', top: 12, right: 12, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
 
-  // List Styles
-  bookCardList: { flexDirection: 'row', marginBottom: 16, borderRadius: 16, padding: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 2 },
-  bookCoverList: { width: 70, height: 105, borderRadius: 8, marginRight: 16 },
-  bookInfoList: { flex: 1, justifyContent: 'space-between' },
-  statusBadgeList: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6, marginBottom: 6 },
-  genreTag: { alignSelf: 'flex-start', backgroundColor: 'rgba(0,0,0,0.05)', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 4 },
-  genreText: { fontSize: 12, fontFamily: 'Inter_500Medium' },
-
-  // Progress Bar
-  progressContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-  progressBarBg: { flex: 1, height: 4, borderRadius: 2, marginRight: 8 },
-  progressBarFill: { height: '100%', borderRadius: 2 },
-  progressText: { fontSize: 10, fontFamily: 'Inter_500Medium' },
-
-  // Common
-  statusText: { fontFamily: 'Inter_700Bold', fontSize: 10, color: '#FFFFFF' },
-  bookTitle: { fontFamily: 'Inter_700Bold', fontSize: 16, marginBottom: 4 },
-  bookAuthor: { fontFamily: 'Inter_400Regular', fontSize: 14 },
   fab: { position: 'absolute', bottom: 24, right: 24, width: 50, height: 50, borderRadius: 16, justifyContent: 'center', alignItems: 'center', elevation: 6 },
 
   // Empty State

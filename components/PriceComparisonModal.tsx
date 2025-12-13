@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { X, ExternalLink, ShoppingCart, Search, TrendingDown } from 'lucide-react-native';
+import { X, ExternalLink, ShoppingCart, Search, TrendingDown, AlertCircle } from 'lucide-react-native';
+import * as WebBrowser from 'expo-web-browser';
 import { useTheme } from '../context/ThemeContext';
 import { PriceService, StoreLink } from '../services/PriceService';
 
@@ -48,8 +49,22 @@ export default function PriceComparisonModal({
   const storeLinks = PriceService.getStoreLinks(bookTitle, isbn, bookAuthor);
   const searchQuery = `${bookTitle}${bookAuthor ? ' ' + bookAuthor : ''} kitap`;
 
-  const openComparisonSite = (site: typeof COMPARISON_SITES[0]) => {
-    Linking.openURL(site.getUrl(searchQuery));
+  const openLink = async (url: string) => {
+    try {
+      await WebBrowser.openBrowserAsync(url, {
+        toolbarColor: colors.background,
+        controlsColor: colors.primary,
+        presentationStyle: WebBrowser.WebBrowserPresentationStyle.FULL_SCREEN,
+      });
+    } catch (error) {
+      // WebBrowser hata verirse harici tarayıcıda aç
+      console.log('WebBrowser hatası, harici tarayıcı açılıyor:', error);
+      try {
+        await Linking.openURL(url);
+      } catch (linkError) {
+        console.error('Link açılamadı:', linkError);
+      }
+    }
   };
 
   return (
@@ -86,7 +101,7 @@ export default function PriceComparisonModal({
                   <TouchableOpacity
                     key={site.id}
                     style={[styles.comparisonButton, { backgroundColor: site.color }]}
-                    onPress={() => openComparisonSite(site)}
+                    onPress={() => openLink(site.getUrl(searchQuery))}
                   >
                     <Search size={16} color="#FFF" />
                     <Text style={styles.comparisonButtonText}>{site.name}</Text>
@@ -99,6 +114,14 @@ export default function PriceComparisonModal({
             <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
               {t('or_go_directly') || 'veya doğrudan mağazaya git'}
             </Text>
+
+            {/* Bilgilendirme Notu */}
+            <View style={[styles.infoNote, { backgroundColor: isDarkMode ? '#374151' : '#FEF3C7' }]}>
+              <AlertCircle size={14} color={isDarkMode ? '#FCD34D' : '#D97706'} />
+              <Text style={[styles.infoNoteText, { color: isDarkMode ? '#FCD34D' : '#92400E' }]}>
+                {t('store_availability_note') || 'Bazı mağazalarda bu kitap bulunmayabilir'}
+              </Text>
+            </View>
 
             {storeLinks.map((link: StoreLink, index: number) => (
               <View
@@ -114,7 +137,7 @@ export default function PriceComparisonModal({
                   </View>
                   <TouchableOpacity 
                     style={[styles.goButton, { backgroundColor: colors.primary + '15' }]}
-                    onPress={() => PriceService.openStore(link.url)}
+                    onPress={() => openLink(link.url)}
                   >
                     <Text style={[styles.actionText, { color: colors.primary }]}>{t('go_to_store')}</Text>
                     <ExternalLink size={14} color={colors.primary} style={{marginLeft: 4}} />
@@ -208,6 +231,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 12,
     textAlign: 'center',
+  },
+  infoNote: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 12,
+    gap: 8,
+  },
+  infoNoteText: {
+    fontSize: 12,
+    flex: 1,
   },
   // Mağaza Linkleri
   storeItem: {

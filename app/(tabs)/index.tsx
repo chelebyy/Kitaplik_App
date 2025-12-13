@@ -20,6 +20,7 @@ import { useBooks, Book } from '../../context/BooksContext';
 import { useAuth } from '../../context/AuthContext';
 import RecommendationModal from '../../components/RecommendationModal';
 import ProfileModal from '../../components/ProfileModal';
+import { BookCard } from '../../components/BookCard';
 
 // Görseldeki tasarıma özel renk paleti (Sabit renkler)
 const DASHBOARD_COLORS = {
@@ -65,12 +66,13 @@ export default function HomeScreen() {
     });
   }, [books, activeFilter, searchQuery]);
 
-  const handleBookPress = (book: Book) => {
+  const handleBookPress = React.useCallback((id: string) => {
     router.push({
       pathname: '/book-detail',
-      params: { id: book.id }
+      params: { id }
     });
-  };
+  }, [router]);
+
   const renderHeader = () => (
     <View style={styles.headerContainer}>
       {/* Top Bar */}
@@ -204,86 +206,7 @@ export default function HomeScreen() {
     </View >
   );
 
-  const renderBookItem = ({ item }: { item: Book }) => {
-    const isReading = item.status === 'Okunuyor';
 
-    // Calculate progress display
-    let progressText = '';
-    let progressPercent = item.progress || 0;
-
-    if (item.status === 'Okundu') {
-      progressPercent = 1;
-      progressText = t('completed');
-    } else if (item.status === 'Okunacak') {
-      progressPercent = 0;
-      progressText = t('not_started');
-    } else {
-      // Reading status
-      if (item.pageCount && item.currentPage !== undefined) {
-        progressText = `${item.currentPage} / ${item.pageCount} ${t('book_detail_pages')}`;
-        // Ensure percent is accurate based on pages if available
-        progressPercent = item.pageCount > 0 ? item.currentPage / item.pageCount : 0;
-      } else {
-        progressText = `%${Math.round(progressPercent * 100)}`;
-      }
-    }
-
-    return (
-      <TouchableOpacity
-        style={[
-          styles.bookCard,
-          {
-            backgroundColor: colors.card,
-            borderColor: isDarkMode ? 'rgba(168, 85, 247, 0.3)' : 'rgba(236, 72, 153, 0.2)'
-          }
-        ]}
-        onPress={() => handleBookPress(item)}
-        activeOpacity={0.9}
-      >
-        <View style={styles.bookCoverWrapper}>
-          <Image
-            source={{ uri: item.coverUrl }}
-            style={[styles.bookCover, { backgroundColor: colors.background }]}
-            resizeMode="cover"
-          />
-        </View>
-
-        <View style={styles.bookInfo}>
-          <View style={styles.bookHeaderRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.bookTitle, { color: colors.text }]} numberOfLines={1}>{item.title}</Text>
-              <Text style={styles.bookAuthor} numberOfLines={1}>{item.author}</Text>
-            </View>
-
-          </View>
-
-          <View style={styles.progressContainer}>
-            <View style={[styles.progressBarBg, { backgroundColor: isDarkMode ? '#333' : '#F2F4F7' }]}>
-              <View
-                style={[
-                  styles.progressBarFill,
-                  {
-                    width: `${Math.min(Math.max(progressPercent * 100, 0), 100)}%`,
-                    backgroundColor: item.status === 'Okundu' ? '#4CAF50' : colors.primary
-                  }
-                ]}
-              />
-            </View>
-            <View style={styles.statusRow}>
-              <Text style={styles.lastReadText}>
-                {t('status_label')}: <Text style={{ fontWeight: '600', color: colors.text }}>{t(item.status === 'Okundu' ? 'read' : item.status === 'Okunuyor' ? 'reading' : 'to_read')}</Text>
-              </Text>
-              {isReading && (
-                <Text style={[styles.progressText, { color: colors.textSecondary, fontSize: 11 }]}>
-                  {progressText}
-                </Text>
-              )}
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
@@ -295,7 +218,13 @@ export default function HomeScreen() {
       <FlatList
         data={filteredBooks}
         keyExtractor={(item) => item.id}
-        renderItem={renderBookItem}
+        renderItem={({ item }) => (
+          <BookCard
+            book={item}
+            variant="list"
+            onPressId={handleBookPress}
+          />
+        )}
         ListHeaderComponent={renderHeader}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
@@ -464,81 +393,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_500Medium',
     fontSize: 12,
   },
-  // Book Card
-  bookCard: {
-    flexDirection: 'row',
-    marginHorizontal: 20,
-    marginBottom: 16,
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  bookCoverWrapper: {
-    marginRight: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  bookCover: {
-    width: 60,
-    height: 90,
-    borderRadius: 6,
-  },
-  bookInfo: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingVertical: 2,
-  },
-  bookHeaderRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  bookTitle: {
-    fontFamily: 'Inter_700Bold',
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  bookAuthor: {
-    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
-    fontSize: 13,
-    color: '#667085',
-  },
-  progressContainer: {
-    marginTop: 8,
-  },
-  progressBarBg: {
-    height: 6,
-    borderRadius: 3,
-    marginBottom: 6,
-    overflow: 'hidden',
-  },
-  progressBarFill: {
-    height: '100%',
-    borderRadius: 3,
-  },
-  statusRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  progressText: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 12,
-    color: '#667085',
-  },
-  lastReadText: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 12,
-    color: '#667085',
-  },
+
   // FAB
   fab: {
     position: 'absolute',

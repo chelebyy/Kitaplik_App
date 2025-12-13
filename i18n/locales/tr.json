@@ -23,6 +23,7 @@
   "compare_prices": "Fiyatları Karşılaştır",
   "compare_prices_desc": "En uygun fiyatı bulmak için karşılaştırma sitelerini kullanın",
   "or_go_directly": "veya doğrudan mağazaya git",
+  "store_availability_note": "Bazı mağazalarda bu kitap bulunmayabilir",
   "status_label": "Durum",
   "completed": "Tamamlandı",
   "not_started": "Henüz başlanmadı",
@@ -137,5 +138,10 @@
   "sort_rating": "Puan",
   "search_placeholder_books": "Kitap veya yazar ara...",
   "empty_search": "\"{{query}}\" araması için kitap bulunamadı.",
-  "empty_category": "Bu kategoride henüz kitap yok."
+  "empty_category": "Bu kategoride henüz kitap yok.",
+  "credit_balance": "Kredi: {{count}}",
+  "earn_credit": "Kredi Kazan (+1)",
+  "cost_1_credit": "1 Kredi",
+  "insufficient_credit_title": "Yetersiz Kredi",
+  "insufficient_credit_msg": "Bu özellik için 1 krediye ihtiyacınız var. Kredi kazanmak ister misiniz?"
 }

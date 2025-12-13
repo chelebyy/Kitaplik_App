@@ -113,19 +113,22 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
     loadBooks();
   }, []);
 
-  // Kitaplar değiştiğinde kaydet
+  // Kitaplar değiştiğinde GECİKMELİ (Debounce: 1000ms) kaydet
   useEffect(() => {
-    const saveBooks = async () => {
-      if (!isLoading) {
-        try {
-          await AsyncStorage.setItem(BOOKS_STORAGE_KEY, JSON.stringify(books));
-        } catch (error) {
-          console.error('Error saving books:', error);
-        }
-      }
-    };
+    if (isLoading) return;
 
-    saveBooks();
+    const handler = setTimeout(async () => {
+      try {
+        await AsyncStorage.setItem(BOOKS_STORAGE_KEY, JSON.stringify(books));
+        // console.log('[Storage] Kitaplar diskte güncellendi.'); // Debug için
+      } catch (error) {
+        console.error('Error saving books:', error);
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
   }, [books, isLoading]);
 
   const addBook = (newBookData: Omit<Book, 'id' | 'addedAt'>) => {

@@ -7,6 +7,7 @@ import { ThemeProvider, useTheme } from '../context/ThemeContext';
 import { BooksProvider } from '../context/BooksContext';
 import { AuthProvider } from '../context/AuthContext';
 import { LanguageProvider } from '../context/LanguageContext';
+import { CreditsProvider } from '../context/CreditsContext';
 
 function RootLayoutContent() {
   const { isDarkMode } = useTheme();
@@ -46,7 +47,9 @@ export default function RootLayout() {
       <ThemeProvider>
         <AuthProvider>
           <BooksProvider>
-            <RootLayoutContent />
+            <CreditsProvider>
+              <RootLayoutContent />
+            </CreditsProvider>
           </BooksProvider>
         </AuthProvider>
       </ThemeProvider>

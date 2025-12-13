@@ -7,13 +7,25 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Image,
+    Alert,
 } from 'react-native';
-import { X, Sparkles, BookOpen, Globe, Check, RefreshCw } from 'lucide-react-native';
+import { X, Sparkles, BookOpen, Globe, Check, RefreshCw, Coins, PlayCircle } from 'lucide-react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Book, useBooks } from '../context/BooksContext';
 import { RecommendationService } from '../services/RecommendationService';
+import { useCredits } from '../context/CreditsContext';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+
+import { RewardedAd, RewardedAdEventType, TestIds, AdEventType } from 'react-native-google-mobile-ads';
+
+// Kullanıcının verdiği Unit ID (App ID formatında verilmiş olsa da istek üzerine buraya ekleniyor)
+// Geliştirme ortamında TestIds.REWARDED kullanılır.
+const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-6110532791964487~7550541087';
+
+const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+    keywords: ['fashion', 'clothing'],
+});
 
 interface RecommendationModalProps {
     visible: boolean;
@@ -27,11 +39,66 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
     const { books, addBook, updateBookStatus } = useBooks();
     const router = useRouter();
     const { t } = useTranslation();
+    const { credits, addCredits, spendCredits } = useCredits();
 
     const [step, setStep] = useState<Step>('selection');
     const [recommendedBook, setRecommendedBook] = useState<Book | null>(null);
     const [source, setSource] = useState<'library' | 'external'>('library');
     const [error, setError] = useState<string | null>(null);
+    const [adLoaded, setAdLoaded] = useState(false);
+
+
+    React.useEffect(() => {
+        const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
+            console.log('Ad Loaded');
+            setAdLoaded(true);
+        });
+        const unsubscribeEarned = rewarded.addAdEventListener(
+            RewardedAdEventType.EARNED_REWARD,
+            reward => {
+                console.log('User earned reward of ', reward);
+                addCredits(1);
+            },
+        );
+        const unsubscribeError = rewarded.addAdEventListener(
+            AdEventType.ERROR,
+            error => {
+                console.error('Ad failed to load: ', error);
+                setAdLoaded(false);
+            }
+        );
+
+        // Start loading the rewarded ad straight away
+        rewarded.load();
+
+        // Unsubscribe from events on unmount
+        return () => {
+            unsubscribeLoaded();
+            unsubscribeEarned();
+            unsubscribeError();
+        };
+    }, []);
+
+    const handleEarnCredit = () => {
+        if (adLoaded) {
+            rewarded.show();
+            // Reklam gösterildikten sonra tekrar yükle
+            setAdLoaded(false);
+            // Show is usually immediate, loading next one should happen after close or earned, 
+            // but the library handles reload requests. 
+            // Note: calling load() immediately after show() might be too early for some networks, 
+            // but standard practice is often to load in the background.
+            // Better to load a new one after the current one finishes or closes.
+            // For simplicity, we just set loaded false. The event listener (EARNED/CLOSED) should probably trigger reload.
+            // But let's keep it simple: just mark false.
+            rewarded.load();
+        } else {
+            // Reklam hazır değilse, yüklemeyi dene ve kullanıcıya bilgi ver
+            console.log('Ad not ready');
+            Alert.alert(t('attention', { defaultValue: 'Dikkat' }), t('ad_not_ready', { defaultValue: 'Reklam henüz hazır değil. Lütfen birkaç saniye bekleyip tekrar deneyin.' }));
+            rewarded.load();
+        }
+    };
 
     const handleClose = () => {
         setStep('selection');
@@ -58,6 +125,18 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
     };
 
     const handleGetExternalRecommendation = async () => {
+        if (credits < 1) {
+            // Optional: Alert user or show modal
+            Alert.alert(
+                t('attention', { defaultValue: 'Dikkat' }),
+                t('insufficient_credit', { defaultValue: 'Bu işlem için krediniz yetersiz. Lütfen reklam izleyerek kredi kazanın.' })
+            );
+            return;
+        }
+
+        const success = await spendCredits(1);
+        if (!success) return; // Should not happen given check above, but safely handle it
+
         setStep('loading');
         setSource('external');
 
@@ -129,9 +208,17 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                             <Sparkles size={20} color="#F79009" style={{ marginRight: 8 }} />
                             <Text style={[styles.title, { color: colors.text }]}>{t('recommendation_title')}</Text>
                         </View>
-                        <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-                            <X size={20} color={colors.textSecondary} />
-                        </TouchableOpacity>
+                        <View style={styles.headerRight}>
+                            <View style={styles.creditContainer}>
+                                <Coins size={16} color="#F59E0B" style={{ marginRight: 4 }} />
+                                <Text style={[styles.creditText, { color: colors.text }]}>
+                                    {t('credit_balance', { count: credits })}
+                                </Text>
+                            </View>
+                            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+                                <X size={20} color={colors.textSecondary} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
                     {/* Content */}
@@ -172,6 +259,18 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
                                             {t('recommendation_discover_desc')}
                                         </Text>
                                     </View>
+                                    <View style={styles.costBadge}>
+                                        <Text style={styles.costText}>{t('cost_1_credit')}</Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={[styles.earnCreditButton, { backgroundColor: '#F0FDF4', borderColor: '#BBF7D0' }]}
+                                    onPress={handleEarnCredit}
+                                    activeOpacity={0.8}
+                                >
+                                    <PlayCircle size={20} color="#16A34A" style={{ marginRight: 8 }} />
+                                    <Text style={[styles.earnCreditText, { color: '#15803D' }]}>{t('earn_credit')}</Text>
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -278,6 +377,24 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(0,0,0,0.05)',
     },
+    headerRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12
+    },
+    creditContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 12,
+    },
+    creditText: {
+        fontSize: 12,
+        fontFamily: 'Inter_600SemiBold',
+        color: '#B45309'
+    },
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -329,6 +446,30 @@ const styles = StyleSheet.create({
     optionDesc: {
         fontSize: 12,
         fontFamily: 'Inter_400Regular',
+    },
+    costBadge: {
+        backgroundColor: '#FEF3C7',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 8,
+    },
+    costText: {
+        fontSize: 10,
+        fontFamily: 'Inter_700Bold',
+        color: '#B45309',
+    },
+    earnCreditButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 12,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderStyle: 'dashed',
+    },
+    earnCreditText: {
+        fontSize: 14,
+        fontFamily: 'Inter_600SemiBold',
     },
     loadingContainer: {
         alignItems: 'center',

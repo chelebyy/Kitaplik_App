@@ -21,6 +21,26 @@ export interface PriceComparisonResult {
   cheapest: ScrapedPrice | null;
 }
 
+// --- Sabitler ve Konfigürasyonlar ---
+
+const PRICE_REGEXES = {
+  TURKISH_PRICE: /[^\d.,]/g,
+  THOUSAND_SEPARATOR: /\./g,
+  DECIMAL_SEPARATOR: ',',
+  DR_NORMAL: /<span[^>]*>[\s]*(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)\s*TL[\s]*<\/span>/gi,
+  DR_DISCOUNT: /<span[^>]*class="[^"]*(?<!campaign-price-old)[^"]*"[^>]*>[\s]*(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)\s*TL/gi,
+  KY_CLASS_TL: /class="TL"><\/span>\s*(\d+,\d{2})/g,
+  KY_PRICE_NEW: /price-new[^>]*>[\s\S]*?(\d{2,3},\d{2})/g,
+  KY_GENERIC: /(\d{2,3},\d{2})/g,
+  BKM_GENERAL: /(\d{1,3}(?:\.\d{3})*,\d{2})\s*(?:TL|₺)/gi,
+};
+
+const REQUEST_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'tr-TR,tr;q=0.9',
+};
+
 const STORE_CONFIGS = {
   dr: {
     name: 'D&R',
@@ -39,58 +59,67 @@ const STORE_CONFIGS = {
   },
 };
 
+// --- Yardımcı Fonksiyonlar ---
+
 /**
- * Türk Lirası formatındaki fiyatı parse eder
- * Örnekler: "149,75 TL", "1.250,00 TL", "748,75"
+ * Türk Lirası formatındaki fiyatı (örn: "1.250,00") number tipine çevirir.
  */
 function parseTurkishPrice(priceText: string): number | null {
   if (!priceText) return null;
-  
-  // Sadece sayı ve ayraçları al
+
   const cleaned = priceText
-    .replace(/[^\d.,]/g, '') // Sadece rakam, nokta, virgül
+    .replace(PRICE_REGEXES.TURKISH_PRICE, '')
     .trim();
-  
+
   if (!cleaned) return null;
 
-  // Türk formatı: 1.250,00 -> nokta binlik ayracı, virgül ondalık
-  // Önce binlik ayracı (nokta) kaldır, sonra virgülü noktaya çevir
+  // 1.250,00 -> 1250.00
   const normalized = cleaned
-    .replace(/\./g, '')  // Binlik ayracını kaldır
-    .replace(',', '.');  // Ondalık virgülü noktaya çevir
-  
+    .replace(PRICE_REGEXES.THOUSAND_SEPARATOR, '')
+    .replace(PRICE_REGEXES.DECIMAL_SEPARATOR, '.');
+
   const price = parseFloat(normalized);
-  
-  // Mantıklı fiyat aralığı kontrolü (1 TL - 10.000 TL arası)
+
+  // Mantıksız fiyatları filtrele (1 TL - 10.000 TL arası)
   if (isNaN(price) || price < 1 || price > 10000) {
     return null;
   }
-  
+
   return price;
 }
 
 /**
- * D&R HTML'inden fiyatları parse eder
+ * Regex ile HTML içinden fiyatları ayıklar
  */
-function parseDRPrices(html: string): number[] {
+function extractPricesWithRegex(html: string, regex: RegExp): number[] {
   const prices: number[] = [];
-  
-  // Pattern: <span>149,75 TL</span> veya <span class="...">239,60 TL</span>
-  const priceRegex = /<span[^>]*>[\s]*(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)\s*TL[\s]*<\/span>/gi;
-  
   let match;
-  while ((match = priceRegex.exec(html)) !== null) {
+  // Regex stateful olduğu için (global flag) döngüyle resetlenmeli veya yeni regex kullanılmalı
+  // Ancak parametre olarak gelen regex'in 'g' flag'i olduğundan emin olmalıyız.
+  // Güvenlik için local bir kopya veya reset yapılabilir ama burada basitçe döngü kuruyoruz.
+  const localRegex = new RegExp(regex);
+
+  while ((match = localRegex.exec(html)) !== null) {
     const price = parseTurkishPrice(match[1]);
     if (price !== null) {
       prices.push(price);
     }
   }
+  return prices;
+}
 
-  // Alternatif pattern: campaign-price-old olmayan fiyatlar (indirimli fiyat)
-  // İndirimli fiyatları önceliklendir
-  const discountRegex = /<span[^>]*class="[^"]*(?<!campaign-price-old)[^"]*"[^>]*>[\s]*(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)\s*TL/gi;
-  
-  while ((match = discountRegex.exec(html)) !== null) {
+function parseDRPrices(html: string): number[] {
+  const prices: number[] = [];
+
+  // Standart fiyatlar
+  let match;
+  while ((match = PRICE_REGEXES.DR_NORMAL.exec(html)) !== null) {
+    const price = parseTurkishPrice(match[1]);
+    if (price !== null) prices.push(price);
+  }
+
+  // İndirimli fiyatlar
+  while ((match = PRICE_REGEXES.DR_DISCOUNT.exec(html)) !== null) {
     const price = parseTurkishPrice(match[1]);
     if (price !== null && !prices.includes(price)) {
       prices.push(price);
@@ -100,31 +129,25 @@ function parseDRPrices(html: string): number[] {
   return [...new Set(prices)].sort((a, b) => a - b);
 }
 
-/**
- * Kitapyurdu HTML'inden fiyatları parse eder
- */
 function parseKitapyurduPrices(html: string): number[] {
   const prices: number[] = [];
-  
-  // Yöntem 1: TL span sonrası
-  let regex = /class="TL"><\/span>\s*(\d+,\d{2})/g;
   let match;
-  while ((match = regex.exec(html)) !== null) {
+
+  // Yöntem 1: Class TL
+  while ((match = PRICE_REGEXES.KY_CLASS_TL.exec(html)) !== null) {
     const price = parseTurkishPrice(match[1]);
     if (price !== null) prices.push(price);
   }
 
-  // Yöntem 2: price-new div içindeki fiyat
-  regex = /price-new[^>]*>[\s\S]*?(\d{2,3},\d{2})/g;
-  while ((match = regex.exec(html)) !== null) {
+  // Yöntem 2: price-new
+  while ((match = PRICE_REGEXES.KY_PRICE_NEW.exec(html)) !== null) {
     const price = parseTurkishPrice(match[1]);
     if (price !== null && !prices.includes(price)) prices.push(price);
   }
 
-  // Yöntem 3: Genel Türk Lirası formatı (son çare)
+  // Yöntem 3: Fallback
   if (prices.length === 0) {
-    regex = /(\d{2,3},\d{2})/g;
-    const allMatches = html.match(regex) || [];
+    const allMatches = html.match(PRICE_REGEXES.KY_GENERIC) || [];
     allMatches.forEach(m => {
       const price = parseTurkishPrice(m);
       if (price !== null && price >= 10 && price <= 500 && !prices.includes(price)) {
@@ -136,25 +159,19 @@ function parseKitapyurduPrices(html: string): number[] {
   return [...new Set(prices)].sort((a, b) => a - b);
 }
 
-/**
- * BKM Kitap HTML'inden fiyatları parse eder
- */
 function parseBKMPrices(html: string): number[] {
   const prices: number[] = [];
-  
-  // BKM fiyat pattern'leri
-  const priceRegex = /(\d{1,3}(?:\.\d{3})*,\d{2})\s*(?:TL|₺)/gi;
-  
   let match;
-  while ((match = priceRegex.exec(html)) !== null) {
+
+  while ((match = PRICE_REGEXES.BKM_GENERAL.exec(html)) !== null) {
     const price = parseTurkishPrice(match[1]);
-    if (price !== null) {
-      prices.push(price);
-    }
+    if (price !== null) prices.push(price);
   }
 
   return [...new Set(prices)].sort((a, b) => a - b);
 }
+
+// --- Ana Servis Metodları ---
 
 /**
  * Tek bir mağazadan fiyat çeker
@@ -168,24 +185,18 @@ async function scrapeStore(
 
   try {
     console.log(`[Scraper] ${config.name} sorgulanıyor: ${query}`);
-    
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'tr-TR,tr;q=0.9',
-      },
-    });
+
+    const response = await fetch(url, { headers: REQUEST_HEADERS });
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+      throw new Error(`HTTP Hata: ${response.status}`);
     }
 
     const html = await response.text();
-    console.log(`[Scraper] ${config.name} HTML alındı: ${html.length} karakter`);
+    // console.log(`[Scraper] ${config.name} HTML alındı: ${html.length} karakter`);
 
     let prices: number[] = [];
-    
+
     switch (storeId) {
       case 'dr':
         prices = parseDRPrices(html);
@@ -196,9 +207,11 @@ async function scrapeStore(
       case 'bkmkitap':
         prices = parseBKMPrices(html);
         break;
+      default:
+        console.warn(`[Scraper] Tanımsız mağaza ID: ${storeId}`);
     }
 
-    console.log(`[Scraper] ${config.name} bulunan fiyatlar:`, prices.slice(0, 5));
+    // console.log(`[Scraper] ${config.name} bulunan fiyatlar:`, prices.slice(0, 5));
 
     const lowestPrice = prices.length > 0 ? Math.min(...prices) : null;
 
@@ -209,15 +222,17 @@ async function scrapeStore(
       currency: 'TL',
       url,
     };
-  } catch (error: any) {
-    console.error(`[Scraper] ${config.name} hata:`, error.message);
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    console.error(`[Scraper] ${config.name} hata:`, errorMessage);
+
     return {
       store: config.name,
       storeId,
       price: null,
       currency: 'TL',
       url,
-      error: error.message,
+      error: errorMessage,
     };
   }
 }
@@ -230,14 +245,14 @@ export async function compareBookPrices(
   author?: string
 ): Promise<PriceComparisonResult> {
   const query = author ? `${bookTitle} ${author}` : bookTitle;
-  
+
   console.log(`[Scraper] ========== FİYAT KARŞILAŞTIRMA BAŞLIYOR ==========`);
   console.log(`[Scraper] Sorgu: "${query}"`);
 
-  // Tüm mağazaları paralel olarak sorgula
+  // Paralel sorgu başlat
   const storeIds = Object.keys(STORE_CONFIGS) as (keyof typeof STORE_CONFIGS)[];
   const pricePromises = storeIds.map(id => scrapeStore(id, query));
-  
+
   const prices = await Promise.all(pricePromises);
 
   // En ucuz fiyatı bul
@@ -248,8 +263,9 @@ export async function compareBookPrices(
 
   console.log(`[Scraper] ========== SONUÇLAR ==========`);
   prices.forEach(p => {
-    console.log(`[Scraper] ${p.store}: ${p.price ? p.price + ' TL' : 'Fiyat bulunamadı'}`);
+    console.log(`[Scraper] ${p.store}: ${p.price ? p.price + ' TL' : 'Fiyat bulunamadı'} ${p.error ? '(' + p.error + ')' : ''}`);
   });
+
   if (cheapest) {
     console.log(`[Scraper] 🏆 EN UCUZ: ${cheapest.store} - ${cheapest.price} TL`);
   }
