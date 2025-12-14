@@ -1,66 +1,70 @@
 # Kitaplik_App - Ürün Gereksinim Dokümanı (PRD)
 
 > **Durum:** Canlı / Geriye Dönük Mühendislik ile Oluşturuldu
-> **Tarih:** 2 Aralık 2025
-> **Versiyon:** 1.0
+> **Tarih:** 14 Aralık 2025
+> **Versiyon:** 1.1
 
 ## 1. Ürün Özeti
-**Kitaplik_App**, kitap severlerin fiziksel veya dijital kütüphanelerini mobil cihazları üzerinden kolayca yönetmelerini sağlayan, kullanıcı dostu ve **çevrimdışı öncelikli (offline-first)** bir mobil uygulamadır. Kullanıcılar kitaplarını kaydedebilir, okuma durumlarını (okunacak, okunuyor, okundu) takip edebilir ve kitap satın alımları için popüler mağazalara hızlı erişim sağlayabilir. Uygulama, herhangi bir üyelik veya sürekli internet bağlantısı gerektirmeden tam fonksiyonel olarak çalışır.
+**Kitaplik_App**, kitap severlerin fiziksel veya dijital kütüphanelerini mobil cihazları üzerinden kolayca yönetmelerini sağlayan, kullanıcı dostu ve **çevrimdışı öncelikli (offline-first)** bir mobil uygulamadır. Kullanıcılar kitaplarını kaydedebilir, okuma durumlarını (okunacak, okunuyor, okundu) takip edebilir ve kitap satın alımları için popüler mağazalara hızlı erişim sağlayabilir. Uygulama, modern bir arayüz ve akıcı bir kullanıcı deneyimi sunar.
 
 ## 2. Teknik Mimari ve Kısıtlar
 Uygulama, sunucu maliyetlerini ortadan kaldıran ve maksimum gizlilik sağlayan "Sunucusuz" (Serverless) ve "Yerel Veri" (Local Storage) mimarisi üzerine inşa edilmiştir.
 
-*   **Platform:** React Native (Expo Managed Workflow)
+*   **Platform:** React Native (Expo Managed Workflow SDK 52+)
 *   **Programlama Dili:** TypeScript
 *   **Veri Tabanı:** AsyncStorage (Veriler kullanıcının cihazında JSON olarak saklanır).
 *   **Navigasyon:** Expo Router (Dosya tabanlı yönlendirme).
-*   **Global Durum Yönetimi:** React Context API (`AuthContext`, `BooksContext`, `ThemeContext`).
+*   **Global Durum Yönetimi:** React Context API (`AuthContext`, `BooksContext`, `ThemeContext`, `CreditsContext`).
+*   **UI Framework:** NativeWind (Tailwind CSS) & Lucide Icons.
 *   **Dış Servisler:**
-    *   **Google Books API:** Kitap kapak resmi, yazar, özet ve sayfa sayısı bilgilerini çekmek için.
-    *   **Expo Camera:** Kitap arkasındaki ISBN (EAN-13) barkodlarını taramak için.
-*   **Kısıtlar:**
-    *   Veriler bulutta yedeklenmez (kullanıcı uygulamayı silerse veriler gider).
-    *   Çoklu cihaz senkronizasyonu yoktur.
+    *   **Google Books API:** Kitap meta verilerini (kapak, yazar, özet) çekmek için.
+    *   **Expo Camera:** ISBN (EAN-13) barkod taraması için.
+    *   **AdMob:** Ödüllü reklamlar (Rewarded Ads) üzerinden kredi kazanımı için.
 
 ## 3. Temel Özellikler ve Modüller
 
 ### 3.1. Kimlik Doğrulama (Local Auth)
 *   **Özellik:** Sunucu bağımsız, cihaz içi profil oluşturma.
 *   **Detay:** Kullanıcı sadece bir "Takma Ad" (Nickname) girerek giriş yapar. Şifre veya E-posta gerekmez.
-*   **Avatar:** Girilen isme göre `ui-avatars.com` üzerinden otomatik profil resmi oluşturulur.
+*   **Avatar:** `ui-avatars.com` entegrasyonu ile isme özel avatar oluşturulur.
 
-### 3.2. Kitap Ekleme Modülü
-Kullanıcıların kütüphanelerine kitap eklemesi için üç farklı yöntem sunulur:
-1.  **Barkod Tarama:** Telefon kamerası kullanılarak kitabın ISBN kodu taranır ve bilgiler Google Books API'den otomatik çekilir.
-2.  **Akıllı Arama:** Kitap adı veya yazar adı ile Google Books veritabanında arama yapılır.
-3.  **Manuel Giriş:** API'de bulunamayan kitaplar için (veya özel basımlar için) elle veri girişi yapılabilir.
+### 3.2. Kitap Yönetimi
+Kullanıcılar kütüphanelerine 3 yöntemle kitap ekleyebilir:
+1.  **Barkod Tarama:** Kamera ile ISBN taranarak Google Books verisi otomatik çekilir.
+2.  **Akıllı Arama:** Kitap/Yazar adı ile arama yapılır.
+3.  **Manuel Giriş:** Özel basımlar için elle veri girişi.
 
-### 3.3. Kütüphane ve Okuma Takibi
-*   **Raflar:** Kitaplar "Okunacaklar", "Okunuyor" ve "Bitenler" olarak üç ana kategoride listelenir.
-*   **İlerleme Çubuğu:** "Okunuyor" durumundaki kitaplar için güncel sayfa sayısı girilerek görsel bir ilerleme çubuğu (Progress Bar) görüntülenir.
-*   **Kişisel Notlar:** Her kitap detayına kullanıcı tarafından özel metin notları eklenebilir.
+### 3.3. Okuma Takibi ve İstatistikler
+*   **Raflar:** "Okunacaklar", "Okunuyor" ve "Bitenler" durumları.
+*   **İlerleme:** Sayfa bazlı ilerleme çubuğu ve yüzde gösterimi.
+*   **Notlar:** Her kitap için özel not alma alanı.
 
-### 3.4. Fiyat Karşılaştırma (Akıllı Linkler)
-*   **Amaç:** Kullanıcının en uygun fiyatı bulmasını kolaylaştırmak.
-*   **Yöntem:** Canlı veri çekmek (scraping) yerine, kitabın ISBN veya adını kullanarak popüler mağazalar için "Doğrudan Arama Linkleri" üretilir.
+### 3.4. Kredi ve Reklam Sistemi (Gamification)
+*   **Amaç:** Uygulamanın sürdürülebilirliğini sağlamak ve "premium" özellik hissi yaratmak.
+*   **Mekanizma:** Kullanıcılar "Ödüllü Reklam" izleyerek kredi kazanır.
+*   **Kullanım:** Bazı gelişmiş özellikler (örn: detaylı yapay zeka önerileri veya çoklu kitap ekleme) kredi gerektirebilir.
+
+### 3.5. Fiyat Karşılaştırma (Akıllı Linkler)
+*   **Yöntem:** ISBN veya kitap adı kullanılarak popüler mağazalar için dinamik arama linkleri oluşturulur.
 *   **Desteklenen Mağazalar:** Kitapyurdu, D&R, İdefix, Amazon TR, BKM Kitap, NadirKitap.
+*   **Özellik:** Canlı fiyat çekmek yerine, kullanıcıyı doğrudan mağazanın ilgili arama sonucuna yönlendirir.
 
-### 3.5. Ayarlar ve Kişiselleştirme
-*   **Çoklu Dil Desteği:** Türkçe (Varsayılan) ve İngilizce. Uygulama içi anlık geçiş imkanı.
-*   **Tema:** Koyu Mod (Dark Mode) ve Açık Mod (Light Mode) desteği.
-*   **Veri Yönetimi:** "Tüm Verileri Temizle" seçeneği ile cihazdaki verilerin sıfırlanması.
+### 3.6. Ayarlar ve UX
+*   **Dil:** Türkçe/İngilizce (i18n) desteği.
+*   **Tema:** Otomatik veya manuel Koyu/Açık mod.
+*   **Splash Screen:** Native Splash API kullanılarak pürüzsüz açılış (Siyah ekran sorunu çözülmüştür).
 
 ## 4. Kullanıcı Hikayeleri (User Stories)
 
 | Rol | İstek | Amaç |
 | :--- | :--- | :--- |
-| **Okur** | Elimdeki fiziksel kitabın barkodunu okutmak istiyorum. | Kitabın adını ve yazarını yazmakla uğraşmadan saniyeler içinde kütüphaneme eklemek için. |
-| **Öğrenci** | Okuduğum kitapta kaçıncı sayfada kaldığımı kaydetmek istiyorum. | Sonraki okuma seansımda kaldığım yeri hatırlamak ve bitirmeye ne kadar kaldığını görmek için. |
-| **Kitap Sever** | Bir kitabın Kitapyurdu ve Amazon fiyatlarını görmek istiyorum. | Tek tek sitelere girip arama yapmadan, tek tıkla ilgili sayfalara gidip fiyatı karşılaştırmak için. |
-| **Gezgin** | Kitap notlarıma internetim yokken de erişmek istiyorum. | Metroda veya uçakta seyahat ederken aldığım notları gözden geçirebilmek için. |
-| **Kullanıcı** | Uygulamayı İngilizce kullanmak istiyorum. | Telefon dilim İngilizce olduğu için veya İngilizce pratiği yapmak için. |
+| **Hızlı Okur** | Kitabın arkasındaki barkodu okutup hemen eklemek istiyorum. | Manuel yazmakla vakit kaybetmemek için. |
+| **Öğrenci** | "Okunuyor" rafımdaki kitapta kaldığım sayfayı güncellemek istiyorum. | Bir sonraki okumamda nerede kaldığımı hatırlamak için. |
+| **Ekonomik Okur** | Bir kitabın Kitapyurdu ve Amazon linklerine tek tıkla gitmek istiyorum. | En ucuz fiyatı bulmak için manuel arama yapmaktan kurtulmak istiyorum. |
+| **Gezgin** | Metroda internetim yokken notlarıma bakmak istiyorum. | Offline-first yapı sayesinde verilerime her an erişebilmek için. |
 
 ## 5. Gelecek Planları (Roadmap)
-*   **Yedekleme:** Verilerin JSON dosyası olarak dışa aktarılması (Export) ve içe aktarılması (Import).
-*   **İstatistikler:** Aylık/Yıllık okuma hedefleri ve grafikleri.
-*   **Koleksiyonlar:** Özel listeler (örn: "Yaz Tatili Listesi", "Favorilerim") oluşturma.
+*   **Yedekleme (JSON Export/Import):** Verilerin cihazlar arası taşınabilmesi.
+*   **Okuma Hedefleri:** Yıllık okuma hedefi belirleme ve grafiksel takip.
+*   **Koleksiyonlar:** "Yaz Tatili", "Favoriler" gibi özel listeler oluşturma.
+*   **Sosyal Paylaşım:** Okunan kitabın Instagram hikayelerinde paylaşılması için özel görsel oluşturucu.

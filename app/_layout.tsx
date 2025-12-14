@@ -2,18 +2,59 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '../hooks/useFrameworkReady';
 import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
-import { View, ActivityIndicator } from 'react-native';
 import { ThemeProvider, useTheme } from '../context/ThemeContext';
-import { BooksProvider } from '../context/BooksContext';
-import { AuthProvider } from '../context/AuthContext';
+import { BooksProvider, useBooks } from '../context/BooksContext';
+import { AuthProvider, useAuth } from '../context/AuthContext';
 import { LanguageProvider } from '../context/LanguageContext';
 import { CreditsProvider } from '../context/CreditsContext';
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback, useState, useEffect } from 'react';
+import { View } from 'react-native';
+import { AnimatedSplash } from '../components/AnimatedSplash';
 
-function RootLayoutContent() {
+// Native splash screen'i otomatik gizlemeyi engelle
+SplashScreen.preventAutoHideAsync();
+
+function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
   const { isDarkMode } = useTheme();
+  const { isLoading: authLoading } = useAuth();
+  const { isLoading: booksLoading } = useBooks();
+
+  // Animasyonlu splash gösterilsin mi?
+  const [showAnimatedSplash, setShowAnimatedSplash] = useState(true);
+
+  // Tüm kritik kaynakların (font, auth, veri) yüklenmesini bekle
+  const isReady = fontsLoaded && !authLoading && !booksLoading;
+
+  // Native splash'i Lottie View render edildiğinde gizle (onLayout ile)
+  const onLayoutAnimatedSplash = useCallback(async () => {
+    if (isReady) {
+      // Lottie görünümü render edildi, artık native splash'i gizleyebiliriz
+      await SplashScreen.hideAsync();
+    }
+  }, [isReady]);
+
+  // Animasyon bittiğinde uygulamayı göster
+  const handleAnimationFinish = useCallback(() => {
+    setShowAnimatedSplash(false);
+  }, []);
+
+  if (!isReady) {
+    // Native splash screen'in ekranda kalmasını sağla
+    return null;
+  }
+
+  // Animasyonlu splash göster - onLayout ile Native splash'i kaldır
+  if (showAnimatedSplash) {
+    return (
+      <View style={{ flex: 1 }} onLayout={onLayoutAnimatedSplash}>
+        <AnimatedSplash onAnimationFinish={handleAnimationFinish} />
+      </View>
+    );
+  }
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="+not-found" />
@@ -21,7 +62,7 @@ function RootLayoutContent() {
         <Stack.Screen name="book-detail" />
       </Stack>
       <StatusBar style={isDarkMode ? 'light' : 'dark'} />
-    </>
+    </View>
   );
 }
 
@@ -34,21 +75,13 @@ export default function RootLayout() {
     Inter_700Bold,
   });
 
-  if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#8BA876" />
-      </View>
-    );
-  }
-
   return (
     <LanguageProvider>
       <ThemeProvider>
         <AuthProvider>
           <BooksProvider>
             <CreditsProvider>
-              <RootLayoutContent />
+              <RootLayoutContent fontsLoaded={fontsLoaded} />
             </CreditsProvider>
           </BooksProvider>
         </AuthProvider>

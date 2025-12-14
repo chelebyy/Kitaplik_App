@@ -20,6 +20,7 @@ export interface Book {
 
 interface BooksContextType {
   books: Book[];
+  isLoading: boolean;
   addBook: (book: Omit<Book, 'id' | 'addedAt'>) => void;
   updateBookStatus: (id: string, status: BookStatus) => void;
   updateBookNotes: (id: string, notes: string) => void;
@@ -215,6 +216,7 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
   return (
     <BooksContext.Provider value={{
       books,
+      isLoading,
       addBook,
       updateBookStatus,
       updateBookNotes,

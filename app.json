@@ -5,7 +5,13 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "myapp",
+    "backgroundColor": "#F7F6EE",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "backgroundColor": "#F7F6EE",
+      "resizeMode": "contain"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -14,6 +20,14 @@
       "output": "single"
     },
     "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F7F6EE",
+          "image": "./assets/images/splash.png",
+          "resizeMode": "contain"
+        }
+      ],
       "expo-router",
       [
         "expo-image-picker",
@@ -41,11 +55,18 @@
       "typedRoutes": true
     },
     "android": {
+      "backgroundColor": "#F7F6EE",
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA"
       ],
       "package": "com.kitaplik.app"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "da2ee961-92a2-44c8-98eb-f2eda0d37d12"
+      }
     }
   }
 }

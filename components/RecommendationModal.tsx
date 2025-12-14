@@ -19,8 +19,6 @@ import { useTranslation } from 'react-i18next';
 
 import { RewardedAd, RewardedAdEventType, TestIds, AdEventType } from 'react-native-google-mobile-ads';
 
-// Kullanıcının verdiği Unit ID (App ID formatında verilmiş olsa da istek üzerine buraya ekleniyor)
-// Geliştirme ortamında TestIds.REWARDED kullanılır.
 const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-6110532791964487~7550541087';
 
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
@@ -31,6 +29,7 @@ interface RecommendationModalProps {
     visible: boolean;
     onClose: () => void;
 }
+
 
 type Step = 'selection' | 'loading' | 'result';
 
@@ -46,7 +45,6 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
     const [source, setSource] = useState<'library' | 'external'>('library');
     const [error, setError] = useState<string | null>(null);
     const [adLoaded, setAdLoaded] = useState(false);
-
 
     React.useEffect(() => {
         const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
@@ -68,10 +66,8 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
             }
         );
 
-        // Start loading the rewarded ad straight away
         rewarded.load();
 
-        // Unsubscribe from events on unmount
         return () => {
             unsubscribeLoaded();
             unsubscribeEarned();
@@ -82,18 +78,9 @@ export default function RecommendationModal({ visible, onClose }: Recommendation
     const handleEarnCredit = () => {
         if (adLoaded) {
             rewarded.show();
-            // Reklam gösterildikten sonra tekrar yükle
             setAdLoaded(false);
-            // Show is usually immediate, loading next one should happen after close or earned, 
-            // but the library handles reload requests. 
-            // Note: calling load() immediately after show() might be too early for some networks, 
-            // but standard practice is often to load in the background.
-            // Better to load a new one after the current one finishes or closes.
-            // For simplicity, we just set loaded false. The event listener (EARNED/CLOSED) should probably trigger reload.
-            // But let's keep it simple: just mark false.
             rewarded.load();
         } else {
-            // Reklam hazır değilse, yüklemeyi dene ve kullanıcıya bilgi ver
             console.log('Ad not ready');
             Alert.alert(t('attention', { defaultValue: 'Dikkat' }), t('ad_not_ready', { defaultValue: 'Reklam henüz hazır değil. Lütfen birkaç saniye bekleyip tekrar deneyin.' }));
             rewarded.load();
