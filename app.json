@@ -4,6 +4,7 @@
     "slug": "react-native-expo-starter",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "backgroundColor": "#F7F6EE",
     "newArchEnabled": true,
@@ -13,7 +14,8 @@
       "resizeMode": "contain"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": "./assets/images/icon.png"
     },
     "web": {
       "bundler": "metro",
@@ -21,11 +23,9 @@
     },
     "plugins": [
       [
-        "expo-splash-screen",
+        "react-native-bootsplash",
         {
-          "backgroundColor": "#F7F6EE",
-          "image": "./assets/images/splash.png",
-          "resizeMode": "contain"
+          "assetsDir": "assets/bootsplash"
         }
       ],
       "expo-router",
@@ -56,6 +56,10 @@
     },
     "android": {
       "backgroundColor": "#F7F6EE",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#F7F6EE"
+      },
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA"

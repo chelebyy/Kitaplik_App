@@ -35,7 +35,8 @@ export const AnimatedSplash = ({ onAnimationFinish }: AnimatedSplashProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F7F6EE', // Lottie animasyonundaki renk ile eşleşiyor
+        // Bootsplash ile aynı arka plan rengi - native splash ile eşleşiyor
+        backgroundColor: '#F7F6EE',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -44,4 +45,3 @@ const styles = StyleSheet.create({
         height: '100%',
     },
 });
-

@@ -7,13 +7,10 @@ import { BooksProvider, useBooks } from '../context/BooksContext';
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { LanguageProvider } from '../context/LanguageContext';
 import { CreditsProvider } from '../context/CreditsContext';
-import * as SplashScreen from 'expo-splash-screen';
+import BootSplash from 'react-native-bootsplash';
 import { useCallback, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { AnimatedSplash } from '../components/AnimatedSplash';
-
-// Native splash screen'i otomatik gizlemeyi engelle
-SplashScreen.preventAutoHideAsync();
 
 function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
   const { isDarkMode } = useTheme();
@@ -26,11 +23,11 @@ function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
   // Tüm kritik kaynakların (font, auth, veri) yüklenmesini bekle
   const isReady = fontsLoaded && !authLoading && !booksLoading;
 
-  // Native splash'i Lottie View render edildiğinde gizle (onLayout ile)
+  // Native splash'i Lottie View render edildiğinde gizle
   const onLayoutAnimatedSplash = useCallback(async () => {
     if (isReady) {
       // Lottie görünümü render edildi, artık native splash'i gizleyebiliriz
-      await SplashScreen.hideAsync();
+      await BootSplash.hide({ fade: true });
     }
   }, [isReady]);
 
