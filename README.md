@@ -7,16 +7,17 @@ Kişisel kitap koleksiyonunuzu yönetmek, okuma alışkanlıklarınızı takip e
 *   **Kitap Yönetimi**: Kitaplığınızdaki kitapları ekleyin, düzenleyin ve detaylarını görüntüleyin.
 *   **Barkod Okuyucu**: Kitapları hızlıca eklemek için kameranızı kullanarak barkodları tarayın (`expo-camera`).
 *   **Öneri Sistemi**: Google Books API entegrasyonu ile okuma zevkinize uygun kitap önerileri alın.
-*   **Kullanıcı Doğrulama**: Firebase Authentication ile güvenli giriş ve hesap yönetimi.
+*   **Çevrimdışı Kimlik Doğrulama**: Yerel depolama tabanlı, üyelik gerektirmeyen hızlı profil oluşturma.
 *   **Karanlık/Aydınlık Mod**: Tercihinize göre tema desteği (`ThemeContext`).
-*   **Modern Arayüz**: Akıcı geçişler ve kullanıcı dostu tasarım (Expo Router, Lucide Icons).
+*   **Çoklu Dil Desteği**: Türkçe ve İngilizce dil seçenekleri.
+*   **Kredi Sistemi**: Reklam izleyerek kredi kazanma ve özel özelliklere erişim.
 
 ## 🛠️ Teknolojiler
 
 *   **Platform**: [Expo](https://expo.dev) (React Native)
 *   **Dil**: TypeScript
 *   **Yönlendirme**: Expo Router
-*   **Backend**: Firebase (Auth, Firestore)
+*   **Veri Tabanı**: AsyncStorage (Offline-First)
 *   **API**: Google Books API
 *   **UI**: Lucide React Native, Tailwind (nativewind/clsx)
 
@@ -37,10 +38,7 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
     yarn install
     ```
 
-3.  **Firebase Yapılandırması**:
-    `config/firebaseConfig.ts` dosyasını kendi Firebase proje bilgilerinizle güncelleyin.
-
-4.  **Uygulamayı Başlatın**:
+3.  **Uygulamayı Başlatın**:
     ```bash
     npm run dev
     # veya
@@ -62,11 +60,11 @@ Kitaplik_App/
 ├── components/          # Yeniden kullanılabilir UI bileşenleri
 │   ├── BarcodeScannerModal.tsx
 │   └── ...
-├── config/              # Yapılandırma dosyaları (Firebase vb.)
+├── config/              # Yapılandırma dosyaları
 ├── constants/           # Sabit değerler (Renkler, Temalar)
-├── context/             # React Context (Auth, Theme, Books)
-├── services/            # API ve Backend servisleri
-│   ├── FirestoreService.ts
+├── context/             # React Context (Auth, Theme, Books, Credits)
+├── services/            # İş Mantığı ve API servisleri
+│   ├── GoogleBooksService.ts
 │   └── RecommendationService.ts
 └── hooks/               # Özel React Hook'ları
 ```

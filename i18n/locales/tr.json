@@ -143,5 +143,8 @@
   "earn_credit": "Kredi Kazan (+1)",
   "cost_1_credit": "1 Kredi",
   "insufficient_credit_title": "Yetersiz Kredi",
-  "insufficient_credit_msg": "Bu özellik için 1 krediye ihtiyacınız var. Kredi kazanmak ister misiniz?"
+  "insufficient_credit_msg": "Bu özellik için 1 krediye ihtiyacınız var. Kredi kazanmak ister misiniz?",
+  "attention": "Dikkat",
+  "ad_not_ready": "Reklam henüz hazır değil. Lütfen birkaç saniye bekleyip tekrar deneyin.",
+  "insufficient_credit": "Bu işlem için krediniz yetersiz. Lütfen reklam izleyerek kredi kazanın."
 }

@@ -5,7 +5,7 @@ Bu belge, Kitaplik App için planlanan ve daha sonra eklenecek özellikleri içe
 ## 1. Detaylı Okuma Analizi (Premium İstatistikler) 📊
 
 **Amaç:** Kullanıcının okuma alışkanlıklarını derinlemesine analiz ederek motive etmek.
-**Kredi Modeli:** Bu özelliklere erişim kredi karşılığı açılabilir veya haftalık rapor için kredi harcanabilir.
+**Gelir Modeli:** Bu özellik **Premium Paket** dahilindedir (Tek seferlik satın alım veya abonelik).
 
 **Özellikler:**
 
@@ -17,15 +17,42 @@ Bu belge, Kitaplik App için planlanan ve daha sonra eklenecek özellikleri içe
 ## 2. Kitap Asistanı (AI Chat - Mini) 🤖
 
 **Amaç:** Kullanıcının kitaplarla ilgili sorularını anlık olarak yanıtlamak.
-**Kredi Modeli:** Her sohbet veya soru başına kredi düşülür (Örn: 2 Kredi).
-**Teknoloji:** Gemini Flash (veya benzeri hızlı/ucuz LLM) API entegrasyonu.
+**Kredi Modeli:** Her soru = **2 Kredi**
+**Teknoloji:** Gemini 2.0 Flash API (en ucuz + en hızlı)
+
+**Teknik Detaylar:**
+
+- Maliyet: ~₺0.01/soru (2 kredi karşılığı karlı)
+- Geliştirme: 12-18 saat
+- Backend: Firebase Cloud Functions gerekli (API key güvenliği)
 
 **Kullanım Senaryoları:**
 
 - "Suç ve Ceza'nın ana fikri nedir?"
-- "Bu kitabı okumalı mıyım? Tarzı bana uygun mu?"
-- "Harry Potter serisindeki X karakteri kimdi?"
-- Kitap özetleri ve karakter analizleri.
+- "Bu kitabı okumalı mıyım?"
+- "Harry Potter'daki X karakteri kimdi?"
+- Kitap özetleri ve karakter analizleri
+
+## 3. Yüksek Çözünürlüklü Kapak Arama (HD) 🖼️
+
+**Amaç:** Kullanıcıların kitaplıklarını daha estetik hale getirmesi.
+**Kredi Modeli:** Her HD kapak arama ve indirme işlemi = **1 Kredi**.
+
+**Özellikler:**
+
+- Google Books dışındaki kaynaklardan veya görsel arama motorlarından yüksek kaliteli kapak bulma.
+- Galeriye kaydetme veya doğrudan kitap kapağı olarak atama.
+
+## 4. Kütüphane Dışa Aktarma (Export) 📤
+
+**Amaç:** Veri yedeği almak veya listeyi paylaşmak.
+
+**Formatlar:**
+
+- **PDF:** Görselli, şık bir katalog.
+- **Excel/CSV:** Detaylı veri listesi.
 
 ---
 *Not: Bu özellikler uygulamanın kullanıcı tabanı arttıkça eklenecektir.*
+
+takip ettiğin yazarın bir kitabı çıktığında otomatik olarak bildirim al , satışa sunulduğunda bildirim al

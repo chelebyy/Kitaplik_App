@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Localization from 'expo-localization';
 import i18n from '../i18n/i18n';
 
 type Language = 'tr' | 'en';
@@ -12,27 +13,46 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 const LANGUAGE_KEY = 'user_language';
 
+/**
+ * Cihazın dilini algılar ve desteklenen dillere göre (tr/en) döndürür.
+ * Cihaz dili Türkçe ise 'tr', aksi halde varsayılan olarak 'en' döner.
+ */
+const getDeviceLanguage = (): Language => {
+  const locales = Localization.getLocales();
+  const deviceLangCode = locales[0]?.languageCode?.toLowerCase() ?? 'en';
+
+  // Eğer cihaz dili Türkçe ise 'tr', değilse 'en' kullan
+  return deviceLangCode === 'tr' ? 'tr' : 'en';
+};
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('tr');
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const loadLanguage = async () => {
       try {
         const savedLang = await AsyncStorage.getItem(LANGUAGE_KEY);
+
         if (savedLang === 'tr' || savedLang === 'en') {
+          // Kullanıcı daha önce dil seçmiş, o dili kullan
           setLanguage(savedLang);
           await i18n.changeLanguage(savedLang);
         } else {
-          // i18n başlatıldığında varsayılan olarak cihaz dilini veya 'tr'yi seçmişti.
-          // State'i bu değerle senkronize edelim.
-          // i18n.language 'tr-TR' gibi gelebilir, sadece ilk 2 harfi alalım.
-          const currentLang = i18n.language?.split('-')[0] as Language;
-          if (currentLang === 'en' || currentLang === 'tr') {
-            setLanguage(currentLang);
-          }
+          // İlk açılış: Cihaz diline göre otomatik dil seç
+          const deviceLang = getDeviceLanguage();
+          setLanguage(deviceLang);
+          await i18n.changeLanguage(deviceLang);
+          // Seçilen dili kaydet (gelecek açılışlar için)
+          await AsyncStorage.setItem(LANGUAGE_KEY, deviceLang);
         }
       } catch (e) {
         console.error('Failed to load language', e);
+        // Hata durumunda cihaz diline göre ayarla
+        const deviceLang = getDeviceLanguage();
+        setLanguage(deviceLang);
+      } finally {
+        setIsLoaded(true);
       }
     };
     loadLanguage();

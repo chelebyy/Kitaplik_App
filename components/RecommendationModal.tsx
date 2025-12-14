@@ -380,7 +380,8 @@ const styles = StyleSheet.create({
     headerRight: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 12
+        gap: 8,
+        flexShrink: 0,
     },
     creditContainer: {
         flexDirection: 'row',
@@ -398,11 +399,15 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        flex: 1,
+        flexShrink: 1,
+        marginRight: 8,
     },
     title: {
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: 'Inter_700Bold',
         fontWeight: '700',
+        flexShrink: 1,
     },
     closeButton: {
         padding: 4,

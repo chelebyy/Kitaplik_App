@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,11 +8,12 @@ import {
   Image,
   FlatList,
   Platform,
-  StatusBar
+  StatusBar,
+  useWindowDimensions
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Search, Plus, MoreVertical, Sun, Moon, Sparkles, User } from 'lucide-react-native';
+import { Search, Plus, Sun, Moon, Sparkles, User, Grid, List } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
@@ -35,11 +36,16 @@ export default function HomeScreen() {
   const { colors, toggleTheme, isDarkMode } = useTheme();
   const { books } = useBooks();
   const { user } = useAuth();
+  const { width } = useWindowDimensions();
 
   const [activeFilter, setActiveFilter] = useState('Tümü');
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [isRecommendationModalVisible, setRecommendationModalVisible] = useState(false);
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
+
+  // Grid hesaplamaları
+  const COLUMN_WIDTH = (width - 48 - 16) / 2;
 
   // İstatistik Hesaplama
   const stats = useMemo(() => {
@@ -202,6 +208,16 @@ export default function HomeScreen() {
               activeFilter === 'Okunuyor' ? t('reading') :
                 activeFilter === 'Okunacak' ? t('to_read') : activeFilter}
         </Text>
+        <TouchableOpacity
+          onPress={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}
+          style={[styles.viewModeButton, { backgroundColor: colors.card }]}
+        >
+          {viewMode === 'grid' ? (
+            <List size={20} color={colors.text} />
+          ) : (
+            <Grid size={20} color={colors.text} />
+          )}
+        </TouchableOpacity>
       </View>
     </View >
   );
@@ -216,17 +232,25 @@ export default function HomeScreen() {
       />
 
       <FlatList
+        key={viewMode}
         data={filteredBooks}
         keyExtractor={(item) => item.id}
+        numColumns={viewMode === 'grid' ? 2 : 1}
         renderItem={({ item }) => (
-          <BookCard
-            book={item}
-            variant="list"
-            onPressId={handleBookPress}
-          />
+          <View style={{
+            width: viewMode === 'grid' ? COLUMN_WIDTH : '100%',
+            paddingHorizontal: viewMode === 'list' ? 24 : 0,
+          }}>
+            <BookCard
+              book={item}
+              variant={viewMode}
+              onPressId={handleBookPress}
+            />
+          </View>
         )}
         ListHeaderComponent={renderHeader}
         contentContainerStyle={styles.listContent}
+        columnWrapperStyle={viewMode === 'grid' ? styles.gridColumnWrapper : undefined}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={styles.emptyState}>
@@ -415,5 +439,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#667085',
     textAlign: 'center',
+  },
+  // View Mode Toggle
+  viewModeButton: {
+    padding: 8,
+    borderRadius: 8,
+  },
+  // Grid Layout
+  gridColumnWrapper: {
+    justifyContent: 'space-between',
+    marginBottom: 24,
+    paddingHorizontal: 24,
   },
 });

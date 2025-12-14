@@ -37,9 +37,9 @@ export const BookCard = React.memo(({
         : (book.progress || 0);
 
     const progressText = book.status === 'Okundu'
-        ? t('completed') // Tamamlandı
+        ? t('read') // Okundu
         : book.status === 'Okunacak'
-            ? t('not_started') // Başlanmadı
+            ? t('to_read') // Okunacak
             : `%${Math.round(progressPercent * 100)}`;
 
     const isReading = book.status === 'Okunuyor';
@@ -106,6 +106,31 @@ export const BookCard = React.memo(({
                     >
                         {book.author}
                     </Text>
+
+                    {/* Progress Bar for Grid - tüm durumlar için */}
+                    {showProgress && (
+                        <View className="mt-2">
+                            <View className={cn("h-1 rounded-full overflow-hidden", isDarkMode ? "bg-gray-700" : "bg-gray-100")}>
+                                <View
+                                    className="h-full rounded-full"
+                                    style={{
+                                        width: `${Math.min(Math.max(progressPercent * 100, 0), 100)}%`,
+                                        backgroundColor: getStatusColor()
+                                    }}
+                                />
+                            </View>
+                            <View className="flex-row justify-between items-center mt-1">
+                                <Text className="text-[10px] text-slate-400 font-medium">
+                                    {getStatusLabel()}
+                                </Text>
+                                {isReading && (
+                                    <Text className="text-[10px] text-slate-400 font-medium">
+                                        {`%${Math.round(progressPercent * 100)}`}
+                                    </Text>
+                                )}
+                            </View>
+                        </View>
+                    )}
                 </View>
             </Pressable>
         );

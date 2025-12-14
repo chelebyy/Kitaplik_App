@@ -138,5 +138,11 @@
   "sort_rating": "Rating",
   "search_placeholder_books": "Search for books or authors...",
   "empty_search": "No books found for \"{{query}}\".",
-  "empty_category": "No books in this category yet."
+  "empty_category": "No books in this category yet.",
+  "credit_balance": "Credits: {{count}}",
+  "earn_credit": "Earn Credit (+1)",
+  "cost_1_credit": "1 Credit",
+  "attention": "Attention",
+  "ad_not_ready": "Ad is not ready yet. Please wait a few seconds and try again.",
+  "insufficient_credit": "You don't have enough credits for this action. Please watch an ad to earn credits."
 }
