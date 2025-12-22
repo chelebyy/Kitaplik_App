@@ -21,13 +21,16 @@ import {
   Sun,
   X,
   CloudUpload,
-  History
+  History,
+  Mail
 } from 'lucide-react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useBooks } from '../../context/BooksContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { BackupService } from '../../services/BackupService';
 import { useTranslation } from 'react-i18next';
+import * as Linking from 'expo-linking';
+import { createFeedbackMailto } from '../../utils/email';
 
 export default function SettingsScreen() {
   const { colors, isDarkMode, toggleTheme } = useTheme();
@@ -36,6 +39,26 @@ export default function SettingsScreen() {
   const { t } = useTranslation();
   const [isAboutVisible, setAboutVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleFeedback = async () => {
+    const subject = t('feedback_subject');
+    const body = `${t('feedback_body_intro')}
+${t('feedback_type_bug')}
+${t('feedback_type_suggestion')}
+${t('feedback_type_request')}
+${t('feedback_type_other')}
+
+${t('feedback_body_message')}
+`;
+    const url = createFeedbackMailto('chelebyy@gmail.com', subject, body);
+    
+    const canOpen = await Linking.canOpenURL(url);
+    if (canOpen) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(t('profile_error_title'), "E-posta uygulaması bulunamadı.");
+    }
+  };
 
   const handleResetData = () => {
     Alert.alert(
@@ -238,6 +261,20 @@ export default function SettingsScreen() {
         <View style={styles.sectionContainer}>
           <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>{t('settings_other')}</Text>
           <View style={[styles.card, { backgroundColor: colors.card }]}>
+            <TouchableOpacity
+              style={styles.row}
+              activeOpacity={0.7}
+              onPress={handleFeedback}
+            >
+              <View style={[styles.iconContainer, { backgroundColor: colors.iconBackground }]}>
+                <Mail size={22} color="#448AFF" />
+              </View>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>{t('settings_feedback')}</Text>
+              <ChevronRight size={20} color={colors.tabIconDefault} />
+            </TouchableOpacity>
+
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+
             <View style={styles.row}>
               <View style={[styles.iconContainer, { backgroundColor: colors.iconBackground }]}>
                 <Info size={22} color="#448AFF" />
