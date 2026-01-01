@@ -57,3 +57,17 @@ Bu belge, Kitaplik App için planlanan ve daha sonra eklenecek özellikleri içe
 _Not: Bu özellikler uygulamanın kullanıcı tabanı arttıkça eklenecektir._
 
 takip ettiğin yazarın bir kitabı çıktığında otomatik olarak bildirim al , satışa sunulduğunda bildirim al
+
+---
+
+## 📚 Teknik İyileştirmeler
+
+### Paralel API Arama Sistemi (Faz 2)
+
+**Durum:** Planlandı (Faz 1 tamamlandı)  
+**Detaylı Plan:** [docs/FUTURE_IMPLEMENTATION_PLAN.md](./docs/FUTURE_IMPLEMENTATION_PLAN.md)
+
+Google Books ve Open Library API'lerini paralel çalıştırarak barkod tarama başarı oranını %90'a çıkarma.
+
+- ✅ Faz 1: ISBN dönüştürme + Open Library fallback (Tamamlandı)
+- ⏳ Faz 2: Paralel arama sistemi (Gelecek)
