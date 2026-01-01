@@ -72,3 +72,55 @@ Kitaplik_App/
 │   └── RecommendationService.ts
 └── hooks/               # Özel React Hook'ları
 ```
+
+## ❓ Sık Sorulan Sorular (FAQ)
+
+### Neden uygulama dilini değiştirdiğimde kitap adları değişmiyor?
+
+Uygulama dili (Türkçe/İngilizce) sadece **arayüz elementlerini** (butonlar, menüler, bildirimler) etkiler.
+
+**Kitap başlıkları ve yazar isimleri** değişmez çünkü:
+
+- Google Books'tan gelen veriler orijinal dilde saklanır
+- Kitabın orijinal adını korumak daha doğrudur
+- Goodreads, Kindle gibi benzer uygulamalar da aynı yaklaşımı kullanır
+
+Örnek: "Kongoya Ağıt" kitabını eklerseniz, uygulama İngilizce olsa bile kitap adı "Kongoya Ağıt" olarak kalır.
+
+### Neden bazı kitaplar barkod tarandığında bulunamıyor?
+
+Barkod araması şu stratejiyi kullanır:
+
+1. Google Books API'de arama
+2. ISBN-10 ↔ ISBN-13 otomatik dönüştürme
+3. Open Library API'de fallback arama
+
+Buna rağmen bazı kitaplar bulunamayabilir:
+
+- Yeni çıkan kitaplar henüz veritabanlarında olmayabilir
+- Bazı yayınevleri dijital erişimi kısıtlamış olabilir
+- Özel baskılar/nadir kitaplar kayıtlı olmayabilir
+
+**Çözüm:** "Manuel Giriş" sekmesinden kitabı kendiniz ekleyebilirsiniz.
+
+### Arama sonuçlarında alakasız kitaplar neden çıkıyor?
+
+Uygulama artık daha akıllı arama kullanıyor:
+
+1. İlk önce kitap başlığında (`intitle:`) arama yapar
+2. Sonuç yoksa genel aramaya döner
+3. Seçilen dildeki kitapları öne çıkarır
+
+Bu iyileştirmeler en son sürümde eklenmiştir. Eski sürümü kullanıyorsanız güncelleyin.
+
+### Kredi sistemi nasıl çalışıyor?
+
+- Başlangıçta **10 kredi** verilir
+- Her "Sihirli Öneri" **1 kredi** harcar
+- Reklam izleyerek **+5 kredi** kazanabilirsiniz
+- Krediler cihazınızda yerel olarak saklanır
+
+---
+
+**Geliştirici:** [Cheleby](mailto:chelebyapp@gmail.com)  
+**Lisans:** MIT
