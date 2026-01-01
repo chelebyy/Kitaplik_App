@@ -1,22 +1,21 @@
-import { Stack } from "expo-router";
+import { Stack, SplashScreen } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useFrameworkReady } from "../hooks/useFrameworkReady";
+import { useFonts } from "expo-font";
 import {
   Inter_400Regular,
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import { ThemeProvider, useTheme } from "../context/ThemeContext";
-import { Stack, SplashScreen } from "expo-router";
-import { useFonts } from "expo-font";
-import { useEffect, useState, useCallback } from "react";
-import { StatusBar, View } from "react-native";
 import { BooksProvider, useBooks } from "../context/BooksContext";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { LanguageProvider } from "../context/LanguageContext";
 import { CreditsProvider } from "../context/CreditsContext";
+import { useEffect, useState, useCallback } from "react";
+import { View } from "react-native";
+import { AnimatedSplash } from "../components/AnimatedSplash";
 import analytics from "@react-native-firebase/analytics";
-import AnimatedSplash from "../components/AnimatedSplash";
 
 // Keep splash visible until app is ready
 SplashScreen.preventAutoHideAsync();
