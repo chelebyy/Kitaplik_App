@@ -85,6 +85,8 @@
   "add_book_add_cover": "Add Cover",
   "add_book_upload": "Upload",
   "add_book_add": "Add",
+  "add_book_search_books": "Search Books",
+  "add_book_search_authors": "Search Authors",
   "take_photo": "Take Photo",
   "choose_from_gallery": "Choose from Gallery",
   "add_book_remove": "Remove",

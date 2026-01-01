@@ -58,6 +58,7 @@ export default function AddBookScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<GoogleBookResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchType, setSearchType] = useState<"book" | "author">("book");
 
   // Scanner State
   const [isScannerVisible, setScannerVisible] = useState(false);
@@ -206,6 +207,7 @@ export default function AddBookScreen() {
       const items = await GoogleBooksService.searchBooks(
         searchQuery,
         i18n.language?.split("-")[0],
+        searchType, // Pass searchType (book or author)
       );
       if (items.length > 0) {
         setSearchResults(items);
@@ -245,6 +247,71 @@ export default function AddBookScreen() {
 
   const renderSearchMode = () => (
     <View style={styles.searchModeContainer}>
+      {/* Search Type Toggle */}
+      <View
+        style={{
+          flexDirection: "row",
+          backgroundColor: colors.inputBackground,
+          borderColor: colors.border,
+          borderWidth: 1,
+          borderRadius: 12,
+          padding: 4,
+          marginBottom: 16,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => setSearchType("book")}
+          style={{
+            flex: 1,
+            paddingVertical: 12,
+            paddingHorizontal: 16,
+            borderRadius: 8,
+            alignItems: "center",
+            backgroundColor:
+              searchType === "book" ? colors.primary : "transparent",
+          }}
+        >
+          <Text
+            style={{
+              color: searchType === "book" ? "#FFFFFF" : colors.text,
+              fontFamily:
+                searchType === "book"
+                  ? "Inter_600SemiBold"
+                  : "Inter_400Regular",
+              fontSize: 14,
+            }}
+          >
+            📚 {t("add_book_search_books")}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => setSearchType("author")}
+          style={{
+            flex: 1,
+            paddingVertical: 12,
+            paddingHorizontal: 16,
+            borderRadius: 8,
+            alignItems: "center",
+            backgroundColor:
+              searchType === "author" ? colors.primary : "transparent",
+          }}
+        >
+          <Text
+            style={{
+              color: searchType === "author" ? "#FFFFFF" : colors.text,
+              fontFamily:
+                searchType === "author"
+                  ? "Inter_600SemiBold"
+                  : "Inter_400Regular",
+              fontSize: 14,
+            }}
+          >
+            👤 {t("add_book_search_authors")}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <View
         style={[
           styles.searchBar,
