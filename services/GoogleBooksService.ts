@@ -1,6 +1,7 @@
 import { fetchWithTimeout } from "../utils/fetchWithTimeout";
 import { logError } from "../utils/errorUtils";
 import { convertISBN10ToISBN13, convertISBN13ToISBN10, normalizeISBN } from "../utils/isbnConverter";
+import { OpenLibraryService } from "./OpenLibraryService";
 
 export interface GoogleBookResult {
   id: string;
@@ -48,7 +49,11 @@ export const GoogleBooksService = {
 
   /**
    * Search for a specific book by ISBN
-   * Automatically tries both ISBN-10 and ISBN-13 formats
+   * Strategy:
+   * 1. Try Google Books with original ISBN
+   * 2. Try Google Books with converted ISBN (10↔13)
+   * 3. Fallback to Open Library with both formats
+   * 
    * @param isbn ISBN-10 or ISBN-13
    * @param lang Language code (e.g., 'tr', 'en')
    * @returns The first matching book or null
@@ -60,11 +65,11 @@ export const GoogleBooksService = {
     try {
       const normalized = normalizeISBN(isbn);
 
-      // Try original ISBN first
+      // STEP 1: Try Google Books with original ISBN
       let result = await tryISBNSearch(normalized, lang);
       if (result) return result;
 
-      // Try converted format
+      // STEP 2: Try Google Books with converted format
       const isISBN10 = normalized.length === 10;
       const convertedISBN = isISBN10
         ? convertISBN10ToISBN13(normalized)
@@ -73,6 +78,20 @@ export const GoogleBooksService = {
       if (convertedISBN) {
         result = await tryISBNSearch(convertedISBN, lang);
         if (result) return result;
+      }
+
+      // STEP 3: Fallback to Open Library
+      const openLibResult = await OpenLibraryService.searchByIsbn(normalized);
+      if (openLibResult) {
+        return OpenLibraryService.toGoogleBookFormat(openLibResult);
+      }
+
+      // Try converted format in Open Library too
+      if (convertedISBN) {
+        const openLibResultConverted = await OpenLibraryService.searchByIsbn(convertedISBN);
+        if (openLibResultConverted) {
+          return OpenLibraryService.toGoogleBookFormat(openLibResultConverted);
+        }
       }
 
       return null;
