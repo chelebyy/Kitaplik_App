@@ -260,7 +260,11 @@ export default function AddBookScreen() {
         }}
       >
         <TouchableOpacity
-          onPress={() => setSearchType("book")}
+          onPress={() => {
+            setSearchType("book");
+            setSearchQuery("");
+            setSearchResults([]);
+          }}
           style={{
             flex: 1,
             paddingVertical: 12,
@@ -286,7 +290,11 @@ export default function AddBookScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => setSearchType("author")}
+          onPress={() => {
+            setSearchType("author");
+            setSearchQuery("");
+            setSearchResults([]);
+          }}
           style={{
             flex: 1,
             paddingVertical: 12,
@@ -321,13 +329,8 @@ export default function AddBookScreen() {
           },
         ]}
       >
-        <Search
-          size={20}
-          color={colors.placeholder}
-          style={styles.searchIcon}
-        />
         <TextInput
-          style={[styles.searchInput, { color: colors.text }]}
+          style={[styles.searchInput, { color: colors.text, marginLeft: 10 }]}
           placeholder={t("add_book_search_results")}
           placeholderTextColor={colors.placeholder}
           value={searchQuery}
@@ -339,11 +342,7 @@ export default function AddBookScreen() {
           onPress={searchGoogleBooks}
           style={styles.searchButton}
         >
-          <Text
-            style={{ color: colors.primary, fontFamily: "Inter_600SemiBold" }}
-          >
-            {t("add_book_search")}
-          </Text>
+          <Search size={20} color={colors.primary} />
         </TouchableOpacity>
       </View>
 

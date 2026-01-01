@@ -55,10 +55,39 @@ export const GoogleBooksService = {
       }
 
       // STEP 2: Fallback to general search
+      // STEP 2: Fallback to general search
       let generalResults = await searchWithPrefix("", query, lang);
       const filtered = filterRelevantResults(query, generalResults, searchType);
       const withCovers = prioritizeCovers(filtered);
-      return filterByLanguage(withCovers, lang);
+      let finalResults = filterByLanguage(withCovers, lang);
+
+      // STEP 3: IF results are scarce, try Open Library Fallback
+      if (finalResults.length < 5) {
+        try {
+          const openLibraryResults = await OpenLibraryService.searchBooks(query, searchType);
+
+          if (openLibraryResults.length > 0) {
+            // Convert to Google Book format and merge
+            // Use a Map to deduplicate by title (simple dedupe)
+            const existingTitles = new Set(finalResults.map(b => b.volumeInfo.title.toLowerCase()));
+
+            const newBooks = openLibraryResults.filter(b => {
+              if (!b.volumeInfo.title) return false;
+              const title = b.volumeInfo.title.toLowerCase();
+              if (existingTitles.has(title)) return false;
+              existingTitles.add(title);
+              return true;
+            });
+
+            finalResults = [...finalResults, ...filterByLanguage(newBooks, lang)];
+          }
+        } catch (olError) {
+          // Silent fail for fallback
+          logError("OpenLibraryFallback", olError);
+        }
+      }
+
+      return finalResults;
     } catch (error) {
       logError("GoogleBooksService.searchBooks", error);
       throw new Error("Kitap aranırken bir sorun oluştu.");
@@ -157,11 +186,17 @@ async function searchWithPrefix(
 ): Promise<GoogleBookResult[]> {
   try {
     const searchQuery = prefix ? `${prefix}${query}` : query;
-    const response = await fetchWithTimeout(
-      `${BASE_URL}?q=${encodeURIComponent(searchQuery)}&maxResults=10&hl=${lang}&langRestrict=${lang}`,
-    );
+    const encodedQuery = encodeURIComponent(searchQuery);
+    // maxResults=40 to get more candidates for filtering
+    const url = `${BASE_URL}?q=${encodedQuery}&langRestrict=${lang}&maxResults=40&printType=books`;
+
+    const response = await fetchWithTimeout(url);
     const data = await response.json();
-    return data.items || [];
+
+    if (data.items && data.items.length > 0) {
+      return data.items;
+    }
+    return [];
   } catch (error) {
     // Silent fail, return empty array
     return [];
