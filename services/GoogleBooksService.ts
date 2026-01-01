@@ -27,28 +27,38 @@ export const GoogleBooksService = {
   /**
    * Search for books by general query (title, author, etc.)
    * Uses smart search strategy:
-   * 1. First try with intitle: prefix (more specific)
+   * 1. First try with specific prefix (intitle: or inauthor:)
    * 2. If no results, fallback to general search
-   * 3. Prioritize books in the requested language
+   * 3. Filter irrelevant results with relevance scoring
+   * 4. Prioritize books with cover images
+   * 5. Sort by language preference
    * @param query Search term
    * @param lang Language code (e.g., 'tr', 'en')
+   * @param searchType 'book' or 'author' search
    * @returns List of books or empty array
    */
   searchBooks: async (
     query: string,
     lang: string = "tr",
+    searchType: "book" | "author" = "book",
   ): Promise<GoogleBookResult[]> => {
     try {
-      // STEP 1: Try specific title search first
-      let titleResults = await searchWithPrefix("intitle:", query, lang);
-      if (titleResults.length > 0) {
-        // Filter by language (preferred language first, then others)
-        return filterByLanguage(titleResults, lang);
+      // STEP 1: Try specific search first
+      const prefix = searchType === "author" ? "inauthor:" : "intitle:";
+      let specificResults = await searchWithPrefix(prefix, query, lang);
+
+      if (specificResults.length > 0) {
+        // Apply filters
+        const filtered = filterRelevantResults(query, specificResults, searchType);
+        const withCovers = prioritizeCovers(filtered);
+        return filterByLanguage(withCovers, lang);
       }
 
       // STEP 2: Fallback to general search
       let generalResults = await searchWithPrefix("", query, lang);
-      return filterByLanguage(generalResults, lang);
+      const filtered = filterRelevantResults(query, generalResults, searchType);
+      const withCovers = prioritizeCovers(filtered);
+      return filterByLanguage(withCovers, lang);
     } catch (error) {
       logError("GoogleBooksService.searchBooks", error);
       throw new Error("Kitap aranırken bir sorun oluştu.");
@@ -194,4 +204,55 @@ function filterByLanguage(
   return [...preferredBooks, ...otherBooks];
 }
 
+/**
+ * Filter irrelevant results based on query relevance
+ * Removes books that don't match the search query well enough
+ * @param query - Search query
+ * @param books - Books to filter
+ * @param searchType - 'book' or 'author'
+ * @returns Filtered books with high relevance
+ */
+function filterRelevantResults(
+  query: string,
+  books: GoogleBookResult[],
+  searchType: "book" | "author",
+): GoogleBookResult[] {
+  const normalizedQuery = query.toLowerCase().trim();
+  const queryWords = normalizedQuery.split(/\s+/);
 
+  return books.filter((book) => {
+    const title = book.volumeInfo.title?.toLowerCase() || "";
+    const authors = book.volumeInfo.authors?.map(a => a.toLowerCase()).join(" ") || "";
+
+    const searchTarget = searchType === "author" ? authors : title;
+
+    // Check if at least 70% of query words appear in the target
+    const matchedWords = queryWords.filter(word =>
+      searchTarget.includes(word)
+    );
+
+    const matchRatio = matchedWords.length / queryWords.length;
+    return matchRatio >= 0.7; // At least 70% word match
+  });
+}
+
+/**
+ * Prioritize books with cover images
+ * Books with covers come first
+ * @param books - Books to sort
+ * @returns Sorted books with covers first
+ */
+function prioritizeCovers(books: GoogleBookResult[]): GoogleBookResult[] {
+  const withCovers: GoogleBookResult[] = [];
+  const withoutCovers: GoogleBookResult[] = [];
+
+  books.forEach((book) => {
+    if (book.volumeInfo.imageLinks?.thumbnail) {
+      withCovers.push(book);
+    } else {
+      withoutCovers.push(book);
+    }
+  });
+
+  return [...withCovers, ...withoutCovers];
+}
