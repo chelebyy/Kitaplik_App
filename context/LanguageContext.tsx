@@ -1,17 +1,26 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Localization from 'expo-localization';
-import i18n from '../i18n/i18n';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Localization from "expo-localization";
+import i18n from "../i18n/i18n";
 
-type Language = 'tr' | 'en';
+type Language = "tr" | "en";
 
 interface LanguageContextType {
   language: Language;
   changeLanguage: (lang: Language) => Promise<void>;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
-const LANGUAGE_KEY = 'user_language';
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
+const LANGUAGE_KEY = "user_language";
 
 /**
  * Cihazın dilini algılar ve desteklenen dillere göre (tr/en) döndürür.
@@ -19,22 +28,21 @@ const LANGUAGE_KEY = 'user_language';
  */
 const getDeviceLanguage = (): Language => {
   const locales = Localization.getLocales();
-  const deviceLangCode = locales[0]?.languageCode?.toLowerCase() ?? 'en';
+  const deviceLangCode = locales[0]?.languageCode?.toLowerCase() ?? "en";
 
   // Eğer cihaz dili Türkçe ise 'tr', değilse 'en' kullan
-  return deviceLangCode === 'tr' ? 'tr' : 'en';
+  return deviceLangCode === "tr" ? "tr" : "en";
 };
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>('tr');
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [language, setLanguage] = useState<Language>("tr");
 
   useEffect(() => {
     const loadLanguage = async () => {
       try {
         const savedLang = await AsyncStorage.getItem(LANGUAGE_KEY);
 
-        if (savedLang === 'tr' || savedLang === 'en') {
+        if (savedLang === "tr" || savedLang === "en") {
           // Kullanıcı daha önce dil seçmiş, o dili kullan
           setLanguage(savedLang);
           await i18n.changeLanguage(savedLang);
@@ -47,29 +55,39 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
           await AsyncStorage.setItem(LANGUAGE_KEY, deviceLang);
         }
       } catch (e) {
-        console.error('Failed to load language', e);
+        console.error("Failed to load language", e);
         // Hata durumunda cihaz diline göre ayarla
         const deviceLang = getDeviceLanguage();
         setLanguage(deviceLang);
       } finally {
-        setIsLoaded(true);
+        // Yükleme tamamlandı
       }
     };
     loadLanguage();
   }, []);
 
-  const changeLanguage = async (lang: Language) => {
+  // Dil değiştirme fonksiyonu - useCallback ile memoize edildi
+  const changeLanguage = useCallback(async (lang: Language) => {
     try {
       await i18n.changeLanguage(lang);
       setLanguage(lang);
       await AsyncStorage.setItem(LANGUAGE_KEY, lang);
     } catch (e) {
-      console.error('Failed to save language', e);
+      console.error("Failed to save language", e);
     }
-  };
+  }, []);
+
+  // Context value - useMemo ile memoize edildi (S6481 düzeltmesi)
+  const contextValue = useMemo<LanguageContextType>(
+    () => ({
+      language,
+      changeLanguage,
+    }),
+    [language, changeLanguage]
+  );
 
   return (
-    <LanguageContext.Provider value={{ language, changeLanguage }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
@@ -78,7 +96,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 export function useLanguage() {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    throw new Error("useLanguage must be used within a LanguageProvider");
   }
   return context;
 }

@@ -1,21 +1,35 @@
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { useFrameworkReady } from '../hooks/useFrameworkReady';
-import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
-import { ThemeProvider, useTheme } from '../context/ThemeContext';
-import { BooksProvider, useBooks } from '../context/BooksContext';
-import { AuthProvider, useAuth } from '../context/AuthContext';
-import { LanguageProvider } from '../context/LanguageContext';
-import { CreditsProvider } from '../context/CreditsContext';
-import BootSplash from 'react-native-bootsplash';
-import { useCallback, useState, useEffect } from 'react';
-import { View } from 'react-native';
-import { AnimatedSplash } from '../components/AnimatedSplash';
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useFrameworkReady } from "../hooks/useFrameworkReady";
+import {
+  useFonts,
+  Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_700Bold,
+} from "@expo-google-fonts/inter";
+import { ThemeProvider, useTheme } from "../context/ThemeContext";
+import { BooksProvider, useBooks } from "../context/BooksContext";
+import { AuthProvider, useAuth } from "../context/AuthContext";
+import { LanguageProvider } from "../context/LanguageContext";
+import { CreditsProvider } from "../context/CreditsContext";
+import { useCallback, useState, useEffect } from "react";
+import { View } from "react-native";
+import { AnimatedSplash } from "../components/AnimatedSplash";
+import * as SplashScreen from "expo-splash-screen";
+import analytics from "@react-native-firebase/analytics";
+
+// Expo splash screen'i manuel kontrol için ayarla
+SplashScreen.preventAutoHideAsync();
 
 function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
   const { isDarkMode } = useTheme();
   const { isLoading: authLoading } = useAuth();
   const { isLoading: booksLoading } = useBooks();
+
+  // Firebase Analytics: Uygulama açılışını takip et
+  useEffect(() => {
+    analytics().logEvent("app_open");
+  }, []);
 
   // Animasyonlu splash gösterilsin mi?
   const [showAnimatedSplash, setShowAnimatedSplash] = useState(true);
@@ -23,11 +37,11 @@ function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
   // Tüm kritik kaynakların (font, auth, veri) yüklenmesini bekle
   const isReady = fontsLoaded && !authLoading && !booksLoading;
 
-  // Native splash'i Lottie View render edildiğinde gizle
+  // Native splash'i AnimatedSplash render edildiğinde gizle
   const onLayoutAnimatedSplash = useCallback(async () => {
     if (isReady) {
-      // Lottie görünümü render edildi, artık native splash'i gizleyebiliriz
-      await BootSplash.hide({ fade: true });
+      // AnimatedSplash görünümü render edildi, artık native splash'i gizleyebiliriz
+      await SplashScreen.hideAsync();
     }
   }, [isReady]);
 
@@ -55,10 +69,10 @@ function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="+not-found" />
-        <Stack.Screen name="add-book" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="add-book" options={{ presentation: "modal" }} />
         <Stack.Screen name="book-detail" />
       </Stack>
-      <StatusBar style={isDarkMode ? 'light' : 'dark'} />
+      <StatusBar style={isDarkMode ? "light" : "dark"} />
     </View>
   );
 }

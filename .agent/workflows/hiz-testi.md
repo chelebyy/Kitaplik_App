@@ -25,5 +25,6 @@ Bu workflow, mobil uygulamanın performansını etkileyebilecek darboğazları s
     - Gereksiz büyük kütüphane importları (örn: tüm 'lodash' yerine parça import).
 
 ## Çıktı
+
 - Bulunan performans risklerini maddeler halinde listele.
 - Her madde için kod düzeltme önerisi sun.

@@ -19,7 +19,7 @@ Bu workflow, React Native bileşenleri için **Jest** ve **@testing-library/reac
     - Kullanılan hookları ve servisleri listele.
 
 2.  **Test Dosyası Oluştur**:
-    - '__tests__' klasörü altına veya 'component.test.tsx' olarak oluştur.
+    - '**tests**' klasörü altına veya 'component.test.tsx' olarak oluştur.
     - Gerekli mockları en tepeye tanımla.
 
 3.  **Test Senaryoları**:

@@ -1,8 +1,16 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
+import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logError } from "../utils/errorUtils";
 
-export type BookStatus = 'Okunacak' | 'Okunuyor' | 'Okundu';
+export type BookStatus = "Okunacak" | "Okunuyor" | "Okundu";
 
 export interface Book {
   id: string;
@@ -21,10 +29,14 @@ export interface Book {
 interface BooksContextType {
   books: Book[];
   isLoading: boolean;
-  addBook: (book: Omit<Book, 'id' | 'addedAt'>) => void;
+  addBook: (book: Omit<Book, "id" | "addedAt">) => void;
   updateBookStatus: (id: string, status: BookStatus) => void;
   updateBookNotes: (id: string, notes: string) => void;
-  updateBookProgress: (id: string, currentPage: number, pageCount: number) => void;
+  updateBookProgress: (
+    id: string,
+    currentPage: number,
+    pageCount: number
+  ) => void;
   deleteBook: (id: string) => void;
   getBookById: (id: string) => Book | undefined;
   clearAllData: () => Promise<void>;
@@ -33,53 +45,57 @@ interface BooksContextType {
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined);
 
-const BOOKS_STORAGE_KEY = 'books_data';
+const BOOKS_STORAGE_KEY = "books_data";
 
 // Başlangıç için örnek veriler
 const INITIAL_BOOKS: Book[] = [
   {
-    id: '1',
-    title: 'The Stranger',
-    author: 'Albert Camus',
-    status: 'Okunuyor',
-    coverUrl: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400&h=600',
-    genre: 'Fiction',
+    id: "1",
+    title: "The Stranger",
+    author: "Albert Camus",
+    status: "Okunuyor",
+    coverUrl:
+      "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400&h=600",
+    genre: "Fiction",
     progress: 0.6,
     pageCount: 110,
     currentPage: 66,
     addedAt: Date.now(),
   },
   {
-    id: '2',
-    title: '1984',
-    author: 'George Orwell',
-    status: 'Okunuyor',
-    coverUrl: 'https://images.unsplash.com/photo-1535905557558-afc4877a26fc?auto=format&fit=crop&q=80&w=400&h=600',
-    genre: 'Science Fiction',
+    id: "2",
+    title: "1984",
+    author: "George Orwell",
+    status: "Okunuyor",
+    coverUrl:
+      "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?auto=format&fit=crop&q=80&w=400&h=600",
+    genre: "Science Fiction",
     progress: 0.2,
     pageCount: 350,
     currentPage: 70,
     addedAt: Date.now() - 10000,
   },
   {
-    id: '3',
-    title: 'The Alchemist',
-    author: 'Paulo Coelho',
-    status: 'Okundu',
-    coverUrl: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=400&h=600',
-    genre: 'Fiction',
+    id: "3",
+    title: "The Alchemist",
+    author: "Paulo Coelho",
+    status: "Okundu",
+    coverUrl:
+      "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=400&h=600",
+    genre: "Fiction",
     progress: 1,
     pageCount: 188,
     currentPage: 188,
     addedAt: Date.now() - 20000,
   },
   {
-    id: '4',
-    title: 'Dune',
-    author: 'Frank Herbert',
-    status: 'Okunacak',
-    coverUrl: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400&h=600',
-    genre: 'Science Fiction',
+    id: "4",
+    title: "Dune",
+    author: "Frank Herbert",
+    status: "Okunacak",
+    coverUrl:
+      "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400&h=600",
+    genre: "Science Fiction",
     progress: 0,
     pageCount: 712,
     currentPage: 0,
@@ -101,11 +117,14 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
         } else {
           // İlk kez açılıyorsa örnek verileri yükle
           setBooks(INITIAL_BOOKS);
-          await AsyncStorage.setItem(BOOKS_STORAGE_KEY, JSON.stringify(INITIAL_BOOKS));
+          await AsyncStorage.setItem(
+            BOOKS_STORAGE_KEY,
+            JSON.stringify(INITIAL_BOOKS)
+          );
         }
       } catch (error) {
-        console.error('Error loading books:', error);
-        Alert.alert('Hata', 'Kitaplar yüklenirken bir sorun oluştu.');
+        logError("BooksContext.loadBooks", error);
+        Alert.alert("Hata", "Kitaplar yüklenirken bir sorun oluştu.");
       } finally {
         setIsLoading(false);
       }
@@ -123,7 +142,7 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
         await AsyncStorage.setItem(BOOKS_STORAGE_KEY, JSON.stringify(books));
         // console.log('[Storage] Kitaplar diskte güncellendi.'); // Debug için
       } catch (error) {
-        console.error('Error saving books:', error);
+        logError("BooksContext.saveBooks", error);
       }
     }, 1000);
 
@@ -132,89 +151,116 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
     };
   }, [books, isLoading]);
 
-  const addBook = (newBookData: Omit<Book, 'id' | 'addedAt'>) => {
+  // Kitap ekleme - useCallback ile memoize edildi
+  const addBook = useCallback((newBookData: Omit<Book, "id" | "addedAt">) => {
     const newBook: Book = {
       id: Date.now().toString(),
       addedAt: Date.now(),
       ...newBookData,
     };
-    setBooks(prev => [newBook, ...prev]);
-  };
+    setBooks((prev) => [newBook, ...prev]);
+  }, []);
 
-  const updateBookStatus = (id: string, status: BookStatus) => {
-    setBooks(prev => prev.map((book) => {
-      if (book.id === id) {
-        const updatedBook = { ...book, status };
-        // Status değiştiğinde progress güncelleme mantığı
-        if (status === 'Okundu') {
-          updatedBook.progress = 1;
-          updatedBook.currentPage = book.pageCount || book.currentPage;
-        } else if (status === 'Okunacak') {
-          updatedBook.progress = 0;
-          updatedBook.currentPage = 0;
+  // Kitap durumu güncelleme - useCallback ile memoize edildi
+  const updateBookStatus = useCallback((id: string, status: BookStatus) => {
+    setBooks((prev) =>
+      prev.map((book) => {
+        if (book.id === id) {
+          const updatedBook = { ...book, status };
+          // Status değiştiğinde progress güncelleme mantığı
+          if (status === "Okundu") {
+            updatedBook.progress = 1;
+            updatedBook.currentPage = book.pageCount || book.currentPage;
+          } else if (status === "Okunacak") {
+            updatedBook.progress = 0;
+            updatedBook.currentPage = 0;
+          }
+          return updatedBook;
         }
-        return updatedBook;
-      }
-      return book;
-    }));
-  };
+        return book;
+      })
+    );
+  }, []);
 
-  const updateBookNotes = (id: string, notes: string) => {
-    setBooks(prev => prev.map((book) => {
-      if (book.id === id) {
-        return { ...book, notes };
-      }
-      return book;
-    }));
-  };
+  // Kitap notları güncelleme - useCallback ile memoize edildi
+  const updateBookNotes = useCallback((id: string, notes: string) => {
+    setBooks((prev) =>
+      prev.map((book) => {
+        if (book.id === id) {
+          return { ...book, notes };
+        }
+        return book;
+      })
+    );
+  }, []);
 
-  const updateBookProgress = (id: string, currentPage: number, pageCount: number) => {
-    setBooks(prev => prev.map((book) => {
-      if (book.id === id) {
-        const progress = pageCount > 0 ? currentPage / pageCount : 0;
-        return {
-          ...book,
-          currentPage,
-          pageCount,
-          progress: Math.min(Math.max(progress, 0), 1)
-        };
-      }
-      return book;
-    }));
-  };
+  // Kitap ilerleme güncelleme - useCallback ile memoize edildi
+  const updateBookProgress = useCallback(
+    (id: string, currentPage: number, pageCount: number) => {
+      setBooks((prev) =>
+        prev.map((book) => {
+          if (book.id === id) {
+            const progress = pageCount > 0 ? currentPage / pageCount : 0;
+            return {
+              ...book,
+              currentPage,
+              pageCount,
+              progress: Math.min(Math.max(progress, 0), 1),
+            };
+          }
+          return book;
+        })
+      );
+    },
+    []
+  );
 
-  const deleteBook = (id: string) => {
-    setBooks(prev => prev.filter((book) => book.id !== id));
-  };
+  // Kitap silme - useCallback ile memoize edildi
+  const deleteBook = useCallback((id: string) => {
+    setBooks((prev) => prev.filter((book) => book.id !== id));
+  }, []);
 
-  const getBookById = (id: string) => {
-    return books.find((book) => book.id === id);
-  };
+  // ID'ye göre kitap getirme - useCallback ile memoize edildi
+  const getBookById = useCallback(
+    (id: string) => {
+      return books.find((book) => book.id === id);
+    },
+    [books]
+  );
 
-  const clearAllData = async () => {
+  // Tüm verileri temizle - useCallback ile memoize edildi
+  const clearAllData = useCallback(async () => {
     try {
       await AsyncStorage.removeItem(BOOKS_STORAGE_KEY);
       setBooks(INITIAL_BOOKS);
-      Alert.alert('Başarılı', 'Tüm veriler sıfırlandı ve varsayılan kitaplar yüklendi.');
+      Alert.alert(
+        "Başarılı",
+        "Tüm veriler sıfırlandı ve varsayılan kitaplar yüklendi."
+      );
     } catch (error) {
-      console.error('Error clearing data:', error);
-      Alert.alert('Hata', 'Veriler sıfırlanırken bir sorun oluştu.');
+      logError("BooksContext.clearAllData", error);
+      Alert.alert("Hata", "Veriler sıfırlanırken bir sorun oluştu.");
     }
-  };
+  }, []);
 
-  const restoreBooks = async (restoredBooks: Book[]) => {
+  // Kitapları geri yükle - useCallback ile memoize edildi
+  const restoreBooks = useCallback(async (restoredBooks: Book[]) => {
     try {
       setBooks(restoredBooks);
       // useEffect will handle saving to AsyncStorage
-      Alert.alert('Başarılı', `${restoredBooks.length} kitap başarıyla geri yüklendi.`);
+      Alert.alert(
+        "Başarılı",
+        `${restoredBooks.length} kitap başarıyla geri yüklendi.`
+      );
     } catch (error) {
-      console.error('Restore error:', error);
-      Alert.alert('Hata', 'Veriler yüklenirken bir sorun oluştu.');
+      logError("BooksContext.restoreBooks", error);
+      Alert.alert("Hata", "Veriler yüklenirken bir sorun oluştu.");
     }
-  };
+  }, []);
 
-  return (
-    <BooksContext.Provider value={{
+  // Context value - useMemo ile memoize edildi (S6481 düzeltmesi)
+  const contextValue = useMemo<BooksContextType>(
+    () => ({
       books,
       isLoading,
       addBook,
@@ -224,8 +270,24 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
       deleteBook,
       getBookById,
       clearAllData,
-      restoreBooks
-    }}>
+      restoreBooks,
+    }),
+    [
+      books,
+      isLoading,
+      addBook,
+      updateBookStatus,
+      updateBookNotes,
+      updateBookProgress,
+      deleteBook,
+      getBookById,
+      clearAllData,
+      restoreBooks,
+    ]
+  );
+
+  return (
+    <BooksContext.Provider value={contextValue}>
       {children}
     </BooksContext.Provider>
   );
@@ -234,7 +296,7 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
 export function useBooks() {
   const context = useContext(BooksContext);
   if (context === undefined) {
-    throw new Error('useBooks must be used within a BooksProvider');
+    throw new Error("useBooks must be used within a BooksProvider");
   }
   return context;
 }

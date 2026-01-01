@@ -3,13 +3,14 @@
     "name": "react-native-expo-starter",
     "slug": "react-native-expo-starter",
     "version": "1.0.0",
+    "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "backgroundColor": "#F7F6EE",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/icon.png",
       "backgroundColor": "#F7F6EE",
       "resizeMode": "contain"
     },
@@ -22,12 +23,6 @@
       "output": "single"
     },
     "plugins": [
-      [
-        "react-native-bootsplash",
-        {
-          "assetsDir": "assets/bootsplash"
-        }
-      ],
       "expo-router",
       [
         "expo-image-picker",
@@ -46,10 +41,14 @@
       [
         "react-native-google-mobile-ads",
         {
-          "androidAppId": "ca-app-pub-6110532791964487~7550541087",
-          "iosAppId": "ca-app-pub-6110532791964487~7550541087"
+          "androidAppId": "ca-app-pub-8736697399468029~2415851631",
+          "iosAppId": "ca-app-pub-8736697399468029~2415851631"
         }
-      ]
+      ],
+      "expo-secure-store",
+      "@react-native-firebase/app",
+      "@react-native-firebase/perf",
+      "@react-native-firebase/crashlytics"
     ],
     "experiments": {
       "typedRoutes": true
@@ -61,10 +60,10 @@
         "backgroundColor": "#F7F6EE"
       },
       "permissions": [
-        "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA"
       ],
-      "package": "com.kitaplik.app"
+      "package": "com.kitaplik.app",
+      "googleServicesFile": "./google-services.json"
     },
     "extra": {
       "router": {},

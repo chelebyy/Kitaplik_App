@@ -1,82 +1,104 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logError } from "../utils/errorUtils";
 
 // Simple local user interface
 export interface User {
-    uid: string;
-    displayName: string | null;
-    email: string | null;
-    photoURL: string | null;
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
 }
 
 interface AuthContextType {
-    user: User | null;
-    isLoading: boolean;
-    signIn: (name: string) => Promise<void>;
-    signOut: () => Promise<void>;
+  user: User | null;
+  isLoading: boolean;
+  signIn: (name: string) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const USER_STORAGE_KEY = 'local_user_profile';
+const USER_STORAGE_KEY = "local_user_profile";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        loadUser();
-    }, []);
+  useEffect(() => {
+    loadUser();
+  }, []);
 
-    const loadUser = async () => {
-        try {
-            const savedUser = await AsyncStorage.getItem(USER_STORAGE_KEY);
-            if (savedUser) {
-                setUser(JSON.parse(savedUser));
-            }
-        } catch (error) {
-            console.error('Failed to load user profile:', error);
-        } finally {
-            setIsLoading(false);
-        }
+  const loadUser = async () => {
+    try {
+      const savedUser = await AsyncStorage.getItem(USER_STORAGE_KEY);
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
+    } catch (error) {
+      logError("AuthContext.loadUser", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Giriş fonksiyonu - useCallback ile memoize edildi
+  const signIn = useCallback(async (name: string) => {
+    const newUser: User = {
+      uid: "local-user-" + Date.now(),
+      displayName: name,
+      email: null, // No email for local user
+      photoURL:
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(name) +
+        "&background=random",
     };
 
-    const signIn = async (name: string) => {
-        const newUser: User = {
-            uid: 'local-user-' + Date.now(),
-            displayName: name,
-            email: null, // No email for local user
-            photoURL: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=random',
-        };
+    try {
+      await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));
+      setUser(newUser);
+    } catch (error) {
+      logError("AuthContext.signIn", error);
+    }
+  }, []);
 
-        try {
-            await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));
-            setUser(newUser);
-        } catch (error) {
-            console.error('Failed to save user profile:', error);
-        }
-    };
+  // Çıkış fonksiyonu - useCallback ile memoize edildi
+  const signOut = useCallback(async () => {
+    try {
+      await AsyncStorage.removeItem(USER_STORAGE_KEY);
+      setUser(null);
+    } catch (error) {
+      logError("AuthContext.signOut", error);
+    }
+  }, []);
 
-    const signOut = async () => {
-        try {
-            await AsyncStorage.removeItem(USER_STORAGE_KEY);
-            setUser(null);
-        } catch (error) {
-            console.error('Failed to remove user profile:', error);
-        }
-    };
+  // Context value - useMemo ile memoize edildi (S6481 düzeltmesi)
+  const contextValue = useMemo<AuthContextType>(
+    () => ({
+      user,
+      isLoading,
+      signIn,
+      signOut,
+    }),
+    [user, isLoading, signIn, signOut]
+  );
 
-    return (
-        <AuthContext.Provider value={{ user, isLoading, signIn, signOut }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }

@@ -1,4 +1,8 @@
-export const createFeedbackMailto = (recipient: string, subject?: string, body?: string): string => {
+export const createFeedbackMailto = (
+  recipient: string,
+  subject?: string,
+  body?: string,
+): string => {
   let url = `mailto:${recipient}`;
   const params: string[] = [];
 
@@ -11,7 +15,7 @@ export const createFeedbackMailto = (recipient: string, subject?: string, body?:
   }
 
   if (params.length > 0) {
-    url += `?${params.join('&')}`;
+    url += `?${params.join("&")}`;
   }
 
   return url;

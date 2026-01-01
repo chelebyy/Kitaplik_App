@@ -35,12 +35,12 @@ Kullanıcıya kitabın en uygun fiyatını ve hangi mağazada olduğunu gösterm
 **Mantık:** Mağaza sitelerinden doğrudan fiyat çek.
 **Test Sonuçları (2 Aralık 2025):**
 
-| Site | Status | Veri Çekildi? |
-|------|--------|---------------|
-| D&R | ✅ 200 | ✅ Fiyat bulundu |
-| Kitapyurdu | ✅ 200 | ⚠️ Regex güncelle |
-| BKM Kitap | ✅ 200 | ⚠️ Regex güncelle |
-| İdefix | ⚠️ Redirect | Düzeltilecek |
+| Site       | Status      | Veri Çekildi?     |
+| ---------- | ----------- | ----------------- |
+| D&R        | ✅ 200      | ✅ Fiyat bulundu  |
+| Kitapyurdu | ✅ 200      | ⚠️ Regex güncelle |
+| BKM Kitap  | ✅ 200      | ⚠️ Regex güncelle |
+| İdefix     | ⚠️ Redirect | Düzeltilecek      |
 
 - [x] D&R fiyat parse mantığı yaz ✅ ÇALIŞIYOR
 - [x] Kitapyurdu fiyat parse mantığı yaz ✅ ÇALIŞIYOR
@@ -194,4 +194,4 @@ Scraping yerine karşılaştırma sitelerine yönlendirme yapılacak.
 
 ---
 
-*Son güncelleme: 2 Aralık 2025*
+_Son güncelleme: 2 Aralık 2025_

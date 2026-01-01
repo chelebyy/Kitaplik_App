@@ -1,8 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useColorScheme } from 'react-native';
-import { Colors } from '../constants/Colors';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
+import { Colors } from "../constants/Colors";
 
-type Theme = 'light' | 'dark';
+type Theme = "light" | "dark";
 
 interface ThemeContextType {
   theme: Theme;
@@ -14,23 +19,30 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const systemScheme = useColorScheme();
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>("light");
 
-  // İsterseniz başlangıçta sistem temasına göre ayarlayabilirsiniz
-  // useEffect(() => {
-  //   if (systemScheme) setTheme(systemScheme);
-  // }, [systemScheme]);
+  // Tema değiştirme fonksiyonu - useCallback ile memoize edildi
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  }, []);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
+  // Türetilmiş değerler - useMemo ile memoize edildi
+  const colors = useMemo(() => Colors[theme], [theme]);
+  const isDarkMode = theme === "dark";
 
-  const colors = Colors[theme];
-  const isDarkMode = theme === 'dark';
+  // Context value - useMemo ile memoize edildi (S6481 düzeltmesi)
+  const contextValue = useMemo<ThemeContextType>(
+    () => ({
+      theme,
+      colors,
+      toggleTheme,
+      isDarkMode,
+    }),
+    [theme, colors, toggleTheme, isDarkMode]
+  );
 
   return (
-    <ThemeContext.Provider value={{ theme, colors, toggleTheme, isDarkMode }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );
@@ -39,7 +51,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 }
+

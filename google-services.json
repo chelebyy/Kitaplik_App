@@ -1,0 +1,29 @@
+{
+    "project_info": {
+        "project_number": "447197374176",
+        "project_id": "readly-5286b",
+        "storage_bucket": "readly-5286b.firebasestorage.app"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:447197374176:android:c6759e451fa6ae0f585285",
+                "android_client_info": {
+                    "package_name": "com.kitaplik.app"
+                }
+            },
+            "oauth_client": [],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyCeN9JkovjGjBem8KGXXfvXoWAmDJTLxfM"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": []
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}
