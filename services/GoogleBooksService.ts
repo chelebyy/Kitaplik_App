@@ -25,6 +25,9 @@ const BASE_URL = "https://www.googleapis.com/books/v1/volumes";
 export const GoogleBooksService = {
   /**
    * Search for books by general query (title, author, etc.)
+   * Uses smart search strategy:
+   * 1. First try with intitle: prefix (more specific)
+   * 2. If no results, fallback to general search
    * @param query Search term
    * @param lang Language code (e.g., 'tr', 'en')
    * @returns List of books or empty array
@@ -34,13 +37,15 @@ export const GoogleBooksService = {
     lang: string = "tr",
   ): Promise<GoogleBookResult[]> => {
     try {
-      // hl: Interface language (for snippets, etc.)
-      // langRestrict: Restrict results to specific language (for book content/title)
-      const response = await fetchWithTimeout(
-        `${BASE_URL}?q=${encodeURIComponent(query)}&maxResults=10&hl=${lang}&langRestrict=${lang}`,
-      );
-      const data = await response.json();
-      return data.items || [];
+      // STEP 1: Try specific title search first
+      const titleResults = await searchWithPrefix("intitle:", query, lang);
+      if (titleResults.length > 0) {
+        return titleResults;
+      }
+
+      // STEP 2: Fallback to general search
+      const generalResults = await searchWithPrefix("", query, lang);
+      return generalResults;
     } catch (error) {
       logError("GoogleBooksService.searchBooks", error);
       throw new Error("Kitap aranırken bir sorun oluştu.");
@@ -124,3 +129,29 @@ async function tryISBNSearch(
     return null;
   }
 }
+
+/**
+ * Helper function to search with a specific prefix
+ * @param prefix - Search prefix (e.g., "intitle:", "inauthor:", "")
+ * @param query - Search query
+ * @param lang - Language code
+ * @returns List of books or empty array
+ */
+async function searchWithPrefix(
+  prefix: string,
+  query: string,
+  lang: string,
+): Promise<GoogleBookResult[]> {
+  try {
+    const searchQuery = prefix ? `${prefix}${query}` : query;
+    const response = await fetchWithTimeout(
+      `${BASE_URL}?q=${encodeURIComponent(searchQuery)}&maxResults=10&hl=${lang}&langRestrict=${lang}`,
+    );
+    const data = await response.json();
+    return data.items || [];
+  } catch (error) {
+    // Silent fail, return empty array
+    return [];
+  }
+}
+
