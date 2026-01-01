@@ -8,6 +8,7 @@ export interface GoogleBookResult {
   volumeInfo: {
     title: string;
     authors?: string[];
+    language?: string; // ISO 639-1 language code (e.g., "en", "tr")
     imageLinks?: {
       thumbnail: string;
     };
@@ -28,6 +29,7 @@ export const GoogleBooksService = {
    * Uses smart search strategy:
    * 1. First try with intitle: prefix (more specific)
    * 2. If no results, fallback to general search
+   * 3. Prioritize books in the requested language
    * @param query Search term
    * @param lang Language code (e.g., 'tr', 'en')
    * @returns List of books or empty array
@@ -38,14 +40,15 @@ export const GoogleBooksService = {
   ): Promise<GoogleBookResult[]> => {
     try {
       // STEP 1: Try specific title search first
-      const titleResults = await searchWithPrefix("intitle:", query, lang);
+      let titleResults = await searchWithPrefix("intitle:", query, lang);
       if (titleResults.length > 0) {
-        return titleResults;
+        // Filter by language (preferred language first, then others)
+        return filterByLanguage(titleResults, lang);
       }
 
       // STEP 2: Fallback to general search
-      const generalResults = await searchWithPrefix("", query, lang);
-      return generalResults;
+      let generalResults = await searchWithPrefix("", query, lang);
+      return filterByLanguage(generalResults, lang);
     } catch (error) {
       logError("GoogleBooksService.searchBooks", error);
       throw new Error("Kitap aranırken bir sorun oluştu.");
@@ -154,4 +157,41 @@ async function searchWithPrefix(
     return [];
   }
 }
+
+/**
+ * Filter and sort books by language preference
+ * Books in the requested language come first, followed by others
+ * @param books - Array of books to filter
+ * @param preferredLang - Preferred language code (e.g., "en", "tr")
+ * @returns Sorted array with preferred language books first
+ */
+function filterByLanguage(
+  books: GoogleBookResult[],
+  preferredLang: string,
+): GoogleBookResult[] {
+  // Separate books by language
+  const preferredBooks: GoogleBookResult[] = [];
+  const otherBooks: GoogleBookResult[] = [];
+
+  books.forEach((book) => {
+    const bookLang = book.volumeInfo.language;
+
+    // If no language info, include it (don't be too restrictive)
+    if (!bookLang) {
+      otherBooks.push(book);
+      return;
+    }
+
+    // Check if book matches preferred language
+    if (bookLang === preferredLang || bookLang.startsWith(preferredLang)) {
+      preferredBooks.push(book);
+    } else {
+      otherBooks.push(book);
+    }
+  });
+
+  // Return preferred books first, then others
+  return [...preferredBooks, ...otherBooks];
+}
+
 
