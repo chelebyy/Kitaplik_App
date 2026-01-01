@@ -51,7 +51,7 @@ ${t("feedback_type_other")}
 
 ${t("feedback_body_message")}
 `;
-    const url = createFeedbackMailto("chelebyy@gmail.com", subject, body);
+    const url = createFeedbackMailto("chelebyapp@gmail.com", subject, body);
 
     const canOpen = await Linking.canOpenURL(url);
     if (canOpen) {
