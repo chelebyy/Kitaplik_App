@@ -1,5 +1,6 @@
 import { fetchWithTimeout } from "../utils/fetchWithTimeout";
 import { logError } from "../utils/errorUtils";
+import { convertISBN10ToISBN13, convertISBN13ToISBN10, normalizeISBN } from "../utils/isbnConverter";
 
 export interface GoogleBookResult {
   id: string;
@@ -47,6 +48,7 @@ export const GoogleBooksService = {
 
   /**
    * Search for a specific book by ISBN
+   * Automatically tries both ISBN-10 and ISBN-13 formats
    * @param isbn ISBN-10 or ISBN-13
    * @param lang Language code (e.g., 'tr', 'en')
    * @returns The first matching book or null
@@ -56,14 +58,23 @@ export const GoogleBooksService = {
     lang: string = "tr",
   ): Promise<GoogleBookResult | null> => {
     try {
-      const response = await fetchWithTimeout(
-        `${BASE_URL}?q=isbn:${isbn}&hl=${lang}&langRestrict=${lang}`,
-      );
-      const data = await response.json();
+      const normalized = normalizeISBN(isbn);
 
-      if (data.items && data.items.length > 0) {
-        return data.items[0];
+      // Try original ISBN first
+      let result = await tryISBNSearch(normalized, lang);
+      if (result) return result;
+
+      // Try converted format
+      const isISBN10 = normalized.length === 10;
+      const convertedISBN = isISBN10
+        ? convertISBN10ToISBN13(normalized)
+        : convertISBN13ToISBN10(normalized);
+
+      if (convertedISBN) {
+        result = await tryISBNSearch(convertedISBN, lang);
+        if (result) return result;
       }
+
       return null;
     } catch (error) {
       logError("GoogleBooksService.searchByIsbn", error);
@@ -71,3 +82,26 @@ export const GoogleBooksService = {
     }
   },
 };
+
+/**
+ * Helper function to search by a single ISBN
+ */
+async function tryISBNSearch(
+  isbn: string,
+  lang: string,
+): Promise<GoogleBookResult | null> {
+  try {
+    const response = await fetchWithTimeout(
+      `${BASE_URL}?q=isbn:${isbn}&hl=${lang}&langRestrict=${lang}`,
+    );
+    const data = await response.json();
+
+    if (data.items && data.items.length > 0) {
+      return data.items[0];
+    }
+    return null;
+  } catch (error) {
+    // Silent fail for individual attempts
+    return null;
+  }
+}
