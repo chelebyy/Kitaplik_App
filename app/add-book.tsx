@@ -366,7 +366,7 @@ export default function AddBookScreen() {
                     fontFamily: "Inter_600SemiBold",
                   }}
                 >
-                  {t("add_book_upload")}
+                  {t("add_book_add")}
                 </Text>
               </View>
             </TouchableOpacity>

@@ -408,40 +408,7 @@ ${t("feedback_body_message")}
               style={[styles.separator, { backgroundColor: colors.border }]}
             />
 
-            <TouchableOpacity
-              style={styles.row}
-              activeOpacity={0.7}
-              onPress={() => {
-                Alert.alert(
-                  "Firebase Crash Test",
-                  "Uygulama şimdi çökecek (test amaçlı). Crashlytics panelinde bu hatayı görebileceksiniz.",
-                  [
-                    { text: t("cancel"), style: "cancel" },
-                    {
-                      text: "Çöktür",
-                      style: "destructive",
-                      onPress: () => {
-                        const crashlytics = require("@react-native-firebase/crashlytics").default;
-                        crashlytics().crash();
-                      },
-                    },
-                  ]
-                );
-              }}
-            >
-              <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: "rgba(255, 152, 0, 0.1)" },
-                ]}
-              >
-                <Info size={22} color="#FF9800" />
-              </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
-                Firebase Hata Testi
-              </Text>
-              <ChevronRight size={20} color={colors.tabIconDefault} />
-            </TouchableOpacity>
+
           </View>
         </View>
       </ScrollView>
