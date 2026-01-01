@@ -2,23 +2,23 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useFrameworkReady } from "../hooks/useFrameworkReady";
 import {
-  useFonts,
   Inter_400Regular,
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import { ThemeProvider, useTheme } from "../context/ThemeContext";
+import { Stack, SplashScreen } from "expo-router";
+import { useFonts } from "expo-font";
+import { useEffect, useState, useCallback } from "react";
+import { StatusBar, View } from "react-native";
 import { BooksProvider, useBooks } from "../context/BooksContext";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { LanguageProvider } from "../context/LanguageContext";
 import { CreditsProvider } from "../context/CreditsContext";
-import { useCallback, useState, useEffect } from "react";
-import { View } from "react-native";
-import { AnimatedSplash } from "../components/AnimatedSplash";
-import * as SplashScreen from "expo-splash-screen";
 import analytics from "@react-native-firebase/analytics";
+import AnimatedSplash from "../components/AnimatedSplash";
 
-// Expo splash screen'i manuel kontrol için ayarla
+// Keep splash visible until app is ready
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
@@ -26,9 +26,12 @@ function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
   const { isLoading: authLoading } = useAuth();
   const { isLoading: booksLoading } = useBooks();
 
-  // Firebase Analytics: Uygulama açılışını takip et
+  // Firebase Analytics: Track app open event
   useEffect(() => {
-    analytics().logEvent("app_open");
+    const trackAppOpen = async () => {
+      await analytics().logEvent("app_open");
+    };
+    trackAppOpen();
   }, []);
 
   // Animasyonlu splash gösterilsin mi?
