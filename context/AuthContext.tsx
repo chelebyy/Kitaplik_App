@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { logError } from "../utils/errorUtils";
 
 // Simple local user interface
@@ -38,7 +38,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
 
   const loadUser = async () => {
     try {
-      const savedUser = await AsyncStorage.getItem(USER_STORAGE_KEY);
+      const savedUser = await SecureStore.getItemAsync(USER_STORAGE_KEY);
       if (savedUser) {
         setUser(JSON.parse(savedUser));
       }
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     };
 
     try {
-      await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));
+      await SecureStore.setItemAsync(USER_STORAGE_KEY, JSON.stringify(newUser));
       setUser(newUser);
     } catch (error) {
       logError("AuthContext.signIn", error);
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   // Çıkış fonksiyonu - useCallback ile memoize edildi
   const signOut = useCallback(async () => {
     try {
-      await AsyncStorage.removeItem(USER_STORAGE_KEY);
+      await SecureStore.deleteItemAsync(USER_STORAGE_KEY);
       setUser(null);
     } catch (error) {
       logError("AuthContext.signOut", error);

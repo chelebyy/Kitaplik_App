@@ -5,11 +5,11 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  FlatList,
   Platform,
   StatusBar,
   useWindowDimensions,
 } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -30,7 +30,6 @@ import { useAuth } from "../../context/AuthContext";
 import RecommendationModal from "../../components/RecommendationModal";
 import ProfileModal from "../../components/ProfileModal";
 import { BookCard } from "../../components/BookCard";
-import { cn } from "../../utils/cn";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -326,11 +325,13 @@ export default function HomeScreen() {
         backgroundColor={colors.background}
       />
 
-      <FlatList
+      <FlashList
         key={viewMode}
         data={filteredBooks}
         keyExtractor={(item) => item.id}
         numColumns={viewMode === "grid" ? 2 : 1}
+        // @ts-ignore
+        estimatedItemSize={280}
         renderItem={({ item }) => (
           <View
             style={{

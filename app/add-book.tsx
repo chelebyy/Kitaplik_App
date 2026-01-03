@@ -9,10 +9,10 @@ import {
   KeyboardAvoidingView,
   Alert,
   ActivityIndicator,
-  FlatList,
   Image,
   ActionSheetIOS,
 } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import {
@@ -30,7 +30,7 @@ import { GoogleBookResult } from "../services/GoogleBooksService";
 import { SearchEngine } from "../services/SearchEngine";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
-import { cn } from "../utils/cn";
+import { LinearGradient } from "expo-linear-gradient";
 
 type InputMode = "manual" | "search";
 
@@ -344,8 +344,10 @@ export default function AddBookScreen() {
           </Text>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={searchResults}
+          // @ts-ignore
+          estimatedItemSize={100}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 24 }}
           showsVerticalScrollIndicator={false}

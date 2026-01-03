@@ -5,10 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  FlatList,
   useWindowDimensions,
-  Platform,
 } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import {
@@ -26,7 +25,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
 import { BookCard } from "../../components/BookCard";
-import { cn } from "../../utils/cn";
+import { BookCard } from "../../components/BookCard";
 
 type SortOption = "title_asc" | "title_desc" | "author_asc" | "rating_desc";
 
@@ -242,10 +241,12 @@ export default function BooksScreen() {
           </View>
         </View>
 
-        <FlatList
+        <FlashList
           key={viewMode}
           data={processedBooks}
           renderItem={renderBookItem}
+          // @ts-ignore
+          estimatedItemSize={180}
           keyExtractor={(item) => item.id}
           getItemLayout={(data, index) => ({
             length: 180, // Approximate height of a card item
