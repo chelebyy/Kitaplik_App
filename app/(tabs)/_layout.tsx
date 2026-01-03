@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 import { Tabs } from "expo-router";
 import { Home, Book, Settings } from "lucide-react-native";
-import { Platform, StyleSheet } from "react-native";
+import { Platform } from "react-native";
 import { useTheme } from "../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
@@ -38,20 +38,16 @@ const TabBarBackground = React.memo(function TabBarBackground({
       colors={isDarkMode ? ["#1E293B", "#27221F"] : ["#FFFFFF", "#FFF7ED"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      style={[
-        styles.gradientBackground,
-        { borderTopColor: isDarkMode ? "#334155" : "#E2E8F0" },
-      ]}
+      style={{
+        flex: 1,
+        borderTopWidth: 1,
+        borderTopColor: isDarkMode ? "#334155" : "#E2E8F0",
+      }}
     />
   );
 });
 
-const styles = StyleSheet.create({
-  gradientBackground: {
-    flex: 1,
-    borderTopWidth: 1,
-  },
-});
+
 
 export default function TabLayout() {
   const { colors, isDarkMode } = useTheme();
