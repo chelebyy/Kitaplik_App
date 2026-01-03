@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   Image,
@@ -18,6 +17,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useBooks, BookStatus } from "../context/BooksContext";
 import { useTranslation } from "react-i18next";
 import PriceComparisonModal from "../components/PriceComparisonModal";
+import { cn } from "../utils/cn";
 
 // Helper function to get translation key for status
 const getStatusTranslationKey = (status: BookStatus): string => {
@@ -65,19 +65,18 @@ export default function BookDetailScreen() {
   if (!book) {
     return (
       <SafeAreaView
-        style={[styles.safeArea, { backgroundColor: colors.background }]}
+        className="flex-1"
+        style={{ backgroundColor: colors.background }}
       >
-        <View style={styles.header}>
+        <View className="flex-row items-center justify-between px-6 py-4">
           <TouchableOpacity
             onPress={() => router.back()}
-            style={styles.iconButton}
+            className="p-2"
           >
             <ArrowLeft size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
+        <View className="flex-1 justify-center items-center">
           <Text style={{ color: colors.text }}>
             {t("book_detail_not_found")}
           </Text>
@@ -133,23 +132,27 @@ export default function BookDetailScreen() {
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: colors.background }]}
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       edges={["top", "left", "right"]}
     >
-      <View style={styles.header}>
+      <View className="flex-row items-center justify-between px-6 py-4">
         <TouchableOpacity
           onPress={() => router.back()}
-          style={styles.iconButton}
+          className="p-2"
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <ArrowLeft size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>
+        <Text
+          className="text-xl font-bold"
+          style={{ fontFamily: "Inter_700Bold", color: colors.text }}
+        >
           {t("book_detail_title")}
         </Text>
         <TouchableOpacity
           onPress={handleDelete}
-          style={styles.iconButton}
+          className="p-2"
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Trash2 size={24} color={colors.danger} />
@@ -158,49 +161,60 @@ export default function BookDetailScreen() {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
+        className="flex-1"
       >
         <ScrollView
-          contentContainerStyle={styles.content}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 24 }}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.imageContainer}>
+          <View
+            className="items-center mt-4 mb-6 shadow-lg elevation-10"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 10 },
+              shadowOpacity: 0.15,
+              shadowRadius: 20,
+            }}
+          >
             <Image
               source={{ uri: book.coverUrl }}
-              style={styles.coverImage}
+              className="w-[180px] h-[270px] rounded-xl bg-[#E0E0E0]"
               resizeMode="cover"
             />
           </View>
 
-          <View style={styles.infoContainer}>
+          <View className="items-center mb-8">
             <Text
-              style={[styles.bookTitle, { color: colors.text }]}
+              className="text-2xl font-bold mb-2 text-center"
+              style={{ fontFamily: "Inter_700Bold", color: colors.text }}
               numberOfLines={2}
             >
               {book.title}
             </Text>
-            <Text style={[styles.bookAuthor, { color: colors.textSecondary }]}>
+            <Text
+              className="text-base font-semibold mb-4"
+              style={{ fontFamily: "Inter_600SemiBold", color: colors.textSecondary }}
+            >
               {book.author}
             </Text>
 
-            <View style={styles.tagsContainer}>
+            <View className="flex-row flex-wrap justify-center gap-2">
               <View
-                style={[
-                  styles.tagChip,
-                  { backgroundColor: colors.chipBackground },
-                ]}
+                className="px-4 py-2 rounded-[20px]"
+                style={{ backgroundColor: colors.chipBackground }}
               >
-                <Text style={[styles.tagText, { color: colors.text }]}>
+                <Text
+                  className="text-xs font-semibold"
+                  style={{ fontFamily: "Inter_600SemiBold", color: colors.text }}
+                >
                   {book.genre || t("general")}
                 </Text>
               </View>
             </View>
 
             <TouchableOpacity
-              style={[
-                styles.compareButton,
-                { backgroundColor: colors.primary + "15" },
-              ]}
+              className="flex-row items-center px-4 py-2.5 rounded-[20px] mt-4"
+              style={{ backgroundColor: colors.primary + "15" }}
               onPress={() => setPriceModalVisible(true)}
             >
               <ShoppingCart
@@ -209,20 +223,22 @@ export default function BookDetailScreen() {
                 style={{ marginRight: 8 }}
               />
               <Text
-                style={[styles.compareButtonText, { color: colors.primary }]}
+                className="text-sm font-semibold"
+                style={{ fontFamily: "Inter_600SemiBold", color: colors.primary }}
               >
                 {t("price_compare")}
               </Text>
             </TouchableOpacity>
           </View>
 
-          <View style={styles.sectionContainer}>
+          <View className="mb-6">
             <Text
-              style={[styles.sectionLabel, { color: colors.sectionHeader }]}
+              className="text-base font-bold mb-3"
+              style={{ fontFamily: "Inter_700Bold", color: colors.sectionHeader }}
             >
               {t("book_detail_status")}
             </Text>
-            <View style={styles.statusContainer}>
+            <View className="flex-row gap-3">
               {statuses.map((s) => {
                 const isActive = book.status === s;
                 // Active Colors
@@ -232,24 +248,21 @@ export default function BookDetailScreen() {
                 return (
                   <TouchableOpacity
                     key={s}
-                    style={[
-                      styles.statusButton,
-                      isActive
-                        ? {
-                          backgroundColor: activeBg,
-                          borderWidth: 1.5,
-                          borderColor: activeBorder,
-                        }
-                        : { borderWidth: 1, borderColor: colors.border },
-                    ]}
+                    className="flex-1 h-11 justify-center items-center rounded-xl border"
+                    style={{
+                      backgroundColor: isActive ? activeBg : "transparent",
+                      borderColor: isActive ? activeBorder : colors.border,
+                      borderWidth: isActive ? 1.5 : 1,
+                    }}
                     onPress={() => handleStatusChange(s)}
                     activeOpacity={0.8}
                   >
                     <Text
-                      style={[
-                        styles.statusButtonText,
-                        { color: isActive ? "#FFFFFF" : colors.textSecondary },
-                      ]}
+                      className="text-sm font-semibold"
+                      style={{
+                        fontFamily: "Inter_600SemiBold",
+                        color: isActive ? "#FFFFFF" : colors.textSecondary,
+                      }}
                     >
                       {t(getStatusTranslationKey(s))}
                     </Text>
@@ -259,28 +272,19 @@ export default function BookDetailScreen() {
             </View>
           </View>
 
-          <View style={styles.sectionContainer}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 12,
-              }}
-            >
+          <View className="mb-6">
+            <View className="flex-row justify-between items-center mb-3">
               <Text
-                style={[
-                  styles.sectionLabel,
-                  { color: colors.sectionHeader, marginBottom: 0 },
-                ]}
+                className="text-base font-bold mb-0"
+                style={{ fontFamily: "Inter_700Bold", color: colors.sectionHeader }}
               >
                 {t("book_detail_progress")}
               </Text>
               <Text
+                className="text-sm font-medium"
                 style={{
                   fontFamily: "Inter_500Medium",
                   color: colors.textSecondary,
-                  fontSize: 14,
                 }}
               >
                 {book.currentPage || 0} / {book.pageCount || 0}{" "}
@@ -289,47 +293,44 @@ export default function BookDetailScreen() {
             </View>
 
             <View
-              style={[
-                styles.progressCard,
-                { backgroundColor: colors.card, borderColor: colors.border },
-              ]}
+              className="rounded-2xl p-4 border"
+              style={{ backgroundColor: colors.card, borderColor: colors.border }}
             >
               {/* Progress Bar */}
               <View
-                style={[
-                  styles.progressBarBg,
-                  { backgroundColor: colors.border },
-                ]}
+                className="h-2 rounded-full mb-4 overflow-hidden"
+                style={{ backgroundColor: colors.border }}
               >
                 <View
-                  style={[
-                    styles.progressBarFill,
-                    {
-                      width: `${Math.min(((book.currentPage || 0) / (book.pageCount || 1)) * 100, 100)}%`,
-                      backgroundColor:
-                        book.status === "Okundu" ? "#4CAF50" : colors.primary,
-                    },
-                  ]}
+                  className="h-full rounded-full"
+                  style={{
+                    width: `${Math.min(((book.currentPage || 0) / (book.pageCount || 1)) * 100, 100)}%`,
+                    backgroundColor:
+                      book.status === "Okundu" ? "#4CAF50" : colors.primary,
+                  }}
                 />
               </View>
 
               {/* Inputs */}
-              <View style={styles.progressInputsRow}>
-                <View style={{ flex: 1, marginRight: 12 }}>
+              <View className="flex-row">
+                <View className="flex-1 mr-3">
                   <Text
-                    style={[styles.inputLabel, { color: colors.textSecondary }]}
+                    className="text-xs font-medium mb-2"
+                    style={{
+                      fontFamily: "Inter_500Medium",
+                      color: colors.textSecondary,
+                    }}
                   >
                     {t("book_detail_current_page")}
                   </Text>
                   <TextInput
-                    style={[
-                      styles.progressInput,
-                      {
-                        backgroundColor: colors.inputBackground,
-                        color: colors.text,
-                        borderColor: colors.border,
-                      },
-                    ]}
+                    className="border rounded-lg px-3 py-2.5 text-sm font-semibold"
+                    style={{
+                      backgroundColor: colors.inputBackground,
+                      color: colors.text,
+                      borderColor: colors.border,
+                      fontFamily: "Inter_600SemiBold",
+                    }}
                     value={String(currentPage)}
                     onChangeText={(text) =>
                       handleProgressChange(text, String(pageCount))
@@ -339,21 +340,24 @@ export default function BookDetailScreen() {
                     placeholderTextColor={colors.placeholder}
                   />
                 </View>
-                <View style={{ flex: 1 }}>
+                <View className="flex-1">
                   <Text
-                    style={[styles.inputLabel, { color: colors.textSecondary }]}
+                    className="text-xs font-medium mb-2"
+                    style={{
+                      fontFamily: "Inter_500Medium",
+                      color: colors.textSecondary,
+                    }}
                   >
                     {t("book_detail_total_pages")}
                   </Text>
                   <TextInput
-                    style={[
-                      styles.progressInput,
-                      {
-                        backgroundColor: colors.inputBackground,
-                        color: colors.text,
-                        borderColor: colors.border,
-                      },
-                    ]}
+                    className="border rounded-lg px-3 py-2.5 text-sm font-semibold"
+                    style={{
+                      backgroundColor: colors.inputBackground,
+                      color: colors.text,
+                      borderColor: colors.border,
+                      fontFamily: "Inter_600SemiBold",
+                    }}
                     value={String(pageCount)}
                     onChangeText={(text) =>
                       handleProgressChange(String(currentPage), text)
@@ -367,20 +371,20 @@ export default function BookDetailScreen() {
             </View>
           </View>
 
-          <View style={styles.sectionContainer}>
+          <View className="mb-6">
             <Text
-              style={[styles.sectionLabel, { color: colors.sectionHeader }]}
+              className="text-base font-bold mb-3"
+              style={{ fontFamily: "Inter_700Bold", color: colors.sectionHeader }}
             >
               {t("book_detail_notes")}
             </Text>
             <View
-              style={[
-                styles.notesContainer,
-                { backgroundColor: colors.noteBackground },
-              ]}
+              className="rounded-2xl p-4 min-h-[150px]"
+              style={{ backgroundColor: colors.noteBackground }}
             >
               <TextInput
-                style={[styles.notesInput, { color: colors.text }]}
+                className="text-[15px] h-full leading-6"
+                style={{ fontFamily: "Inter_400Regular", color: colors.text }}
                 placeholder={t("book_detail_notes_placeholder")}
                 placeholderTextColor={colors.placeholder}
                 multiline
@@ -391,7 +395,7 @@ export default function BookDetailScreen() {
             </View>
           </View>
 
-          <View style={{ height: 40 }} />
+          <View className="h-10" />
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -404,99 +408,3 @@ export default function BookDetailScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: { flex: 1 },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
-  headerTitle: { fontFamily: "Inter_700Bold", fontSize: 20 },
-  iconButton: { padding: 8 },
-  content: { paddingHorizontal: 24, paddingBottom: 24 },
-  imageContainer: {
-    alignItems: "center",
-    marginTop: 16,
-    marginBottom: 24,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  coverImage: {
-    width: 180,
-    height: 270,
-    borderRadius: 12,
-    backgroundColor: "#E0E0E0",
-  },
-  infoContainer: { alignItems: "center", marginBottom: 32 },
-  bookTitle: {
-    fontFamily: "Inter_700Bold",
-    fontSize: 24,
-    marginBottom: 8,
-    textAlign: "center",
-  },
-  bookAuthor: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 16,
-    marginBottom: 16,
-  },
-  tagsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    gap: 8,
-  },
-  tagChip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
-  tagText: { fontFamily: "Inter_600SemiBold", fontSize: 12 },
-  compareButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 20,
-    marginTop: 16,
-  },
-  compareButtonText: { fontFamily: "Inter_600SemiBold", fontSize: 14 },
-  sectionContainer: { marginBottom: 24 },
-  sectionLabel: { fontFamily: "Inter_700Bold", fontSize: 16, marginBottom: 12 },
-  statusContainer: { flexDirection: "row", gap: 12 },
-  statusButton: {
-    flex: 1,
-    height: 44,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 12,
-  },
-  statusButtonActive: { borderColor: "transparent" },
-  statusButtonText: { fontFamily: "Inter_600SemiBold", fontSize: 14 },
-  notesContainer: { borderRadius: 16, padding: 16, minHeight: 150 },
-  notesInput: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 15,
-    lineHeight: 24,
-    height: "100%",
-  },
-  progressCard: { borderRadius: 16, padding: 16, borderWidth: 1 },
-  progressBarBg: {
-    height: 8,
-    borderRadius: 4,
-    marginBottom: 16,
-    overflow: "hidden",
-  },
-  progressBarFill: { height: "100%", borderRadius: 4 },
-  progressInputsRow: { flexDirection: "row" },
-  inputLabel: { fontFamily: "Inter_500Medium", fontSize: 12, marginBottom: 8 },
-  progressInput: {
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 14,
-  },
-});
