@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   Modal,
@@ -9,12 +8,16 @@ import {
 } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { X } from "lucide-react-native";
+import { cn } from "../utils/cn";
 
 interface BarcodeScannerModalProps {
   visible: boolean;
   onClose: () => void;
   onScan: (data: string) => void;
 }
+
+const { width } = Dimensions.get("window");
+const scanSize = width * 0.7;
 
 export default function BarcodeScannerModal({
   visible,
@@ -41,23 +44,25 @@ export default function BarcodeScannerModal({
   };
 
   if (!permission) {
-    return <View />;
+    return <View className="flex-1 bg-black" />;
   }
 
   if (!permission.granted) {
     return (
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.container}>
-          <View style={styles.permissionContainer}>
-            <Text style={styles.permissionText}>Kamera izni gerekiyor</Text>
+        <View className="flex-1 bg-black justify-center items-center">
+          <View className="bg-white p-5 rounded-xl items-center w-[80%]">
+            <Text className="text-base mb-5 text-center font-medium">
+              Kamera izni gerekiyor
+            </Text>
             <TouchableOpacity
               onPress={requestPermission}
-              style={styles.permissionButton}
+              className="bg-blue-600 px-5 py-2.5 rounded-lg mb-2.5 w-full items-center"
             >
-              <Text style={styles.permissionButtonText}>İzin Ver</Text>
+              <Text className="text-white text-base font-semibold">İzin Ver</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Kapat</Text>
+            <TouchableOpacity onPress={onClose} className="p-2.5">
+              <Text className="text-blue-600 text-base font-medium">Kapat</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -71,110 +76,36 @@ export default function BarcodeScannerModal({
       animationType="slide"
       presentationStyle="pageSheet"
     >
-      <View style={styles.container}>
+      <View className="flex-1 bg-black">
         <CameraView
-          style={styles.camera}
+          className="flex-1"
           facing="back"
           onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
           barcodeScannerSettings={{
             barcodeTypes: ["ean13", "ean8"],
           }}
         />
-        <View style={styles.overlay}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Barkod Tara</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
+        <View className="absolute inset-0 bg-black/50 justify-between">
+          <View className="flex-row justify-between items-center p-5 pt-[50px]">
+            <Text className="text-white text-lg font-semibold">Barkod Tara</Text>
+            <TouchableOpacity onPress={onClose} className="p-2">
               <X size={24} color="#FFF" />
             </TouchableOpacity>
           </View>
-          <View style={styles.scanArea}>
-            <View style={styles.scanFrame} />
-            <Text style={styles.scanText}>Barkodu çerçeve içine getirin</Text>
+          <View className="flex-1 items-center justify-center pb-24">
+            <View
+              className="border-2 border-white rounded-xl bg-transparent"
+              style={{
+                width: scanSize,
+                height: scanSize * 0.6,
+              }}
+            />
+            <Text className="text-white mt-5 text-sm opacity-80 font-medium">
+              Barkodu çerçeve içine getirin
+            </Text>
           </View>
         </View>
       </View>
     </Modal>
   );
 }
-
-const { width } = Dimensions.get("window");
-const scanSize = width * 0.7;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  camera: {
-    flex: 1,
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "space-between",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
-    paddingTop: 50,
-  },
-  title: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  closeIcon: {
-    padding: 8,
-  },
-  scanArea: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingBottom: 100,
-  },
-  scanFrame: {
-    width: scanSize,
-    height: scanSize * 0.6,
-    borderWidth: 2,
-    borderColor: "#FFF",
-    borderRadius: 12,
-    backgroundColor: "transparent",
-  },
-  scanText: {
-    color: "#FFF",
-    marginTop: 20,
-    fontSize: 14,
-    opacity: 0.8,
-  },
-  permissionContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
-  permissionText: {
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  permissionButton: {
-    backgroundColor: "#007AFF",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  permissionButtonText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  closeButton: {
-    padding: 10,
-  },
-  closeButtonText: {
-    color: "#007AFF",
-    fontSize: 16,
-  },
-});
