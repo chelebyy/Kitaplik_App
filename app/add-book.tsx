@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   TextInput,
@@ -31,6 +30,7 @@ import { GoogleBookResult } from "../services/GoogleBooksService";
 import { SearchEngine } from "../services/SearchEngine";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
+import { cn } from "../utils/cn";
 
 type InputMode = "manual" | "search";
 
@@ -137,14 +137,12 @@ export default function AddBookScreen() {
         { text: t("cancel"), style: "cancel" },
         {
           text: t("take_photo"),
-          // S6544: void wrapper ile async fonksiyon çağrısı
           onPress: () => {
             void takePhoto();
           },
         },
         {
           text: t("choose_from_gallery"),
-          // S6544: void wrapper ile async fonksiyon çağrısı
           onPress: () => {
             void pickImage();
           },
@@ -152,11 +150,6 @@ export default function AddBookScreen() {
       ]);
     }
   };
-
-
-
-  // ...
-
 
   const handleBarcodeScanned = async (isbn: string) => {
     setIsLoading(true);
@@ -261,17 +254,13 @@ export default function AddBookScreen() {
   };
 
   const renderSearchMode = () => (
-    <View style={styles.searchModeContainer}>
+    <View className="flex-1 px-6">
       {/* Search Type Toggle */}
       <View
+        className="flex-row border rounded-xl p-1 mb-4"
         style={{
-          flexDirection: "row",
           backgroundColor: colors.inputBackground,
           borderColor: colors.border,
-          borderWidth: 1,
-          borderRadius: 12,
-          padding: 4,
-          marginBottom: 16,
         }}
       >
         <TouchableOpacity
@@ -280,24 +269,16 @@ export default function AddBookScreen() {
             setSearchQuery("");
             setSearchResults([]);
           }}
+          className="flex-1 py-3 px-4 rounded-lg items-center justify-center transition-all bg-transparent"
           style={{
-            flex: 1,
-            paddingVertical: 12,
-            paddingHorizontal: 16,
-            borderRadius: 8,
-            alignItems: "center",
-            backgroundColor:
-              searchType === "book" ? colors.primary : "transparent",
+            backgroundColor: searchType === "book" ? colors.primary : "transparent",
           }}
         >
           <Text
+            className="text-sm font-semibold"
             style={{
               color: searchType === "book" ? "#FFFFFF" : colors.text,
-              fontFamily:
-                searchType === "book"
-                  ? "Inter_600SemiBold"
-                  : "Inter_400Regular",
-              fontSize: 14,
+              fontFamily: searchType === "book" ? "Inter_600SemiBold" : "Inter_400Regular",
             }}
           >
             📚 {t("add_book_search_books")}
@@ -310,24 +291,16 @@ export default function AddBookScreen() {
             setSearchQuery("");
             setSearchResults([]);
           }}
+          className="flex-1 py-3 px-4 rounded-lg items-center justify-center transition-all bg-transparent"
           style={{
-            flex: 1,
-            paddingVertical: 12,
-            paddingHorizontal: 16,
-            borderRadius: 8,
-            alignItems: "center",
-            backgroundColor:
-              searchType === "author" ? colors.primary : "transparent",
+            backgroundColor: searchType === "author" ? colors.primary : "transparent",
           }}
         >
           <Text
+            className="text-sm font-semibold"
             style={{
               color: searchType === "author" ? "#FFFFFF" : colors.text,
-              fontFamily:
-                searchType === "author"
-                  ? "Inter_600SemiBold"
-                  : "Inter_400Regular",
-              fontSize: 14,
+              fontFamily: searchType === "author" ? "Inter_600SemiBold" : "Inter_400Regular",
             }}
           >
             👤 {t("add_book_search_authors")}
@@ -336,16 +309,15 @@ export default function AddBookScreen() {
       </View>
 
       <View
-        style={[
-          styles.searchBar,
-          {
-            backgroundColor: colors.inputBackground,
-            borderColor: colors.border,
-          },
-        ]}
+        className="flex-row items-center border rounded-xl px-3 py-2 mb-4"
+        style={{
+          backgroundColor: colors.inputBackground,
+          borderColor: colors.border,
+        }}
       >
         <TextInput
-          style={[styles.searchInput, { color: colors.text, marginLeft: 10 }]}
+          className="flex-1 font-regular text-base py-2 ml-2.5"
+          style={{ color: colors.text, fontFamily: "Inter_400Regular" }}
           placeholder={t("add_book_search_results")}
           placeholderTextColor={colors.placeholder}
           value={searchQuery}
@@ -355,16 +327,19 @@ export default function AddBookScreen() {
         />
         <TouchableOpacity
           onPress={searchGoogleBooks}
-          style={styles.searchButton}
+          className="px-2 py-1"
         >
           <Search size={20} color={colors.primary} />
         </TouchableOpacity>
       </View>
 
       {isLoading ? (
-        <View style={styles.loadingContainer}>
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+          <Text
+            className="mt-3 font-medium text-sm"
+            style={{ color: colors.textSecondary, fontFamily: "Inter_500Medium" }}
+          >
             {t("add_book_searching")}
           </Text>
         </View>
@@ -372,18 +347,22 @@ export default function AddBookScreen() {
         <FlatList
           data={searchResults}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.resultsList}
+          contentContainerStyle={{ paddingBottom: 24 }}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             searchResults.length === 0 && searchQuery ? (
-              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              <Text
+                className="text-center mt-6 font-regular"
+                style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
+              >
                 {t("add_book_no_results")}
               </Text>
             ) : null
           }
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={[styles.resultItem, { backgroundColor: colors.card }]}
+              className="flex-row p-3 rounded-xl mb-3 items-center"
+              style={{ backgroundColor: colors.card }}
               onPress={() => selectBook(item)}
             >
               <Image
@@ -394,18 +373,20 @@ export default function AddBookScreen() {
                       "https://",
                     ) || "https://placehold.co/100x150/png",
                 }}
-                style={styles.resultImage}
+                className="w-[50px] h-[75px] rounded mr-3 bg-[#E0E0E0]"
                 resizeMode="cover"
               />
-              <View style={styles.resultInfo}>
+              <View className="flex-1 mr-2">
                 <Text
-                  style={[styles.resultTitle, { color: colors.text }]}
+                  className="font-semibold text-[15px] mb-1 leading-5"
+                  style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
                   numberOfLines={2}
                 >
                   {item.volumeInfo.title || t("add_book_book_name_placeholder")}
                 </Text>
                 <Text
-                  style={[styles.resultAuthor, { color: colors.textSecondary }]}
+                  className="font-regular text-[13px] mb-1.5"
+                  style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
                   numberOfLines={1}
                 >
                   {item.volumeInfo.authors?.join(", ") ||
@@ -414,16 +395,12 @@ export default function AddBookScreen() {
                 {item.volumeInfo.categories &&
                   item.volumeInfo.categories.length > 0 && (
                     <View
-                      style={[
-                        styles.resultTag,
-                        { backgroundColor: colors.chipBackground },
-                      ]}
+                      className="self-start px-2 py-0.5 rounded"
+                      style={{ backgroundColor: colors.chipBackground }}
                     >
                       <Text
-                        style={[
-                          styles.resultTagText,
-                          { color: colors.textSecondary },
-                        ]}
+                        className="text-[10px] font-medium"
+                        style={{ color: colors.textSecondary, fontFamily: "Inter_500Medium" }}
                       >
                         {item.volumeInfo.categories[0]}
                       </Text>
@@ -431,17 +408,16 @@ export default function AddBookScreen() {
                   )}
                 {item.volumeInfo.pageCount ? (
                   <Text
-                    style={[
-                      styles.resultPageCount,
-                      { color: colors.textSecondary },
-                    ]}
+                    className="text-xs font-regular mt-1"
+                    style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
                   >
                     {item.volumeInfo.pageCount} {t("book_detail_pages")}
                   </Text>
                 ) : null}
               </View>
-              <View style={styles.selectButtonContainer}>
+              <View className="pl-2">
                 <Text
+                  className="font-semibold"
                   style={{
                     color: colors.primary,
                     fontFamily: "Inter_600SemiBold",
@@ -459,53 +435,49 @@ export default function AddBookScreen() {
 
   const renderManualMode = () => (
     <ScrollView
-      contentContainerStyle={styles.content}
+      contentContainerStyle={{ padding: 24 }}
       showsVerticalScrollIndicator={false}
     >
       {/* Scan Barcode Button */}
       <TouchableOpacity
-        style={[
-          styles.scanButton,
-          { backgroundColor: colors.card, borderColor: colors.primary },
-        ]}
+        className="flex-row items-center justify-center p-3 rounded-xl border border-dashed mb-6"
+        style={{
+          backgroundColor: colors.card,
+          borderColor: colors.primary,
+        }}
         onPress={() => setScannerVisible(true)}
       >
         <ScanLine size={20} color={colors.primary} style={{ marginRight: 8 }} />
-        <Text style={[styles.scanButtonText, { color: colors.primary }]}>
+        <Text
+          className="font-semibold text-sm"
+          style={{ color: colors.primary, fontFamily: "Inter_600SemiBold" }}
+        >
           {t("add_book_scan_barcode")}
         </Text>
       </TouchableOpacity>
 
       {/* Cover Upload Area */}
       <View
-        style={[
-          styles.uploadContainer,
-          {
-            backgroundColor: isDarkMode ? colors.card : "#F8F9FA",
-            borderColor: colors.border,
-          },
-        ]}
+        className="border-[1.5px] border-dashed rounded-2xl p-8 items-center mb-8 min-h-[200px] justify-center"
+        style={{
+          backgroundColor: isDarkMode ? colors.card : "#F8F9FA",
+          borderColor: colors.border,
+        }}
       >
         {coverUrl ? (
-          <View style={styles.previewContainer}>
+          <View className="w-full items-center">
             <Image
               source={{ uri: coverUrl }}
-              style={styles.coverPreview}
+              className="w-[120px] h-[180px] rounded-lg mb-3"
               resizeMode="contain"
             />
             <TouchableOpacity
-              style={[
-                styles.removeCoverButton,
-                { backgroundColor: "rgba(0,0,0,0.6)" },
-              ]}
+              className="px-3 py-1.5 rounded-xl bg-black/60"
               onPress={() => setCoverUrl(null)}
             >
               <Text
-                style={{
-                  color: "#FFF",
-                  fontSize: 12,
-                  fontFamily: "Inter_600SemiBold",
-                }}
+                className="text-white text-xs font-semibold"
+                style={{ fontFamily: "Inter_600SemiBold" }}
               >
                 {t("add_book_remove")}
               </Text>
@@ -514,29 +486,32 @@ export default function AddBookScreen() {
         ) : (
           <>
             <View
-              style={[
-                styles.uploadIconCircle,
-                { backgroundColor: colors.iconBackground },
-              ]}
+              className="w-16 h-16 rounded-full justify-center items-center mb-4"
+              style={{ backgroundColor: colors.iconBackground }}
             >
               <ImageIcon size={32} color="#448AFF" />
             </View>
-            <Text style={[styles.uploadTitle, { color: colors.text }]}>
+            <Text
+              className="font-semibold text-base mb-1"
+              style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+            >
               {t("add_book_cover")}
             </Text>
             <Text
-              style={[styles.uploadSubtitle, { color: colors.textSecondary }]}
+              className="font-regular text-sm mb-4"
+              style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
             >
               {t("add_book_add_cover")}
             </Text>
             <TouchableOpacity
-              style={[
-                styles.uploadButton,
-                { backgroundColor: colors.chipBackground },
-              ]}
+              className="px-8 py-2.5 rounded-lg"
+              style={{ backgroundColor: colors.chipBackground }}
               onPress={handleUpload}
             >
-              <Text style={[styles.uploadButtonText, { color: colors.text }]}>
+              <Text
+                className="font-semibold text-sm"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("add_book_upload")}
               </Text>
             </TouchableOpacity>
@@ -545,19 +520,21 @@ export default function AddBookScreen() {
       </View>
 
       {/* Form Fields */}
-      <View style={styles.formGroup}>
-        <Text style={[styles.label, { color: colors.text }]}>
+      <View className="mb-6">
+        <Text
+          className="font-semibold text-base mb-3"
+          style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+        >
           {t("add_book_book_name")}
         </Text>
         <TextInput
-          style={[
-            styles.input,
-            {
-              backgroundColor: colors.inputBackground,
-              borderColor: colors.border,
-              color: colors.text,
-            },
-          ]}
+          className="border rounded-xl px-4 h-[50px] font-regular text-base"
+          style={{
+            backgroundColor: colors.inputBackground,
+            borderColor: colors.border,
+            color: colors.text,
+            fontFamily: "Inter_400Regular",
+          }}
           placeholder={t("add_book_book_name_placeholder")}
           placeholderTextColor={colors.placeholder}
           value={title}
@@ -565,19 +542,21 @@ export default function AddBookScreen() {
         />
       </View>
 
-      <View style={styles.formGroup}>
-        <Text style={[styles.label, { color: colors.text }]}>
+      <View className="mb-6">
+        <Text
+          className="font-semibold text-base mb-3"
+          style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+        >
           {t("add_book_author")}
         </Text>
         <TextInput
-          style={[
-            styles.input,
-            {
-              backgroundColor: colors.inputBackground,
-              borderColor: colors.border,
-              color: colors.text,
-            },
-          ]}
+          className="border rounded-xl px-4 h-[50px] font-regular text-base"
+          style={{
+            backgroundColor: colors.inputBackground,
+            borderColor: colors.border,
+            color: colors.text,
+            fontFamily: "Inter_400Regular",
+          }}
           placeholder={t("add_book_author_placeholder")}
           placeholderTextColor={colors.placeholder}
           value={author}
@@ -585,20 +564,22 @@ export default function AddBookScreen() {
         />
       </View>
 
-      <View style={styles.row}>
-        <View style={[styles.formGroup, { flex: 1, marginRight: 12 }]}>
-          <Text style={[styles.label, { color: colors.text }]}>
+      <View className="flex-row items-center">
+        <View className="flex-1 mr-3 mb-6">
+          <Text
+            className="font-semibold text-base mb-3"
+            style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+          >
             {t("add_book_genre")}
           </Text>
           <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: colors.inputBackground,
-                borderColor: colors.border,
-                color: colors.text,
-              },
-            ]}
+            className="border rounded-xl px-4 h-[50px] font-regular text-base"
+            style={{
+              backgroundColor: colors.inputBackground,
+              borderColor: colors.border,
+              color: colors.text,
+              fontFamily: "Inter_400Regular",
+            }}
             placeholder={t("add_book_genre_placeholder")}
             placeholderTextColor={colors.placeholder}
             value={genre}
@@ -606,19 +587,21 @@ export default function AddBookScreen() {
           />
         </View>
 
-        <View style={[styles.formGroup, { flex: 1 }]}>
-          <Text style={[styles.label, { color: colors.text }]}>
+        <View className="flex-1 mb-6">
+          <Text
+            className="font-semibold text-base mb-3"
+            style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+          >
             {t("add_book_page_count")}
           </Text>
           <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: colors.inputBackground,
-                borderColor: colors.border,
-                color: colors.text,
-              },
-            ]}
+            className="border rounded-xl px-4 h-[50px] font-regular text-base"
+            style={{
+              backgroundColor: colors.inputBackground,
+              borderColor: colors.border,
+              color: colors.text,
+              fontFamily: "Inter_400Regular",
+            }}
             placeholder={t("add_book_page_count_placeholder")}
             placeholderTextColor={colors.placeholder}
             value={pageCount}
@@ -628,11 +611,14 @@ export default function AddBookScreen() {
         </View>
       </View>
 
-      <View style={styles.formGroup}>
-        <Text style={[styles.label, { color: colors.text }]}>
+      <View className="mb-6">
+        <Text
+          className="font-semibold text-base mb-3"
+          style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+        >
           {t("add_book_status")}
         </Text>
-        <View style={styles.statusContainer}>
+        <View className="flex-row gap-3">
           {statuses.map((s) => {
             const isActive = status === s;
             // Active Colors
@@ -642,24 +628,21 @@ export default function AddBookScreen() {
             return (
               <TouchableOpacity
                 key={s}
-                style={[
-                  styles.statusButton,
-                  isActive
-                    ? {
-                      backgroundColor: activeBg,
-                      borderWidth: 1.5,
-                      borderColor: activeBorder,
-                    }
-                    : { borderWidth: 1, borderColor: colors.border },
-                ]}
+                className="flex-1 h-11 justify-center items-center rounded-xl overflow-hidden border"
+                style={{
+                  backgroundColor: isActive ? activeBg : "transparent",
+                  borderColor: isActive ? activeBorder : colors.border,
+                  borderWidth: isActive ? 1.5 : 1,
+                }}
                 onPress={() => setStatus(s)}
                 activeOpacity={0.8}
               >
                 <Text
-                  style={[
-                    styles.statusButtonText,
-                    { color: isActive ? "#FFFFFF" : colors.textSecondary },
-                  ]}
+                  className="font-semibold text-sm z-10"
+                  style={{
+                    color: isActive ? "#FFFFFF" : colors.textSecondary,
+                    fontFamily: "Inter_600SemiBold",
+                  }}
                 >
                   {t(getStatusTranslationKey(s))}
                 </Text>
@@ -669,19 +652,21 @@ export default function AddBookScreen() {
         </View>
       </View>
 
-      <View style={styles.formGroup}>
-        <Text style={[styles.label, { color: colors.text }]}>
+      <View className="mb-6">
+        <Text
+          className="font-semibold text-base mb-3"
+          style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+        >
           {t("book_detail_current_page")}
         </Text>
         <TextInput
-          style={[
-            styles.input,
-            {
-              backgroundColor: colors.inputBackground,
-              borderColor: colors.border,
-              color: colors.text,
-            },
-          ]}
+          className="border rounded-xl px-4 h-[50px] font-regular text-base"
+          style={{
+            backgroundColor: colors.inputBackground,
+            borderColor: colors.border,
+            color: colors.text,
+            fontFamily: "Inter_400Regular",
+          }}
           placeholder={t("current_page_placeholder")}
           placeholderTextColor={colors.placeholder}
           value={currentPage}
@@ -690,46 +675,53 @@ export default function AddBookScreen() {
         />
       </View>
 
-      <View style={{ height: 100 }} />
+      <View className="h-[100px]" />
     </ScrollView>
   );
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: colors.background }]}
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       edges={["top", "left", "right"]}
     >
-      <View style={[styles.header, { backgroundColor: colors.background }]}>
+      <View
+        className="flex-row items-center justify-between px-6 py-4"
+        style={{ backgroundColor: colors.background }}
+      >
         <TouchableOpacity
           onPress={() => router.back()}
-          style={styles.backButton}
+          className="p-1 -ml-1"
         >
           <ArrowLeft size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>
+        <Text
+          className="text-xl font-bold"
+          style={{ fontFamily: "Inter_700Bold", color: colors.text }}
+        >
           {t("add_book_title")}
         </Text>
-        <View style={{ width: 24 }} />
+        <View className="w-6" />
       </View>
 
-      <View style={styles.modeSwitcherContainer}>
+      <View className="px-6 mb-4">
         <View
-          style={[
-            styles.modeSwitcher,
-            { backgroundColor: colors.chipBackground },
-          ]}
+          className="flex-row p-1 rounded-xl h-11"
+          style={{ backgroundColor: colors.chipBackground }}
         >
           <TouchableOpacity
-            style={[
-              styles.modeButton,
-              mode === "manual" && {
-                backgroundColor: colors.card,
-                shadowColor: "#000",
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 2,
-              },
-            ]}
+            className="flex-1 flex-row items-center justify-center rounded-lg"
+            style={
+              mode === "manual"
+                ? {
+                  backgroundColor: colors.card,
+                  shadowColor: "#000",
+                  shadowOpacity: 0.1,
+                  shadowRadius: 2,
+                  elevation: 2,
+                }
+                : {}
+            }
             onPress={() => setMode("manual")}
           >
             <PenTool
@@ -738,27 +730,28 @@ export default function AddBookScreen() {
               style={{ marginRight: 6 }}
             />
             <Text
-              style={[
-                styles.modeText,
-                {
-                  color: mode === "manual" ? colors.text : colors.textSecondary,
-                },
-              ]}
+              className="font-semibold text-sm"
+              style={{
+                color: mode === "manual" ? colors.text : colors.textSecondary,
+                fontFamily: "Inter_600SemiBold",
+              }}
             >
               {t("add_book_manual")}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[
-              styles.modeButton,
-              mode === "search" && {
-                backgroundColor: colors.card,
-                shadowColor: "#000",
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 2,
-              },
-            ]}
+            className="flex-1 flex-row items-center justify-center rounded-lg"
+            style={
+              mode === "search"
+                ? {
+                  backgroundColor: colors.card,
+                  shadowColor: "#000",
+                  shadowOpacity: 0.1,
+                  shadowRadius: 2,
+                  elevation: 2,
+                }
+                : {}
+            }
             onPress={() => setMode("search")}
           >
             <Search
@@ -767,12 +760,11 @@ export default function AddBookScreen() {
               style={{ marginRight: 6 }}
             />
             <Text
-              style={[
-                styles.modeText,
-                {
-                  color: mode === "search" ? colors.text : colors.textSecondary,
-                },
-              ]}
+              className="font-semibold text-sm"
+              style={{
+                color: mode === "search" ? colors.text : colors.textSecondary,
+                fontFamily: "Inter_600SemiBold",
+              }}
             >
               {t("add_book_search")}
             </Text>
@@ -782,22 +774,27 @@ export default function AddBookScreen() {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
+        className="flex-1"
       >
         {mode === "manual" ? renderManualMode() : renderSearchMode()}
 
         {mode === "manual" && (
           <View
-            style={[
-              styles.footer,
-              {
-                backgroundColor: colors.background,
-                borderTopColor: colors.border,
-              },
-            ]}
+            className="absolute bottom-0 left-0 right-0 px-6 pt-4 border-t"
+            style={{
+              backgroundColor: colors.background,
+              borderTopColor: colors.border,
+              paddingBottom: Platform.OS === "ios" ? 34 : 24,
+            }}
           >
             <TouchableOpacity
-              style={styles.saveButton}
+              className="h-14 rounded-2xl shadow-sm elevation-4"
+              style={{
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.1,
+                shadowRadius: 8,
+              }}
               onPress={handleSave}
               activeOpacity={0.8}
             >
@@ -818,10 +815,11 @@ export default function AddBookScreen() {
                 }}
               >
                 <Text
-                  style={[
-                    styles.saveButtonText,
-                    { color: isDarkMode ? colors.primary : "#334155" },
-                  ]}
+                  className="font-bold text-base"
+                  style={{
+                    fontFamily: "Inter_700Bold",
+                    color: isDarkMode ? colors.primary : "#334155",
+                  }}
                 >
                   {t("add_book_save")}
                 </Text>
@@ -838,19 +836,11 @@ export default function AddBookScreen() {
       />
 
       {isLoading && mode === "manual" && (
-        <View
-          style={[
-            styles.loadingOverlay,
-            { backgroundColor: "rgba(0,0,0,0.5)" },
-          ]}
-        >
+        <View className="absolute inset-0 bg-black/50 justify-center items-center z-50">
           <ActivityIndicator size="large" color="#FFF" />
           <Text
-            style={{
-              color: "#FFF",
-              marginTop: 10,
-              fontFamily: "Inter_600SemiBold",
-            }}
+            className="text-white mt-2.5 font-semibold"
+            style={{ fontFamily: "Inter_600SemiBold" }}
           >
             Kitap bilgileri getiriliyor...
           </Text>
@@ -859,202 +849,3 @@ export default function AddBookScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: { flex: 1 },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
-  backButton: { padding: 4, marginLeft: -4 },
-  headerTitle: { fontFamily: "Inter_700Bold", fontSize: 20 },
-  modeSwitcherContainer: { paddingHorizontal: 24, marginBottom: 16 },
-  modeSwitcher: {
-    flexDirection: "row",
-    padding: 4,
-    borderRadius: 12,
-    height: 44,
-  },
-  modeButton: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
-  },
-  modeText: { fontFamily: "Inter_600SemiBold", fontSize: 14 },
-  content: { padding: 24 },
-  searchModeContainer: { flex: 1, paddingHorizontal: 24 },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 16,
-  },
-  searchIcon: { marginRight: 8 },
-  searchInput: {
-    flex: 1,
-    fontFamily: "Inter_400Regular",
-    fontSize: 16,
-    paddingVertical: 8,
-  },
-  searchButton: { paddingHorizontal: 8, paddingVertical: 4 },
-  loadingContainer: { flex: 1, alignItems: "center", justifyContent: "center" },
-  loadingText: { marginTop: 12, fontFamily: "Inter_500Medium", fontSize: 14 },
-  resultsList: { paddingBottom: 24 },
-  emptyText: {
-    textAlign: "center",
-    marginTop: 24,
-    fontFamily: "Inter_400Regular",
-  },
-  resultItem: {
-    flexDirection: "row",
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 12,
-    alignItems: "center",
-  },
-  resultImage: {
-    width: 50,
-    height: 75,
-    borderRadius: 4,
-    marginRight: 12,
-    backgroundColor: "#E0E0E0",
-  },
-  resultInfo: { flex: 1, marginRight: 8 },
-  resultTitle: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 15,
-    marginBottom: 4,
-  },
-  resultAuthor: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 13,
-    marginBottom: 6,
-  },
-  resultTag: {
-    alignSelf: "flex-start",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  resultTagText: { fontSize: 10, fontFamily: "Inter_500Medium" },
-  resultPageCount: {
-    fontSize: 12,
-    fontFamily: "Inter_400Regular",
-    marginTop: 4,
-  },
-  selectButtonContainer: { paddingLeft: 8 },
-  uploadContainer: {
-    borderWidth: 1.5,
-    borderStyle: "dashed",
-    borderRadius: 16,
-    padding: 32,
-    alignItems: "center",
-    marginBottom: 32,
-    minHeight: 200,
-    justifyContent: "center",
-  },
-  previewContainer: { width: "100%", alignItems: "center" },
-  coverPreview: { width: 120, height: 180, borderRadius: 8, marginBottom: 12 },
-  removeCoverButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  uploadIconCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  uploadTitle: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  uploadSubtitle: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 14,
-    marginBottom: 16,
-  },
-  uploadButton: { paddingHorizontal: 32, paddingVertical: 10, borderRadius: 8 },
-  uploadButtonText: { fontFamily: "Inter_600SemiBold", fontSize: 14 },
-  formGroup: { marginBottom: 24 },
-  row: { flexDirection: "row", alignItems: "center" },
-  label: { fontFamily: "Inter_600SemiBold", fontSize: 16, marginBottom: 12 },
-  input: {
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    height: 50,
-    paddingVertical: 0,
-    textAlignVertical: "center",
-    fontFamily: "Inter_400Regular",
-    fontSize: 16,
-  },
-  statusContainer: { flexDirection: "row", gap: 12 },
-  statusButton: {
-    flex: 1,
-    height: 44,
-    borderRadius: 12,
-    overflow: "hidden",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  statusButtonActive: { borderColor: "transparent" },
-  statusButtonText: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 14,
-    zIndex: 1,
-  },
-  footer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 24,
-    paddingBottom: Platform.OS === "ios" ? 34 : 24,
-    paddingTop: 16,
-    borderTopWidth: 1,
-  },
-  saveButton: {
-    height: 56,
-    borderRadius: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  saveButtonText: { fontFamily: "Inter_700Bold", fontSize: 16 },
-  scanButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 24,
-    borderStyle: "dashed",
-  },
-  scanButtonText: { fontFamily: "Inter_600SemiBold", fontSize: 14 },
-  loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-});
