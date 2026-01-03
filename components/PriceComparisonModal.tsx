@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   Linking,
 } from "react-native";
@@ -20,6 +19,7 @@ import {
 import * as WebBrowser from "expo-web-browser";
 import { useTheme } from "../context/ThemeContext";
 import { PriceService, StoreLink } from "../services/PriceService";
+import { cn } from "../utils/cn";
 
 interface PriceComparisonModalProps {
   visible: boolean;
@@ -92,53 +92,86 @@ export default function PriceComparisonModal({
       transparent={true}
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={[styles.container, { backgroundColor: colors.card }]}>
-          <View style={[styles.header, { borderBottomColor: colors.border }]}>
-            <Text style={[styles.title, { color: colors.text }]}>
+      <View className="flex-1 bg-black/50 justify-end">
+        <View
+          className={cn(
+            "rounded-t-3xl max-h-[80%] overflow-hidden",
+            isDarkMode ? "bg-slate-900" : "bg-white"
+          )}
+          style={{ backgroundColor: colors.card }}
+        >
+          {/* Header */}
+          <View
+            className={cn(
+              "flex-row justify-between items-center p-5 border-b",
+              isDarkMode ? "border-slate-700" : "border-slate-100"
+            )}
+            style={{ borderBottomColor: colors.border }}
+          >
+            <Text
+              className={cn(
+                "text-lg font-bold",
+                isDarkMode ? "text-white" : "text-slate-900"
+              )}
+              style={{ color: colors.text }}
+            >
               {t("compare_options")}
             </Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <TouchableOpacity onPress={onClose} className="p-1">
               <X size={24} color={colors.text} />
             </TouchableOpacity>
           </View>
 
-          <ScrollView contentContainerStyle={styles.content}>
+          <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }}>
             {/* Fiyat Karşılaştırma Bölümü */}
             <View
-              style={[
-                styles.comparisonSection,
-                { backgroundColor: isDarkMode ? "#1E3A5F" : "#EFF6FF" },
-              ]}
+              className={cn(
+                "p-4 rounded-xl mb-5",
+                isDarkMode ? "bg-[#1E3A5F]" : "bg-blue-50"
+              )}
             >
-              <View style={styles.comparisonHeader}>
+              <View className="flex-row items-center mb-2">
                 <TrendingDown size={20} color={colors.primary} />
-                <Text style={[styles.comparisonTitle, { color: colors.text }]}>
+                <Text
+                  className={cn(
+                    "text-base font-bold ml-2",
+                    isDarkMode ? "text-white" : "text-slate-900"
+                  )}
+                  style={{ color: colors.text }}
+                >
                   {t("compare_prices") || "Fiyatları Karşılaştır"}
                 </Text>
               </View>
               <Text
-                style={[
-                  styles.comparisonSubtitle,
-                  { color: colors.textSecondary },
-                ]}
+                className={cn(
+                  "text-[13px] mb-4",
+                  isDarkMode ? "text-slate-400" : "text-slate-600"
+                )}
+                style={{ color: colors.textSecondary }}
               >
                 {t("compare_prices_desc") ||
                   "En uygun fiyatı bulmak için karşılaştırma sitelerini kullanın"}
               </Text>
 
-              <View style={styles.comparisonButtons}>
+              <View className="mt-2 gap-3">
                 {COMPARISON_SITES.map((site) => (
                   <TouchableOpacity
                     key={site.id}
-                    style={[
-                      styles.comparisonButton,
-                      { backgroundColor: site.color },
-                    ]}
+                    className="flex-row items-center justify-center px-4 py-3.5 rounded-xl gap-2 shadow-sm"
+                    style={{
+                      backgroundColor: site.color,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 1 },
+                      shadowOpacity: 0.1,
+                      shadowRadius: 2,
+                      elevation: 2,
+                    }}
                     onPress={() => openLink(site.getUrl(searchQuery))}
                   >
                     <Search size={16} color="#FFF" />
-                    <Text style={styles.comparisonButtonText}>{site.name}</Text>
+                    <Text className="text-white text-[15px] font-semibold">
+                      {site.name}
+                    </Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -146,27 +179,28 @@ export default function PriceComparisonModal({
 
             {/* Mağaza Linkleri Bölümü */}
             <Text
-              style={[styles.sectionTitle, { color: colors.textSecondary }]}
+              className="text-[13px] mb-3 text-center"
+              style={{ color: colors.textSecondary }}
             >
               {t("or_go_directly") || "veya doğrudan mağazaya git"}
             </Text>
 
             {/* Bilgilendirme Notu */}
             <View
-              style={[
-                styles.infoNote,
-                { backgroundColor: isDarkMode ? "#374151" : "#FEF3C7" },
-              ]}
+              className={cn(
+                "flex-row items-center p-2.5 rounded-lg mb-3 gap-2",
+                isDarkMode ? "bg-slate-700" : "bg-amber-50"
+              )}
             >
               <AlertCircle
                 size={14}
                 color={isDarkMode ? "#FCD34D" : "#D97706"}
               />
               <Text
-                style={[
-                  styles.infoNoteText,
-                  { color: isDarkMode ? "#FCD34D" : "#92400E" },
-                ]}
+                className={cn(
+                  "text-xs flex-1",
+                  isDarkMode ? "text-amber-300" : "text-amber-800"
+                )}
               >
                 {t("store_availability_note") ||
                   "Bazı mağazalarda bu kitap bulunmayabilir"}
@@ -176,37 +210,37 @@ export default function PriceComparisonModal({
             {storeLinks.map((link: StoreLink) => (
               <View
                 key={link.store.id}
-                style={[
-                  styles.storeItem,
-                  {
-                    borderColor: colors.border,
-                    backgroundColor: isDarkMode ? "#1E293B" : "#F8FAFC",
-                  },
-                ]}
+                className={cn(
+                  "p-3 mb-2 rounded-xl border",
+                  isDarkMode
+                    ? "bg-slate-800 border-slate-700"
+                    : "bg-slate-50 border-slate-200"
+                )}
+                style={{ borderColor: colors.border }}
               >
-                <View style={styles.storeRow}>
-                  <View style={styles.storeInfo}>
+                <View className="flex-row justify-between items-center">
+                  <View className="flex-row items-center flex-1">
                     <View
-                      style={[
-                        styles.storeIconPlaceholder,
-                        { backgroundColor: link.store.logoColor },
-                      ]}
+                      className="w-9 h-9 rounded-lg justify-center items-center mr-2.5"
+                      style={{ backgroundColor: link.store.logoColor }}
                     >
                       <ShoppingCart size={20} color="#FFF" />
                     </View>
-                    <Text style={[styles.storeName, { color: colors.text }]}>
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: colors.text }}
+                    >
                       {link.store.name}
                     </Text>
                   </View>
                   <TouchableOpacity
-                    style={[
-                      styles.goButton,
-                      { backgroundColor: colors.primary + "15" },
-                    ]}
+                    className="flex-row items-center px-2.5 py-1.5 rounded-md"
+                    style={{ backgroundColor: colors.primary + "15" }}
                     onPress={() => openLink(link.url)}
                   >
                     <Text
-                      style={[styles.actionText, { color: colors.primary }]}
+                      className="text-xs font-semibold"
+                      style={{ color: colors.primary }}
                     >
                       {t("go_to_store")}
                     </Text>
@@ -225,137 +259,3 @@ export default function PriceComparisonModal({
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
-  },
-  container: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: "80%",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
-    borderBottomWidth: 1,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  closeButton: {
-    padding: 4,
-  },
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  // Fiyat Karşılaştırma Bölümü
-  comparisonSection: {
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 20,
-  },
-  comparisonHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  comparisonTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginLeft: 8,
-  },
-  comparisonSubtitle: {
-    fontSize: 13,
-    marginBottom: 16,
-  },
-  comparisonButtons: {
-    marginTop: 8,
-    gap: 12,
-  },
-  comparisonButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 12,
-    gap: 8,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  comparisonButtonText: {
-    color: "#FFF",
-    fontSize: 15,
-    fontWeight: "600",
-  },
-  sectionTitle: {
-    fontSize: 13,
-    marginBottom: 12,
-    textAlign: "center",
-  },
-  infoNote: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 12,
-    gap: 8,
-  },
-  infoNoteText: {
-    fontSize: 12,
-    flex: 1,
-  },
-  // Mağaza Linkleri
-  storeItem: {
-    padding: 12,
-    marginBottom: 8,
-    borderRadius: 10,
-    borderWidth: 1,
-  },
-  storeRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  storeInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  storeIconPlaceholder: {
-    width: 36,
-    height: 36,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-  },
-  storeName: {
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  goButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 6,
-  },
-  actionText: {
-    fontSize: 12,
-    fontWeight: "600",
-  },
-});
