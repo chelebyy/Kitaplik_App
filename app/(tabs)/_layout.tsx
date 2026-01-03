@@ -9,7 +9,6 @@ import { LinearGradient } from "expo-linear-gradient";
 // Tab ikonları için tip tanımı
 interface TabIconProps {
   color: string;
-  size: number;
   focused: boolean;
 }
 

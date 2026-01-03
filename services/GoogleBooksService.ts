@@ -1,6 +1,7 @@
 import { fetchWithTimeout } from "../utils/fetchWithTimeout";
 import { logError } from "../utils/errorUtils";
 import { convertISBN10ToISBN13, convertISBN13ToISBN10, normalizeISBN } from "../utils/isbnConverter";
+import { normalizeForMatching } from "../utils/stringUtils";
 import { OpenLibraryService } from "./OpenLibraryService";
 
 export interface GoogleBookResult {
@@ -41,6 +42,7 @@ export const GoogleBooksService = {
     query: string,
     lang: string = "tr",
     searchType: "book" | "author" = "book",
+    skipFallback: boolean = false,
   ): Promise<GoogleBookResult[]> => {
     try {
       // STEP 1: Try specific search first
@@ -62,7 +64,7 @@ export const GoogleBooksService = {
       let finalResults = filterByLanguage(withCovers, lang);
 
       // STEP 3: IF results are scarce, try Open Library Fallback
-      if (finalResults.length < 5) {
+      if (!skipFallback && finalResults.length < 5) {
         try {
           const openLibraryResults = await OpenLibraryService.searchBooks(query, searchType);
 
@@ -247,29 +249,35 @@ function filterByLanguage(
  * @param searchType - 'book' or 'author'
  * @returns Filtered books with high relevance
  */
+
+
+
 function filterRelevantResults(
   query: string,
   books: GoogleBookResult[],
   searchType: "book" | "author",
 ): GoogleBookResult[] {
-  const normalizedQuery = query.toLowerCase().trim();
+  // Normalize both query and content for comparison
+  const normalizedQuery = normalizeForMatching(query.trim());
   const queryWords = normalizedQuery.split(/\s+/);
 
   return books.filter((book) => {
-    const title = book.volumeInfo.title?.toLowerCase() || "";
-    const authors = book.volumeInfo.authors?.map(a => a.toLowerCase()).join(" ") || "";
+    const title = book.volumeInfo.title || "";
+    const authors = book.volumeInfo.authors?.join(" ") || "";
 
-    const searchTarget = searchType === "author" ? authors : title;
+    const rawTarget = searchType === "author" ? authors : title;
+    const normalizedTarget = normalizeForMatching(rawTarget);
 
     // Check if at least 70% of query words appear in the target
-    const matchedWords = queryWords.filter(word =>
-      searchTarget.includes(word)
+    const matchedWords = queryWords.filter((word) =>
+      normalizedTarget.includes(word),
     );
 
     const matchRatio = matchedWords.length / queryWords.length;
     return matchRatio >= 0.7; // At least 70% word match
   });
 }
+
 
 /**
  * Prioritize books with cover images

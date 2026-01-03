@@ -23,7 +23,7 @@ export default function FilterDropdown({
   items,
   selectedValue,
   onValueChange,
-}: FilterDropdownProps) {
+}: Readonly<FilterDropdownProps>) {
   const { colors, isDarkMode } = useTheme();
   const [visible, setVisible] = useState(false);
 

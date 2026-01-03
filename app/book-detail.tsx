@@ -19,6 +19,16 @@ import { useBooks, BookStatus } from "../context/BooksContext";
 import { useTranslation } from "react-i18next";
 import PriceComparisonModal from "../components/PriceComparisonModal";
 
+// Helper function to get translation key for status
+const getStatusTranslationKey = (status: BookStatus): string => {
+  const keys: Record<BookStatus, string> = {
+    "Okundu": "read",
+    "Okunuyor": "reading",
+    "Okunacak": "to_read",
+  };
+  return keys[status];
+};
+
 export default function BookDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
@@ -90,8 +100,8 @@ export default function BookDetailScreen() {
   const handleProgressChange = (current: string, total: string) => {
     if (!bookId) return;
 
-    const currentNum = parseInt(current) || 0;
-    const totalNum = parseInt(total) || 0;
+    const currentNum = Number.parseInt(current, 10) || 0;
+    const totalNum = Number.parseInt(total, 10) || 0;
 
     setCurrentPage(currentNum);
     setPageCount(totalNum);
@@ -226,10 +236,10 @@ export default function BookDetailScreen() {
                       styles.statusButton,
                       isActive
                         ? {
-                            backgroundColor: activeBg,
-                            borderWidth: 1.5,
-                            borderColor: activeBorder,
-                          }
+                          backgroundColor: activeBg,
+                          borderWidth: 1.5,
+                          borderColor: activeBorder,
+                        }
                         : { borderWidth: 1, borderColor: colors.border },
                     ]}
                     onPress={() => handleStatusChange(s)}
@@ -241,13 +251,7 @@ export default function BookDetailScreen() {
                         { color: isActive ? "#FFFFFF" : colors.textSecondary },
                       ]}
                     >
-                      {t(
-                        s === "Okundu"
-                          ? "read"
-                          : s === "Okunuyor"
-                            ? "reading"
-                            : "to_read",
-                      )}
+                      {t(getStatusTranslationKey(s))}
                     </Text>
                   </TouchableOpacity>
                 );

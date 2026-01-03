@@ -27,14 +27,22 @@ import { useTheme } from "../context/ThemeContext";
 import { useBooks, BookStatus } from "../context/BooksContext";
 import * as ImagePicker from "expo-image-picker";
 import BarcodeScannerModal from "../components/BarcodeScannerModal";
-import {
-  GoogleBooksService,
-  GoogleBookResult,
-} from "../services/GoogleBooksService";
+import { GoogleBookResult } from "../services/GoogleBooksService";
+import { SearchEngine } from "../services/SearchEngine";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
 
 type InputMode = "manual" | "search";
+
+// Helper function to get translation key for status (reduces cognitive complexity)
+const getStatusTranslationKey = (status: BookStatus): string => {
+  const keys: Record<BookStatus, string> = {
+    "Okundu": "read",
+    "Okunuyor": "reading",
+    "Okunacak": "to_read",
+  };
+  return keys[status];
+};
 
 export default function AddBookScreen() {
   const router = useRouter();
@@ -145,16 +153,23 @@ export default function AddBookScreen() {
     }
   };
 
+
+
+  // ...
+
+
   const handleBarcodeScanned = async (isbn: string) => {
     setIsLoading(true);
     try {
-      const book = await GoogleBooksService.searchByIsbn(
+      // Use SearchEngine
+      const items = await SearchEngine.search(
         isbn,
         i18n.language?.split("-")[0],
+        "book"
       );
 
-      if (book) {
-        selectBook(book);
+      if (items.length > 0) {
+        selectBook(items[0]);
         Alert.alert(t("add_book_success"), t("add_book_success_msg"));
       } else {
         Alert.alert(t("add_book_not_found"), t("add_book_not_found_msg"));
@@ -172,8 +187,8 @@ export default function AddBookScreen() {
       return;
     }
 
-    const totalPages = parseInt(pageCount) || 0;
-    const current = parseInt(currentPage) || 0;
+    const totalPages = Number.parseInt(pageCount, 10) || 0;
+    const current = Number.parseInt(currentPage, 10) || 0;
 
     let progress = 0;
     if (status === "Okundu") {
@@ -204,10 +219,10 @@ export default function AddBookScreen() {
 
     setIsLoading(true);
     try {
-      const items = await GoogleBooksService.searchBooks(
+      const items = await SearchEngine.search(
         searchQuery,
         i18n.language?.split("-")[0],
-        searchType, // Pass searchType (book or author)
+        searchType,
       );
       if (items.length > 0) {
         setSearchResults(items);
@@ -646,13 +661,7 @@ export default function AddBookScreen() {
                     { color: isActive ? "#FFFFFF" : colors.textSecondary },
                   ]}
                 >
-                  {t(
-                    s === "Okundu"
-                      ? "read"
-                      : s === "Okunuyor"
-                        ? "reading"
-                        : "to_read",
-                  )}
+                  {t(getStatusTranslationKey(s))}
                 </Text>
               </TouchableOpacity>
             );

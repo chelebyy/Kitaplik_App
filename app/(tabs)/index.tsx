@@ -50,6 +50,17 @@ export default function HomeScreen() {
     useState(false);
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
 
+  // Helper function to get localized filter title (reduces cognitive complexity)
+  const getFilterTitle = (filter: string): string => {
+    const titles: Record<string, string> = {
+      "Tümü": t("all_books"),
+      "Okundu": t("read"),
+      "Okunuyor": t("reading"),
+      "Okunacak": t("to_read"),
+    };
+    return titles[filter] || filter;
+  };
+
   // Grid hesaplamaları
   const COLUMN_WIDTH = (width - 48 - 16) / 2;
 
@@ -267,15 +278,7 @@ export default function HomeScreen() {
       {/* Section Header */}
       <View style={styles.sectionHeader}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          {activeFilter === "Tümü"
-            ? t("all_books")
-            : activeFilter === "Okundu"
-              ? t("read")
-              : activeFilter === "Okunuyor"
-                ? t("reading")
-                : activeFilter === "Okunacak"
-                  ? t("to_read")
-                  : activeFilter}
+          {getFilterTitle(activeFilter)}
         </Text>
         <TouchableOpacity
           onPress={() =>

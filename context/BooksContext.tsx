@@ -140,7 +140,6 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
     const handler = setTimeout(async () => {
       try {
         await AsyncStorage.setItem(BOOKS_STORAGE_KEY, JSON.stringify(books));
-        // console.log('[Storage] Kitaplar diskte güncellendi.'); // Debug için
       } catch (error) {
         logError("BooksContext.saveBooks", error);
       }

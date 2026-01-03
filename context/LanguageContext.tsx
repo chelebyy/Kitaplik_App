@@ -34,7 +34,7 @@ const getDeviceLanguage = (): Language => {
   return deviceLangCode === "tr" ? "tr" : "en";
 };
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
+export function LanguageProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [language, setLanguage] = useState<Language>("tr");
 
   useEffect(() => {

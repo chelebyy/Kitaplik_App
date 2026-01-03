@@ -3,7 +3,6 @@ import {
   Modal,
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   Image,
   TextInput,
@@ -13,14 +12,23 @@ import { X, LogOut, User as UserIcon, Check } from "lucide-react-native";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { cn } from "../utils/cn";
 
 interface ProfileModalProps {
   visible: boolean;
   onClose: () => void;
 }
 
-export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
-  const { colors, isDarkMode } = useTheme();
+export default function ProfileModal({
+  visible,
+  onClose,
+}: Readonly<ProfileModalProps>) {
+  const { isDarkMode } = useTheme();
+  // We use inline colors for icons where className can't easily reach props, 
+  // but for main UI we use Tailwind classes.
+  // Note: For text/bg colors, we often rely on isDarkMode toggle or standard Tailwind dark: utility if configured.
+  // Since this project uses manual isDarkMode context, we'll use conditional classes.
+
   const { user, signIn, signOut } = useAuth();
   const { t } = useTranslation();
   const [name, setName] = useState("");
@@ -41,51 +49,55 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
+      <View className="flex-1 bg-black/50 justify-center items-center p-5">
         <View
-          style={[
-            styles.container,
-            { backgroundColor: colors.card, borderColor: colors.border },
-          ]}
+          className={cn(
+            "w-full max-w-[360px] rounded-3xl border overflow-hidden shadow-xl",
+            isDarkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"
+          )}
+          style={isDarkMode ? undefined : { elevation: 10 }} // Tailwind shadow doesn't always map to elevation on Android
         >
           {/* Header */}
-          <View style={styles.header}>
-            <Text style={[styles.title, { color: colors.text }]}>
+          <View className={cn("flex-row justify-between items-center px-5 py-4 border-b", isDarkMode ? "border-slate-700" : "border-slate-100")}>
+            <Text className={cn("text-lg font-bold", isDarkMode ? "text-white" : "text-slate-900")}>
               {t("profile")}
             </Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <X size={20} color={colors.textSecondary} />
+            <TouchableOpacity onPress={onClose} className="p-1">
+              <X size={20} color={isDarkMode ? "#94a3b8" : "#64748b"} />
             </TouchableOpacity>
           </View>
 
           {/* Content */}
-          <View style={styles.content}>
+          <View className="p-6">
             {user ? (
               // Logged In View
-              <View style={styles.profileContainer}>
+              <View className="items-center">
                 <Image
                   source={{
                     uri: user.photoURL || "https://via.placeholder.com/100",
                   }}
-                  style={styles.avatar}
+                  className="w-20 h-20 rounded-full mb-4 bg-slate-200"
                 />
-                <Text style={[styles.userName, { color: colors.text }]}>
+                <Text className={cn("text-lg font-bold mb-4", isDarkMode ? "text-white" : "text-slate-900")}>
                   {user.displayName || t("book_lover")}
                 </Text>
 
                 <View
-                  style={[
-                    styles.infoCard,
-                    { backgroundColor: isDarkMode ? "#333" : "#F3F4F6" },
-                  ]}
+                  className={cn(
+                    "p-4 rounded-xl mb-6 w-full",
+                    isDarkMode ? "bg-[#333]" : "bg-gray-100"
+                  )}
                 >
-                  <Text style={[styles.infoText, { color: colors.text }]}>
+                  <Text className={cn("text-[13px] text-center leading-5", isDarkMode ? "text-gray-300" : "text-slate-600")}>
                     {t("profile_local_active")}
                   </Text>
                 </View>
 
                 <TouchableOpacity
-                  style={[styles.logoutButton, { borderColor: colors.danger }]}
+                  className={cn(
+                    "flex-row items-center py-3 px-6 rounded-xl border w-full justify-center",
+                    "border-red-500"
+                  )}
                   onPress={() => {
                     signOut();
                     onClose();
@@ -93,58 +105,52 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
                 >
                   <LogOut
                     size={18}
-                    color={colors.danger}
+                    color="#ef4444"
                     style={{ marginRight: 8 }}
                   />
-                  <Text style={[styles.logoutText, { color: colors.danger }]}>
+                  <Text className="text-sm font-semibold text-red-500">
                     {t("profile_delete")}
                   </Text>
                 </TouchableOpacity>
               </View>
             ) : (
               // Guest View / Create Profile
-              <View style={styles.guestContainer}>
+              <View className="items-center">
                 <View
-                  style={[styles.iconCircle, { backgroundColor: "#E0F2FE" }]}
+                  className="w-16 h-16 rounded-full justify-center items-center mb-4 bg-sky-100"
                 >
                   <UserIcon size={32} color="#0284C7" />
                 </View>
-                <Text style={[styles.guestTitle, { color: colors.text }]}>
+                <Text className={cn("text-xl font-bold mb-2", isDarkMode ? "text-white" : "text-slate-900")}>
                   {t("profile_create")}
                 </Text>
                 <Text
-                  style={[styles.guestDesc, { color: colors.textSecondary }]}
+                  className={cn("text-sm text-center mb-6 leading-5", isDarkMode ? "text-gray-400" : "text-slate-500")}
                 >
                   {t("profile_create_desc")}
                 </Text>
 
                 <View
-                  style={[
-                    styles.inputContainer,
-                    {
-                      backgroundColor: colors.background,
-                      borderColor: colors.border,
-                    },
-                  ]}
+                  className={cn(
+                    "w-full rounded-xl border mb-4 px-4 h-[50px] justify-center",
+                    isDarkMode ? "bg-slate-900 border-slate-700" : "bg-white border-slate-200"
+                  )}
                 >
                   <TextInput
-                    style={[styles.input, { color: colors.text }]}
+                    className={cn("text-base", isDarkMode ? "text-white" : "text-slate-900")}
                     placeholder={t("profile_name_placeholder")}
-                    placeholderTextColor={colors.textSecondary}
+                    placeholderTextColor={isDarkMode ? "#64748b" : "#94a3b8"}
                     value={name}
                     onChangeText={setName}
                   />
                 </View>
 
                 <TouchableOpacity
-                  style={[
-                    styles.createButton,
-                    { backgroundColor: colors.primary },
-                  ]}
+                  className="flex-row items-center justify-center py-[14px] px-6 rounded-xl w-full bg-blue-600"
                   onPress={handleCreateProfile}
                 >
                   <Check size={20} color="#FFF" style={{ marginRight: 8 }} />
-                  <Text style={styles.createButtonText}>
+                  <Text className="text-base font-semibold text-white">
                     {t("profile_create_button")}
                   </Text>
                 </TouchableOpacity>
@@ -156,136 +162,3 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  container: {
-    width: "100%",
-    maxWidth: 360,
-    borderRadius: 24,
-    borderWidth: 1,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(0,0,0,0.05)",
-  },
-  title: {
-    fontSize: 18,
-    fontFamily: "Inter_700Bold",
-  },
-  closeButton: {
-    padding: 4,
-  },
-  content: {
-    padding: 24,
-  },
-  // Profile Styles
-  profileContainer: {
-    alignItems: "center",
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 16,
-  },
-  userName: {
-    fontSize: 18,
-    fontFamily: "Inter_700Bold",
-    marginBottom: 16,
-  },
-  infoCard: {
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 24,
-    width: "100%",
-  },
-  infoText: {
-    fontSize: 13,
-    fontFamily: "Inter_400Regular",
-    textAlign: "center",
-    lineHeight: 20,
-  },
-  logoutButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    borderWidth: 1,
-    width: "100%",
-    justifyContent: "center",
-  },
-  logoutText: {
-    fontSize: 14,
-    fontFamily: "Inter_600SemiBold",
-  },
-  // Guest Styles
-  guestContainer: {
-    alignItems: "center",
-  },
-  iconCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  guestTitle: {
-    fontSize: 20,
-    fontFamily: "Inter_700Bold",
-    marginBottom: 8,
-  },
-  guestDesc: {
-    fontSize: 14,
-    fontFamily: "Inter_400Regular",
-    textAlign: "center",
-    marginBottom: 24,
-    lineHeight: 20,
-  },
-  inputContainer: {
-    width: "100%",
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 16,
-    height: 50,
-    justifyContent: "center",
-  },
-  input: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 16,
-  },
-  createButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    width: "100%",
-  },
-  createButtonText: {
-    fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-    color: "#FFF",
-  },
-});

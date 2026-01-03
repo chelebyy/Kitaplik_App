@@ -13,155 +13,131 @@ interface BookCardProps {
   showProgress?: boolean;
 }
 
-// ... imports unchanged
+// Shared props for sub-components (reduces cognitive complexity)
+interface BookCardRenderProps {
+  book: Book;
+  showProgress: boolean;
+  isDarkMode: boolean;
+  handlePress: () => void;
+  progressPercent: number;
+  isReading: boolean;
+  statusColor: string;
+  statusLabel: string;
+  bookDetailHint: string;
+}
 
-export const BookCard = React.memo(function BookCard({
+// Grid variant sub-component
+const GridBookCard = ({
   book,
-  variant = "list",
-  onPress,
-  onPressId,
-  showProgress = true,
-}: BookCardProps) {
-  // ... implementation unchanged
-  const { t } = useTranslation();
-  const { colors, isDarkMode } = useTheme();
-
-  const handlePress = React.useCallback(() => {
-    if (onPress) onPress();
-    if (onPressId) onPressId(book.id);
-  }, [onPress, onPressId, book.id]);
-
-  // Progress logic
-  const progressPercent =
-    book.pageCount && book.currentPage
-      ? Math.min(Math.max(book.currentPage / book.pageCount, 0), 1)
-      : book.progress || 0;
-
-  const progressText =
-    book.status === "Okundu"
-      ? t("read") // Okundu
-      : book.status === "Okunacak"
-        ? t("to_read") // Okunacak
-        : `%${Math.round(progressPercent * 100)}`;
-
-  const isReading = book.status === "Okunuyor";
-
-  // Status Colors (matching index.tsx logic)
-  const getStatusColor = () => {
-    switch (book.status) {
-      case "Okundu":
-        return "#4CAF50"; // Green
-      case "Okunuyor":
-        return colors.primary; // Blue/Theme
-      case "Okunacak":
-        return colors.textSecondary; // Grey
-      default:
-        return colors.textSecondary;
-    }
-  };
-
-  const getStatusLabel = () => {
-    switch (book.status) {
-      case "Okunuyor":
-        return t("reading");
-      case "Okundu":
-        return t("read");
-      case "Okunacak":
-        return t("to_read");
-      default:
-        return book.status;
-    }
-  };
-
-  if (variant === "grid") {
-    return (
-      <Pressable
-        onPress={handlePress}
-        className={cn(
-          "mb-4 rounded-xl overflow-hidden shadow-sm",
-          isDarkMode ? "bg-slate-800" : "bg-white",
-        )}
-        style={{
-          elevation: 4,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
+  showProgress,
+  isDarkMode,
+  handlePress,
+  progressPercent,
+  isReading,
+  statusColor,
+  statusLabel,
+  bookDetailHint,
+}: BookCardRenderProps) => (
+  <Pressable
+    onPress={handlePress}
+    className={cn(
+      "mb-4 rounded-xl overflow-hidden shadow-sm",
+      isDarkMode ? "bg-slate-800" : "bg-white",
+    )}
+    style={{
+      elevation: 4,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+    }}
+    accessibilityRole="button"
+    accessibilityLabel={`${book.title}, ${book.author}`}
+    accessibilityHint={bookDetailHint}
+  >
+    <View className="relative">
+      <Image
+        source={{
+          uri: book.coverUrl || "https://via.placeholder.com/150",
         }}
-        accessibilityRole="button"
-        accessibilityLabel={`${book.title}, ${book.author}`}
-        accessibilityHint={t("book_detail_hint")}
+        className="w-full h-48 bg-slate-200"
+        resizeMode="cover"
+      />
+      <View
+        className="absolute top-2 right-2 px-2 py-1 rounded-md"
+        style={{ backgroundColor: statusColor }}
       >
-        <View className="relative">
-          <Image
-            source={{
-              uri: book.coverUrl || "https://via.placeholder.com/150",
-            }}
-            className="w-full h-48 bg-slate-200"
-            resizeMode="cover"
-          />
+        <Text className="text-[10px] font-bold text-white">
+          {statusLabel}
+        </Text>
+      </View>
+    </View>
+
+    <View className="p-3">
+      <Text
+        className={cn(
+          "text-sm font-bold mb-1",
+          isDarkMode ? "text-white" : "text-slate-900",
+        )}
+        numberOfLines={1}
+      >
+        {book.title}
+      </Text>
+      <Text
+        className="text-xs text-slate-500 font-medium"
+        numberOfLines={1}
+      >
+        {book.author}
+      </Text>
+
+      {showProgress && (
+        <View className="mt-2">
           <View
-            className="absolute top-2 right-2 px-2 py-1 rounded-md"
-            style={{ backgroundColor: getStatusColor() }}
+            className={cn(
+              "h-1 rounded-full overflow-hidden",
+              isDarkMode ? "bg-gray-700" : "bg-gray-100",
+            )}
           >
-            <Text className="text-[10px] font-bold text-white">
-              {getStatusLabel()}
+            <View
+              className="h-full rounded-full"
+              style={{
+                width: `${Math.min(Math.max(progressPercent * 100, 0), 100)}%`,
+                backgroundColor: statusColor,
+              }}
+            />
+          </View>
+          <View className="flex-row justify-between items-center mt-1">
+            <Text className="text-[10px] text-slate-400 font-medium">
+              {statusLabel}
             </Text>
+            {isReading && (
+              <Text className="text-[10px] text-slate-400 font-medium">
+                {`%${Math.round(progressPercent * 100)}`}
+              </Text>
+            )}
           </View>
         </View>
+      )}
+    </View>
+  </Pressable>
+);
 
-        <View className="p-3">
-          <Text
-            className={cn(
-              "text-sm font-bold mb-1",
-              isDarkMode ? "text-white" : "text-slate-900",
-            )}
-            numberOfLines={1}
-          >
-            {book.title}
-          </Text>
-          <Text
-            className="text-xs text-slate-500 font-medium"
-            numberOfLines={1}
-          >
-            {book.author}
-          </Text>
+// List variant sub-component
+const ListBookCard = ({
+  book,
+  showProgress,
+  isDarkMode,
+  handlePress,
+  progressPercent,
+  isReading,
+  statusColor,
+  statusLabel,
+  bookDetailHint,
+}: BookCardRenderProps) => {
+  const { t } = useTranslation();
 
-          {/* Progress Bar for Grid - tüm durumlar için */}
-          {showProgress && (
-            <View className="mt-2">
-              <View
-                className={cn(
-                  "h-1 rounded-full overflow-hidden",
-                  isDarkMode ? "bg-gray-700" : "bg-gray-100",
-                )}
-              >
-                <View
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${Math.min(Math.max(progressPercent * 100, 0), 100)}%`,
-                    backgroundColor: getStatusColor(),
-                  }}
-                />
-              </View>
-              <View className="flex-row justify-between items-center mt-1">
-                <Text className="text-[10px] text-slate-400 font-medium">
-                  {getStatusLabel()}
-                </Text>
-                {isReading && (
-                  <Text className="text-[10px] text-slate-400 font-medium">
-                    {`%${Math.round(progressPercent * 100)}`}
-                  </Text>
-                )}
-              </View>
-            </View>
-          )}
-        </View>
-      </Pressable>
-    );
-  }
+  const progressText = isReading ? `%${Math.round(progressPercent * 100)}` : "";
 
-  // List Variant (Default)
   return (
     <Pressable
       onPress={handlePress}
@@ -179,8 +155,8 @@ export const BookCard = React.memo(function BookCard({
         shadowRadius: 4,
       }}
       accessibilityRole="button"
-      accessibilityLabel={`${book.title}, ${book.author}, ${getStatusLabel()}`}
-      accessibilityHint={t("book_detail_hint")}
+      accessibilityLabel={`${book.title}, ${book.author}, ${statusLabel}`}
+      accessibilityHint={bookDetailHint}
     >
       {/* Cover */}
       <View className="mr-4 shadow-sm">
@@ -214,44 +190,116 @@ export const BookCard = React.memo(function BookCard({
         </View>
 
         {/* Progress & Status */}
-        <View className="mt-2">
-          {/* Progress Bar Background */}
-          <View
-            className={cn(
-              "h-1.5 rounded-full mb-1.5 overflow-hidden",
-              isDarkMode ? "bg-gray-700" : "bg-gray-100",
-            )}
-          >
+        {showProgress && (
+          <View className="mt-2">
             <View
-              className="h-full rounded-full"
-              style={{
-                width: `${Math.min(Math.max(progressPercent * 100, 0), 100)}%`,
-                backgroundColor: getStatusColor(),
-              }}
-            />
-          </View>
+              className={cn(
+                "h-1.5 rounded-full mb-1.5 overflow-hidden",
+                isDarkMode ? "bg-gray-700" : "bg-gray-100",
+              )}
+            >
+              <View
+                className="h-full rounded-full"
+                style={{
+                  width: `${Math.min(Math.max(progressPercent * 100, 0), 100)}%`,
+                  backgroundColor: statusColor,
+                }}
+              />
+            </View>
 
-          <View className="flex-row justify-between items-center">
-            <Text className="text-xs text-slate-500 font-normal">
-              {t("status_label")}:{" "}
-              <Text
-                className={cn(
-                  "font-semibold",
-                  isDarkMode ? "text-slate-300" : "text-slate-700",
-                )}
-              >
-                {getStatusLabel()}
+            <View className="flex-row justify-between items-center">
+              <Text className="text-xs text-slate-500 font-normal">
+                {t("status_label")}:{" "}
+                <Text
+                  className={cn(
+                    "font-semibold",
+                    isDarkMode ? "text-slate-300" : "text-slate-700",
+                  )}
+                >
+                  {statusLabel}
+                </Text>
               </Text>
-            </Text>
 
-            {isReading && (
-              <Text className="text-[11px] text-slate-400 font-medium">
-                {progressText}
-              </Text>
-            )}
+              {isReading && (
+                <Text className="text-[11px] text-slate-400 font-medium">
+                  {progressText}
+                </Text>
+              )}
+            </View>
           </View>
-        </View>
+        )}
       </View>
     </Pressable>
   );
+};
+
+// Main BookCard component (simplified orchestrator)
+export const BookCard = React.memo(function BookCard({
+  book,
+  variant = "list",
+  onPress,
+  onPressId,
+  showProgress = true,
+}: BookCardProps) {
+  const { t } = useTranslation();
+  const { colors, isDarkMode } = useTheme();
+
+  const handlePress = React.useCallback(() => {
+    if (onPress) onPress();
+    if (onPressId) onPressId(book.id);
+  }, [onPress, onPressId, book.id]);
+
+  // Progress calculation
+  const progressPercent =
+    book.pageCount && book.currentPage
+      ? Math.min(Math.max(book.currentPage / book.pageCount, 0), 1)
+      : book.progress || 0;
+
+  const isReading = book.status === "Okunuyor";
+
+  // Status color helper
+  const getStatusColor = (): string => {
+    switch (book.status) {
+      case "Okundu":
+        return "#4CAF50";
+      case "Okunuyor":
+        return colors.primary;
+      case "Okunacak":
+        return colors.textSecondary;
+      default:
+        return colors.textSecondary;
+    }
+  };
+
+  // Status label helper
+  const getStatusLabel = (): string => {
+    switch (book.status) {
+      case "Okunuyor":
+        return t("reading");
+      case "Okundu":
+        return t("read");
+      case "Okunacak":
+        return t("to_read");
+      default:
+        return book.status;
+    }
+  };
+
+  // Shared props for sub-components
+  const renderProps: BookCardRenderProps = {
+    book,
+    showProgress,
+    isDarkMode,
+    handlePress,
+    progressPercent,
+    isReading,
+    statusColor: getStatusColor(),
+    statusLabel: getStatusLabel(),
+    bookDetailHint: t("book_detail_hint"),
+  };
+
+  // Delegate to appropriate variant
+  return variant === "grid"
+    ? <GridBookCard {...renderProps} />
+    : <ListBookCard {...renderProps} />;
 });

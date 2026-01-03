@@ -22,7 +22,7 @@ const CreditsContext = createContext<CreditsContextType | undefined>(undefined);
 
 const CREDITS_STORAGE_KEY = "user_credits_v2"; // Changed key for migration
 
-export function CreditsProvider({ children }: { children: React.ReactNode }) {
+export function CreditsProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [credits, setCredits] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,14 +34,14 @@ export function CreditsProvider({ children }: { children: React.ReactNode }) {
   const loadCredits = async () => {
     try {
       let storedCredits: string | null = null;
-      if (Platform.OS !== "web") {
-        storedCredits = await SecureStore.getItemAsync(CREDITS_STORAGE_KEY);
-      } else {
+      if (Platform.OS === "web") {
         storedCredits = await AsyncStorage.getItem(CREDITS_STORAGE_KEY);
+      } else {
+        storedCredits = await SecureStore.getItemAsync(CREDITS_STORAGE_KEY);
       }
 
       if (storedCredits !== null) {
-        setCredits(parseInt(storedCredits, 10));
+        setCredits(Number.parseInt(storedCredits, 10));
       }
     } catch (error) {
       logError("CreditsContext.loadCredits", error);
@@ -52,13 +52,13 @@ export function CreditsProvider({ children }: { children: React.ReactNode }) {
 
   const saveCredits = async (newCredits: number) => {
     try {
-      if (Platform.OS !== "web") {
+      if (Platform.OS === "web") {
+        await AsyncStorage.setItem(CREDITS_STORAGE_KEY, newCredits.toString());
+      } else {
         await SecureStore.setItemAsync(
           CREDITS_STORAGE_KEY,
           newCredits.toString()
         );
-      } else {
-        await AsyncStorage.setItem(CREDITS_STORAGE_KEY, newCredits.toString());
       }
     } catch (error) {
       logError("CreditsContext.saveCredits", error);

@@ -9,7 +9,7 @@
  * Normalize ISBN by removing hyphens and spaces
  */
 export function normalizeISBN(isbn: string): string {
-    return isbn.replace(/[-\s]/g, '');
+    return isbn.replaceAll(/[-\s]/g, '');
 }
 
 /**
@@ -26,6 +26,15 @@ function isValidISBN10(isbn: string): boolean {
 function isValidISBN13(isbn: string): boolean {
     const normalized = normalizeISBN(isbn);
     return /^\d{13}$/.test(normalized);
+}
+
+/**
+ * Calculate ISBN-10 check digit from remainder
+ */
+function calculateISBN10CheckDigit(remainder: number): string {
+    if (remainder === 0) return '0';
+    const value = 11 - remainder;
+    return value === 10 ? 'X' : String(value);
 }
 
 /**
@@ -56,7 +65,7 @@ export function convertISBN10ToISBN13(isbn10: string): string | null {
     // Step 3: Calculate new check digit
     let sum = 0;
     for (let i = 0; i < 12; i++) {
-        const digit = parseInt(isbn12[i]);
+        const digit = Number.parseInt(isbn12[i], 10);
         sum += digit * (i % 2 === 0 ? 1 : 3);
     }
 
@@ -93,11 +102,11 @@ export function convertISBN13ToISBN10(isbn13: string): string | null {
     // Calculate ISBN-10 check digit
     let sum = 0;
     for (let i = 0; i < 9; i++) {
-        sum += parseInt(digits[i]) * (10 - i);
+        sum += Number.parseInt(digits[i], 10) * (10 - i);
     }
 
     const remainder = sum % 11;
-    const checkDigit = remainder === 0 ? '0' : (11 - remainder === 10 ? 'X' : String(11 - remainder));
+    const checkDigit = calculateISBN10CheckDigit(remainder);
 
     return digits + checkDigit;
 }

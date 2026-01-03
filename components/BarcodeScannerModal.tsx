@@ -20,7 +20,7 @@ export default function BarcodeScannerModal({
   visible,
   onClose,
   onScan,
-}: BarcodeScannerModalProps) {
+}: Readonly<BarcodeScannerModalProps>) {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
 

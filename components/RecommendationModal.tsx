@@ -3,7 +3,6 @@ import {
   Modal,
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
   Image,
@@ -25,6 +24,7 @@ import { RecommendationService } from "../services/RecommendationService";
 import { useCredits } from "../context/CreditsContext";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { cn } from "../utils/cn";
 
 import {
   RewardedInterstitialAd,
@@ -52,7 +52,7 @@ type Step = "selection" | "loading" | "result";
 export default function RecommendationModal({
   visible,
   onClose,
-}: RecommendationModalProps) {
+}: Readonly<RecommendationModalProps>) {
   const { colors, isDarkMode } = useTheme();
   const { books, addBook, updateBookStatus } = useBooks();
   const router = useRouter();
@@ -223,72 +223,72 @@ export default function RecommendationModal({
       animationType="fade"
       onRequestClose={handleClose}
     >
-      <View style={styles.overlay}>
+      <View className="flex-1 bg-black/50 justify-center items-center p-5">
         <View
-          style={[
-            styles.container,
-            { backgroundColor: colors.card, borderColor: colors.border },
-          ]}
+          className={cn(
+            "w-full max-w-[400px] rounded-3xl border overflow-hidden shadow-xl",
+            isDarkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"
+          )}
+          style={isDarkMode ? undefined : { elevation: 10 }}
         >
           {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.titleContainer}>
+          <View
+            className={cn(
+              "flex-row justify-between items-center px-5 py-4 border-b",
+              isDarkMode ? "border-slate-700" : "border-slate-100"
+            )}
+          >
+            <View className="flex-row items-center flex-1 shrink mr-2">
               <Sparkles size={20} color="#F79009" style={{ marginRight: 8 }} />
-              <Text style={[styles.title, { color: colors.text }]}>
+              <Text className={cn("text-base font-bold shrink", isDarkMode ? "text-white" : "text-slate-900")}>
                 {t("recommendation_title")}
               </Text>
             </View>
-            <View style={styles.headerRight}>
-              <View style={styles.creditContainer}>
+            <View className="flex-row items-center gap-2 shrink-0">
+              <View className="flex-row items-center bg-amber-500/10 px-2 py-1 rounded-xl">
                 <Coins size={16} color="#F59E0B" style={{ marginRight: 4 }} />
-                <Text style={[styles.creditText, { color: colors.text }]}>
+                <Text className="text-xs font-semibold text-amber-700">
                   {t("credit_balance", { count: credits })}
                 </Text>
               </View>
               <TouchableOpacity
                 onPress={handleClose}
-                style={styles.closeButton}
+                className="p-1"
               >
-                <X size={20} color={colors.textSecondary} />
+                <X size={20} color={isDarkMode ? "#94a3b8" : "#64748b"} />
               </TouchableOpacity>
             </View>
           </View>
 
           {/* Content */}
-          <View style={styles.content}>
+          <View className="p-6 min-h-[300px] justify-center">
             {step === "selection" && (
-              <View style={styles.selectionContainer}>
+              <View className="gap-4">
                 <Text
-                  style={[styles.subtitle, { color: colors.textSecondary }]}
+                  className={cn("text-center mb-2 font-regular", isDarkMode ? "text-slate-400" : "text-slate-500")}
                 >
                   {t("recommendation_subtitle")}
                 </Text>
 
                 <TouchableOpacity
-                  style={[
-                    styles.optionCard,
-                    {
-                      backgroundColor: isDarkMode ? "#1E293B" : "#F8FAFC",
-                      borderColor: colors.border,
-                    },
-                  ]}
+                  className={cn(
+                    "flex-row items-center p-4 rounded-2xl border",
+                    isDarkMode ? "bg-slate-800 border-slate-700" : "bg-slate-50 border-slate-200"
+                  )}
                   onPress={handleGetLocalRecommendation}
                   activeOpacity={0.8}
                 >
                   <View
-                    style={[styles.iconCircle, { backgroundColor: "#E0F2FE" }]}
+                    className="w-12 h-12 rounded-full justify-center items-center mr-4 bg-sky-100"
                   >
                     <BookOpen size={24} color="#0284C7" />
                   </View>
-                  <View style={styles.optionTextContainer}>
-                    <Text style={[styles.optionTitle, { color: colors.text }]}>
+                  <View className="flex-1">
+                    <Text className={cn("text-base font-semibold mb-1", isDarkMode ? "text-white" : "text-slate-900")}>
                       {t("recommendation_library")}
                     </Text>
                     <Text
-                      style={[
-                        styles.optionDesc,
-                        { color: colors.textSecondary },
-                      ]}
+                      className={cn("text-xs", isDarkMode ? "text-slate-400" : "text-slate-500")}
                     >
                       {t("recommendation_library_desc")}
                     </Text>
@@ -296,44 +296,35 @@ export default function RecommendationModal({
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={[
-                    styles.optionCard,
-                    {
-                      backgroundColor: isDarkMode ? "#1E293B" : "#F8FAFC",
-                      borderColor: colors.border,
-                    },
-                  ]}
+                  className={cn(
+                    "flex-row items-center p-4 rounded-2xl border",
+                    isDarkMode ? "bg-slate-800 border-slate-700" : "bg-slate-50 border-slate-200"
+                  )}
                   onPress={handleGetExternalRecommendation}
                   activeOpacity={0.8}
                 >
                   <View
-                    style={[styles.iconCircle, { backgroundColor: "#F3E8FF" }]}
+                    className="w-12 h-12 rounded-full justify-center items-center mr-4 bg-purple-100"
                   >
                     <Globe size={24} color="#9333EA" />
                   </View>
-                  <View style={styles.optionTextContainer}>
-                    <Text style={[styles.optionTitle, { color: colors.text }]}>
+                  <View className="flex-1">
+                    <Text className={cn("text-base font-semibold mb-1", isDarkMode ? "text-white" : "text-slate-900")}>
                       {t("recommendation_discover")}
                     </Text>
                     <Text
-                      style={[
-                        styles.optionDesc,
-                        { color: colors.textSecondary },
-                      ]}
+                      className={cn("text-xs", isDarkMode ? "text-slate-400" : "text-slate-500")}
                     >
                       {t("recommendation_discover_desc")}
                     </Text>
                   </View>
-                  <View style={styles.costBadge}>
-                    <Text style={styles.costText}>{t("cost_1_credit")}</Text>
+                  <View className="bg-amber-100 px-2 py-1 rounded-lg">
+                    <Text className="text-[10px] font-bold text-amber-700">{t("cost_1_credit")}</Text>
                   </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={[
-                    styles.earnCreditButton,
-                    { backgroundColor: "#F0FDF4", borderColor: "#BBF7D0" },
-                  ]}
+                  className="flex-row items-center justify-center p-3 rounded-xl border border-dashed border-green-200 bg-green-50"
                   onPress={handleEarnCredit}
                   activeOpacity={0.8}
                 >
@@ -342,7 +333,7 @@ export default function RecommendationModal({
                     color="#16A34A"
                     style={{ marginRight: 8 }}
                   />
-                  <Text style={[styles.earnCreditText, { color: "#15803D" }]}>
+                  <Text className="text-sm font-semibold text-green-700">
                     {t("earn_credit")}
                   </Text>
                 </TouchableOpacity>
@@ -350,10 +341,10 @@ export default function RecommendationModal({
             )}
 
             {step === "loading" && (
-              <View style={styles.loadingContainer}>
+              <View className="items-center justify-center">
                 <ActivityIndicator size="large" color={colors.primary} />
                 <Text
-                  style={[styles.loadingText, { color: colors.textSecondary }]}
+                  className={cn("mt-4 font-medium", isDarkMode ? "text-slate-400" : "text-slate-500")}
                 >
                   {source === "library"
                     ? t("recommendation_loading_library")
@@ -363,32 +354,26 @@ export default function RecommendationModal({
             )}
 
             {step === "result" && (
-              <View style={styles.resultContainer}>
+              <View className="items-center">
                 {error ? (
-                  <View style={styles.errorContainer}>
-                    <Text style={[styles.errorText, { color: colors.danger }]}>
+                  <View className="items-center">
+                    <Text className="text-center mb-4 font-medium text-red-500">
                       {error}
                     </Text>
                     <TouchableOpacity
-                      style={[
-                        styles.retryButton,
-                        {
-                          backgroundColor: colors.card,
-                          borderColor: colors.border,
-                        },
-                      ]}
+                      className={cn(
+                        "flex-row items-center px-4 py-2 rounded-2xl border",
+                        isDarkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"
+                      )}
                       onPress={() => setStep("selection")}
                     >
                       <RefreshCw
                         size={16}
-                        color={colors.text}
+                        color={isDarkMode ? "#FFF" : "#000"}
                         style={{ marginRight: 6 }}
                       />
                       <Text
-                        style={{
-                          color: colors.text,
-                          fontFamily: "Inter_500Medium",
-                        }}
+                        className={cn("font-medium", isDarkMode ? "text-white" : "text-slate-900")}
                       >
                         {t("recommendation_retry")}
                       </Text>
@@ -397,38 +382,30 @@ export default function RecommendationModal({
                 ) : (
                   recommendedBook && (
                     <>
-                      <View style={styles.bookPreview}>
+                      <View className="items-center mb-6">
                         <Image
                           source={{ uri: recommendedBook.coverUrl }}
-                          style={styles.bookCover}
+                          className="w-[100px] h-[150px] rounded-lg mb-4 shadow-sm"
                           resizeMode="cover"
                         />
                         <Text
-                          style={[styles.bookTitle, { color: colors.text }]}
+                          className={cn("text-lg font-bold text-center mb-1", isDarkMode ? "text-white" : "text-slate-900")}
                         >
                           {recommendedBook.title}
                         </Text>
                         <Text
-                          style={[
-                            styles.bookAuthor,
-                            { color: colors.textSecondary },
-                          ]}
+                          className={cn("text-sm font-medium mb-3", isDarkMode ? "text-slate-400" : "text-slate-500")}
                         >
                           {recommendedBook.author}
                         </Text>
                         <View
-                          style={[
-                            styles.genreTag,
-                            {
-                              backgroundColor: isDarkMode ? "#333" : "#F1F5F9",
-                            },
-                          ]}
+                          className={cn(
+                            "px-3 py-1 rounded-xl",
+                            isDarkMode ? "bg-[#333]" : "bg-slate-100"
+                          )}
                         >
                           <Text
-                            style={[
-                              styles.genreText,
-                              { color: colors.textSecondary },
-                            ]}
+                            className={cn("text-xs font-medium", isDarkMode ? "text-slate-400" : "text-slate-500")}
                           >
                             {recommendedBook.genre}
                           </Text>
@@ -436,10 +413,11 @@ export default function RecommendationModal({
                       </View>
 
                       <TouchableOpacity
-                        style={[
-                          styles.actionButton,
-                          { backgroundColor: colors.primary },
-                        ]}
+                        className={cn(
+                          "flex-row items-center justify-center py-3 px-6 rounded-xl w-full",
+                          "bg-blue-600" // logic for dynamic primary color usually done via inline style or mapped class, here using blue-600 as default primary map
+                        )}
+                        style={{ backgroundColor: colors.primary }}
                         onPress={handleAction}
                       >
                         {source === "library" ? (
@@ -449,7 +427,7 @@ export default function RecommendationModal({
                               color="#FFF"
                               style={{ marginRight: 8 }}
                             />
-                            <Text style={styles.actionButtonText}>
+                            <Text className="text-white text-base font-semibold">
                               {t("recommendation_start_reading")}
                             </Text>
                           </>
@@ -460,7 +438,7 @@ export default function RecommendationModal({
                               color="#FFF"
                               style={{ marginRight: 8 }}
                             />
-                            <Text style={styles.actionButtonText}>
+                            <Text className="text-white text-base font-semibold">
                               {t("recommendation_add_library")}
                             </Text>
                           </>
@@ -468,11 +446,11 @@ export default function RecommendationModal({
                       </TouchableOpacity>
 
                       <TouchableOpacity
-                        style={{ marginTop: 12 }}
+                        className="mt-3"
                         onPress={handleRetry}
                       >
                         <Text
-                          style={{ color: colors.textSecondary, fontSize: 13 }}
+                          className={cn("text-[13px]", isDarkMode ? "text-slate-400" : "text-slate-500")}
                         >
                           {t("recommendation_try_another")}
                         </Text>
@@ -488,208 +466,3 @@ export default function RecommendationModal({
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  container: {
-    width: "100%",
-    maxWidth: 400,
-    borderRadius: 24,
-    borderWidth: 1,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(0,0,0,0.05)",
-  },
-  headerRight: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    flexShrink: 0,
-  },
-  creditContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(245, 158, 11, 0.1)",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  creditText: {
-    fontSize: 12,
-    fontFamily: "Inter_600SemiBold",
-    color: "#B45309",
-  },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-    flexShrink: 1,
-    marginRight: 8,
-  },
-  title: {
-    fontSize: 16,
-    fontFamily: "Inter_700Bold",
-    fontWeight: "700",
-    flexShrink: 1,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  content: {
-    padding: 24,
-    minHeight: 300,
-    justifyContent: "center",
-  },
-  selectionContainer: {
-    gap: 16,
-  },
-  subtitle: {
-    textAlign: "center",
-    marginBottom: 8,
-    fontFamily: "Inter_400Regular",
-  },
-  optionCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-  },
-  iconCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  optionTextContainer: {
-    flex: 1,
-  },
-  optionTitle: {
-    fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-    marginBottom: 4,
-  },
-  optionDesc: {
-    fontSize: 12,
-    fontFamily: "Inter_400Regular",
-  },
-  costBadge: {
-    backgroundColor: "#FEF3C7",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  costText: {
-    fontSize: 10,
-    fontFamily: "Inter_700Bold",
-    color: "#B45309",
-  },
-  earnCreditButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderStyle: "dashed",
-  },
-  earnCreditText: {
-    fontSize: 14,
-    fontFamily: "Inter_600SemiBold",
-  },
-  loadingContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  loadingText: {
-    marginTop: 16,
-    fontFamily: "Inter_500Medium",
-  },
-  resultContainer: {
-    alignItems: "center",
-  },
-  bookPreview: {
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  bookCover: {
-    width: 100,
-    height: 150,
-    borderRadius: 8,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-  },
-  bookTitle: {
-    fontSize: 18,
-    fontFamily: "Inter_700Bold",
-    textAlign: "center",
-    marginBottom: 4,
-  },
-  bookAuthor: {
-    fontSize: 14,
-    fontFamily: "Inter_500Medium",
-    marginBottom: 12,
-  },
-  genreTag: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  genreText: {
-    fontSize: 12,
-    fontFamily: "Inter_500Medium",
-  },
-  actionButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    width: "100%",
-  },
-  actionButtonText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-  },
-  errorContainer: {
-    alignItems: "center",
-  },
-  errorText: {
-    textAlign: "center",
-    marginBottom: 16,
-    fontFamily: "Inter_500Medium",
-  },
-  retryButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-  },
-});

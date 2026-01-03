@@ -60,7 +60,7 @@ export default function PriceComparisonModal({
   bookTitle,
   bookAuthor,
   isbn,
-}: PriceComparisonModalProps) {
+}: Readonly<PriceComparisonModalProps>) {
   const { colors, isDarkMode } = useTheme();
   const { t } = useTranslation();
 
@@ -173,9 +173,9 @@ export default function PriceComparisonModal({
               </Text>
             </View>
 
-            {storeLinks.map((link: StoreLink, index: number) => (
+            {storeLinks.map((link: StoreLink) => (
               <View
-                key={index}
+                key={link.store.id}
                 style={[
                   styles.storeItem,
                   {
