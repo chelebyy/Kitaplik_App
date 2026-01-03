@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 import { ChevronDown, Check, X } from "lucide-react-native";
 import { useTheme } from "../context/ThemeContext";
+import { cn } from "../utils/cn";
 
 interface FilterDropdownProps {
   label: string;
@@ -35,19 +35,27 @@ export default function FilterDropdown({
   return (
     <>
       <TouchableOpacity
-        style={[
-          styles.triggerButton,
-          { backgroundColor: colors.card, borderColor: colors.border },
-        ]}
+        className={cn(
+          "flex-row items-center justify-between px-4 py-2.5 rounded-xl border min-w-[150px]",
+          isDarkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"
+        )}
+        style={{ backgroundColor: colors.card, borderColor: colors.border }}
         onPress={() => setVisible(true)}
         activeOpacity={0.7}
       >
-        <View style={styles.triggerContent}>
-          <Text style={[styles.triggerLabel, { color: colors.textSecondary }]}>
+        <View className="flex-row items-center flex-1 mr-2">
+          <Text
+            className={cn(
+              "font-regular text-sm mr-1.5",
+              isDarkMode ? "text-slate-400" : "text-slate-500"
+            )}
+            style={{ fontFamily: "Inter_400Regular", color: colors.textSecondary }}
+          >
             {label}:
           </Text>
           <Text
-            style={[styles.triggerValue, { color: colors.primary }]}
+            className="font-semibold text-sm flex-1"
+            style={{ fontFamily: "Inter_600SemiBold", color: colors.primary }}
             numberOfLines={1}
           >
             {selectedValue}
@@ -62,17 +70,43 @@ export default function FilterDropdown({
         animationType="fade"
         onRequestClose={() => setVisible(false)}
       >
-        <Pressable style={styles.overlay} onPress={() => setVisible(false)}>
-          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
+        <Pressable
+          className="flex-1 bg-black/50 justify-center items-center p-6"
+          onPress={() => setVisible(false)}
+        >
+          <View
+            className={cn(
+              "w-full max-h-[60%] rounded-3xl shadow-xl overflow-hidden",
+              isDarkMode ? "bg-slate-800" : "bg-white"
+            )}
+            style={{
+              backgroundColor: colors.card,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 10 },
+              shadowOpacity: 0.25,
+              shadowRadius: 20,
+              elevation: 10,
+            }}
+          >
             <View
-              style={[styles.modalHeader, { borderBottomColor: colors.border }]}
+              className={cn(
+                "flex-row justify-between items-center p-4 border-b",
+                isDarkMode ? "border-slate-700" : "border-slate-100"
+              )}
+              style={{ borderBottomColor: colors.border }}
             >
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
+              <Text
+                className={cn(
+                  "font-bold text-base",
+                  isDarkMode ? "text-white" : "text-slate-900"
+                )}
+                style={{ fontFamily: "Inter_700Bold", color: colors.text }}
+              >
                 {label} Seçin
               </Text>
               <TouchableOpacity
                 onPress={() => setVisible(false)}
-                style={styles.closeButton}
+                className="p-1"
               >
                 <X size={20} color={colors.textSecondary} />
               </TouchableOpacity>
@@ -81,27 +115,27 @@ export default function FilterDropdown({
             <FlatList
               data={items}
               keyExtractor={(item) => item}
-              style={styles.list}
+              contentContainerStyle={{ paddingVertical: 8 }}
               renderItem={({ item }) => {
                 const isSelected = item === selectedValue;
                 return (
                   <TouchableOpacity
-                    style={[
-                      styles.item,
-                      isSelected && {
-                        backgroundColor: isDarkMode ? "#333" : "#F0F9F0",
-                      },
-                    ]}
+                    className={cn(
+                      "flex-row justify-between items-center py-3.5 px-5",
+                      isSelected && (isDarkMode ? "bg-[#333]" : "bg-[#F0F9F0]")
+                    )}
                     onPress={() => handleSelect(item)}
                   >
                     <Text
-                      style={[
-                        styles.itemText,
-                        {
-                          color: isSelected ? colors.primary : colors.text,
-                          fontWeight: isSelected ? "700" : "400",
-                        },
-                      ]}
+                      className={cn(
+                        "text-base",
+                        isSelected ? "font-bold" : "font-regular",
+                        isDarkMode ? "text-white" : "text-slate-900"
+                      )}
+                      style={{
+                        fontFamily: isSelected ? "Inter_700Bold" : "Inter_400Regular",
+                        color: isSelected ? colors.primary : colors.text,
+                      }}
                     >
                       {item}
                     </Text>
@@ -116,78 +150,3 @@ export default function FilterDropdown({
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  triggerButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 12,
-    borderWidth: 1,
-    minWidth: 150,
-  },
-  triggerContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-    marginRight: 8,
-  },
-  triggerLabel: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 14,
-    marginRight: 6,
-  },
-  triggerValue: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 14,
-    flex: 1,
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
-  },
-  modalContent: {
-    width: "100%",
-    maxHeight: "60%",
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 20,
-    elevation: 10,
-    overflow: "hidden",
-  },
-  modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    borderBottomWidth: 1,
-  },
-  modalTitle: {
-    fontFamily: "Inter_700Bold",
-    fontSize: 16,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  list: {
-    paddingVertical: 8,
-  },
-  item: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-  },
-  itemText: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 16,
-  },
-});
