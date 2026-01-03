@@ -31,7 +31,6 @@ import { useTranslation } from "react-i18next";
 import * as Linking from "expo-linking";
 import { createFeedbackMailto } from "../../utils/email";
 import { logError } from "../../utils/errorUtils";
-import { cn } from "../../utils/cn";
 
 export default function SettingsScreen() {
   const { colors, isDarkMode, toggleTheme } = useTheme();

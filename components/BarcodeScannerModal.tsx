@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { X } from "lucide-react-native";
-import { cn } from "../utils/cn";
 
 interface BarcodeScannerModalProps {
   visible: boolean;

@@ -30,7 +30,6 @@ import { GoogleBookResult } from "../services/GoogleBooksService";
 import { SearchEngine } from "../services/SearchEngine";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
-import { LinearGradient } from "expo-linear-gradient";
 
 type InputMode = "manual" | "search";
 
@@ -91,7 +90,7 @@ export default function AddBookScreen() {
     if (!hasPermission) return;
 
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [2, 3],
       quality: 0.8,

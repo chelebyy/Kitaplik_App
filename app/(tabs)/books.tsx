@@ -25,7 +25,6 @@ import FilterDropdown from "../../components/FilterDropdown";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
 import { BookCard } from "../../components/BookCard";
-import { BookCard } from "../../components/BookCard";
 
 type SortOption = "title_asc" | "title_desc" | "author_asc" | "rating_desc";
 
@@ -248,7 +247,7 @@ export default function BooksScreen() {
           // @ts-ignore
           estimatedItemSize={180}
           keyExtractor={(item) => item.id}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_data: ArrayLike<Book> | null | undefined, index: number) => ({
             length: 180, // Approximate height of a card item
             offset: 180 * index,
             index,

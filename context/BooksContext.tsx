@@ -103,7 +103,7 @@ const INITIAL_BOOKS: Book[] = [
   },
 ];
 
-export function BooksProvider({ children }: { children: React.ReactNode }) {
+export function BooksProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

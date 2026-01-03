@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 
 declare global {
-  interface Window {
-    frameworkReady?: () => void;
-  }
+  // eslint-disable-next-line no-var
+  var frameworkReady: (() => void) | undefined;
 }
 
 export function useFrameworkReady() {
   useEffect(() => {
-    window.frameworkReady?.();
+    globalThis.frameworkReady?.();
   });
 }
