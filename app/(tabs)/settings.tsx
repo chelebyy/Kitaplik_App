@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   ScrollView,
@@ -32,6 +31,7 @@ import { useTranslation } from "react-i18next";
 import * as Linking from "expo-linking";
 import { createFeedbackMailto } from "../../utils/email";
 import { logError } from "../../utils/errorUtils";
+import { cn } from "../../utils/cn";
 
 export default function SettingsScreen() {
   const { colors, isDarkMode, toggleTheme } = useTheme();
@@ -70,7 +70,6 @@ ${t("feedback_body_message")}
         {
           text: t("settings_reset_confirm_button"),
           style: "destructive",
-          // S6544: void wrapper ile async fonksiyon çağrısı
           onPress: () => {
             void clearAllData();
           },
@@ -95,7 +94,6 @@ ${t("feedback_body_message")}
         },
         {
           text: t("settings_backup_save_device"),
-          // S6544: void wrapper ile async fonksiyon çağrısı
           onPress: () => {
             void (async () => {
               setIsLoading(true);
@@ -109,7 +107,6 @@ ${t("feedback_body_message")}
         },
         {
           text: t("settings_backup_share"),
-          // S6544: void wrapper ile async fonksiyon çağrısı
           onPress: () => {
             void (async () => {
               setIsLoading(true);
@@ -137,7 +134,6 @@ ${t("feedback_body_message")}
             { text: t("cancel"), style: "cancel" },
             {
               text: t("settings_restore_confirm_button"),
-              // S6544: void wrapper ile async fonksiyon çağrısı
               onPress: () => {
                 void (async () => {
                   await restoreBooks(restoredBooks);
@@ -167,14 +163,12 @@ ${t("feedback_body_message")}
         { text: t("cancel"), style: "cancel" },
         {
           text: t("settings_restore_select_device"),
-          // S6544: void wrapper ile async fonksiyon çağrısı
           onPress: () => {
             void performRestore();
           },
         },
         {
           text: t("settings_restore_select_drive"),
-          // S6544: void wrapper ile async fonksiyon çağrısı
           onPress: () => {
             void performRestore();
           },
@@ -185,31 +179,49 @@ ${t("feedback_body_message")}
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: colors.background }]}
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       edges={["top", "left", "right"]}
     >
-      <View style={[styles.header, { backgroundColor: colors.background }]}>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>
+      <View
+        className="px-6 py-5"
+        style={{ backgroundColor: colors.background }}
+      >
+        <Text
+          className="text-[28px] font-bold"
+          style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
+        >
           {t("settings")}
         </Text>
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Section: GÖRÜNÜM */}
-        <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>
+        <View className="mb-6">
+          <Text
+            className="text-[13px] mb-3 uppercase tracking-wider ml-1"
+            style={{ color: colors.sectionHeader, fontFamily: "Inter_700Bold" }}
+          >
             {t("settings_appearance")}
           </Text>
-          <View style={[styles.card, { backgroundColor: colors.card }]}>
-            <View style={styles.row}>
+          <View
+            className="rounded-2xl py-2 px-4 shadow-sm"
+            style={{
+              backgroundColor: colors.card,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.03,
+              shadowRadius: 8,
+              elevation: 2,
+            }}
+          >
+            <View className="flex-row items-center py-3 min-h-[56px]">
               <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.iconBackground },
-                ]}
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
               >
                 {isDarkMode ? (
                   <Moon size={22} color="#448AFF" />
@@ -217,7 +229,10 @@ ${t("feedback_body_message")}
                   <Sun size={22} color="#448AFF" />
                 )}
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("dark_mode")}
               </Text>
               <Switch
@@ -229,27 +244,33 @@ ${t("feedback_body_message")}
             </View>
 
             <View
-              style={[styles.separator, { backgroundColor: colors.border }]}
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
             />
 
             <TouchableOpacity
-              style={styles.row}
+              className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
               onPress={() => changeLanguage(language === "tr" ? "en" : "tr")}
             >
               <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.iconBackground },
-                ]}
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
               >
                 <Text style={{ fontSize: 20 }}>🌍</Text>
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("settings_language")}
               </Text>
               <Text
-                style={[styles.versionText, { color: colors.textSecondary }]}
+                className="text-[15px] font-regular"
+                style={{
+                  color: colors.textSecondary,
+                  fontFamily: "Inter_400Regular",
+                }}
               >
                 {language === "tr" ? "🇹🇷 Türkçe" : "🇬🇧 English"}
               </Text>
@@ -258,74 +279,85 @@ ${t("feedback_body_message")}
         </View>
 
         {/* Section: VERİ YÖNETİMİ */}
-        <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>
+        <View className="mb-6">
+          <Text
+            className="text-[13px] mb-3 uppercase tracking-wider ml-1"
+            style={{ color: colors.sectionHeader, fontFamily: "Inter_700Bold" }}
+          >
             {t("settings_data_management")}
           </Text>
-          <View style={[styles.card, { backgroundColor: colors.card }]}>
+          <View
+            className="rounded-2xl py-2 px-4 shadow-sm"
+            style={{ backgroundColor: colors.card }}
+          >
             <TouchableOpacity
-              style={styles.row}
+              className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
               onPress={handleBackup}
               disabled={isLoading}
             >
               <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.iconBackground },
-                ]}
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
               >
                 <CloudUpload size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("settings_backup")}
               </Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
 
             <View
-              style={[styles.separator, { backgroundColor: colors.border }]}
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
             />
 
             <TouchableOpacity
-              style={styles.row}
+              className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
               onPress={handleRestore}
               disabled={isLoading}
             >
               <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.iconBackground },
-                ]}
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
               >
                 <History size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("settings_restore")}
               </Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
 
             <View
-              style={[styles.separator, { backgroundColor: colors.border }]}
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
             />
 
             <TouchableOpacity
-              style={styles.row}
+              className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
               onPress={handleResetData}
               disabled={isLoading}
             >
               <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: "rgba(255, 59, 48, 0.1)" },
-                ]}
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: "rgba(255, 59, 48, 0.1)" }}
               >
                 <Trash2 size={22} color="#FF3B30" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("settings_reset")}
               </Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
@@ -334,90 +366,99 @@ ${t("feedback_body_message")}
         </View>
 
         {/* Section: DİĞER */}
-        <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionHeader, { color: colors.sectionHeader }]}>
+        <View className="mb-6">
+          <Text
+            className="text-[13px] mb-3 uppercase tracking-wider ml-1"
+            style={{ color: colors.sectionHeader, fontFamily: "Inter_700Bold" }}
+          >
             {t("settings_other")}
           </Text>
-          <View style={[styles.card, { backgroundColor: colors.card }]}>
+          <View
+            className="rounded-2xl py-2 px-4 shadow-sm"
+            style={{ backgroundColor: colors.card }}
+          >
             <TouchableOpacity
-              style={styles.row}
+              className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
               onPress={handleFeedback}
             >
               <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.iconBackground },
-                ]}
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
               >
                 <Mail size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("settings_feedback")}
               </Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
 
             <View
-              style={[styles.separator, { backgroundColor: colors.border }]}
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
             />
 
-            <View style={styles.row}>
+            <View className="flex-row items-center py-3 min-h-[56px]">
               <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.iconBackground },
-                ]}
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
               >
                 <Info size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("settings_version")}
               </Text>
               <Text
-                style={[styles.versionText, { color: colors.textSecondary }]}
+                className="text-[15px] font-regular"
+                style={{
+                  color: colors.textSecondary,
+                  fontFamily: "Inter_400Regular",
+                }}
               >
                 1.0.0
               </Text>
             </View>
 
             <View
-              style={[styles.separator, { backgroundColor: colors.border }]}
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
             />
 
             <TouchableOpacity
-              style={styles.row}
+              className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
               onPress={() => setAboutVisible(true)}
             >
               <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: colors.iconBackground },
-                ]}
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
               >
                 <FileText size={22} color="#448AFF" />
               </View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
                 {t("settings_about")}
               </Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
-
-            <View
-              style={[styles.separator, { backgroundColor: colors.border }]}
-            />
-
-
           </View>
         </View>
       </ScrollView>
 
       {/* Loading Overlay */}
       {isLoading && (
-        <View style={styles.loadingOverlay}>
+        <View className="absolute inset-0 bg-black/50 justify-center items-center z-50">
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: "#FFF", marginTop: 10, fontWeight: "600" }}>
+          <Text className="text-white mt-2.5 font-semibold">
             {t("settings_loading")}
           </Text>
         </View>
@@ -430,22 +471,37 @@ ${t("feedback_body_message")}
         visible={isAboutVisible}
         onRequestClose={() => setAboutVisible(false)}
       >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
+        <View className="flex-1 bg-black/50 justify-end">
+          <View
+            className="rounded-t-3xl pb-10 px-6 min-h-[400px]"
+            style={{ backgroundColor: colors.card }}
+          >
+            <View className="flex-row justify-between items-center py-5 mb-2.5">
+              <Text
+                className="text-xl font-bold"
+                style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
+              >
                 {t("settings_about_title")}
               </Text>
               <TouchableOpacity
                 onPress={() => setAboutVisible(false)}
-                style={styles.closeButton}
+                className="p-1"
               >
                 <X size={24} color={colors.text} />
               </TouchableOpacity>
             </View>
 
-            <View style={styles.aboutContent}>
-              <View style={styles.logoContainer}>
+            <View className="items-center">
+              <View
+                className="mb-4 shadow-sm"
+                style={{
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 4,
+                }}
+              >
                 <Image
                   source={{
                     uri: "https://img.icons8.com/fluency/96/books.png",
@@ -453,18 +509,37 @@ ${t("feedback_body_message")}
                   style={{ width: 80, height: 80 }}
                 />
               </View>
-              <Text style={[styles.appName, { color: colors.text }]}>
+              <Text
+                className="text-2xl font-bold mb-3"
+                style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
+              >
                 {t("settings_app_name")}
               </Text>
               <Text
-                style={[styles.appDescription, { color: colors.textSecondary }]}
+                className="text-base text-center leading-6 mb-6 font-regular"
+                style={{
+                  color: colors.textSecondary,
+                  fontFamily: "Inter_400Regular",
+                }}
               >
                 {t("settings_about_desc")}
               </Text>
-              <Text style={[styles.developer, { color: colors.textSecondary }]}>
+              <Text
+                className="text-sm font-semibold mb-2"
+                style={{
+                  color: colors.textSecondary,
+                  fontFamily: "Inter_600SemiBold",
+                }}
+              >
                 {t("settings_developer")}
               </Text>
-              <Text style={[styles.copyright, { color: colors.textSecondary }]}>
+              <Text
+                className="text-xs font-regular opacity-60"
+                style={{
+                  color: colors.textSecondary,
+                  fontFamily: "Inter_400Regular",
+                }}
+              >
                 {t("settings_copyright")}
               </Text>
             </View>
@@ -474,141 +549,3 @@ ${t("feedback_body_message")}
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  header: {
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-  },
-  headerTitle: {
-    fontFamily: "Inter_700Bold",
-    fontSize: 28,
-  },
-  content: {
-    paddingHorizontal: 24,
-    paddingBottom: 40,
-  },
-  sectionContainer: {
-    marginBottom: 24,
-  },
-  sectionHeader: {
-    fontFamily: "Inter_700Bold",
-    fontSize: 13,
-    marginBottom: 12,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginLeft: 4,
-  },
-  card: {
-    borderRadius: 16,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.03,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    minHeight: 56,
-  },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  rowLabel: {
-    flex: 1,
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 16,
-  },
-  versionText: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 15,
-  },
-  separator: {
-    height: 1,
-    marginLeft: 56,
-  },
-
-  // Modal Styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "flex-end",
-  },
-  modalContent: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    paddingBottom: 40,
-    paddingHorizontal: 24,
-    minHeight: 400,
-  },
-  modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 20,
-    marginBottom: 10,
-  },
-  modalTitle: {
-    fontFamily: "Inter_700Bold",
-    fontSize: 20,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  aboutContent: {
-    alignItems: "center",
-  },
-  logoContainer: {
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  appName: {
-    fontFamily: "Inter_700Bold",
-    fontSize: 24,
-    marginBottom: 12,
-  },
-  appDescription: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 16,
-    textAlign: "center",
-    lineHeight: 24,
-    marginBottom: 24,
-  },
-  developer: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  copyright: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 12,
-    opacity: 0.6,
-  },
-  loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-});
