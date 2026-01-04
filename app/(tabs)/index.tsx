@@ -4,11 +4,11 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Image,
   Platform,
   StatusBar,
   useWindowDimensions,
 } from "react-native";
+import { Image } from "expo-image";
 import { FlashList } from "@shopify/flash-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,7 +25,7 @@ import {
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext";
-import { useBooks } from "../../context/BooksContext";
+import { useBooks, Book } from "../../context/BooksContext";
 import { useAuth } from "../../context/AuthContext";
 import RecommendationModal from "../../components/RecommendationModal";
 import ProfileModal from "../../components/ProfileModal";
@@ -49,10 +49,10 @@ export default function HomeScreen() {
   // Helper function to get localized filter title (reduces cognitive complexity)
   const getFilterTitle = (filter: string): string => {
     const titles: Record<string, string> = {
-      "Tümü": t("all_books"),
-      "Okundu": t("read"),
-      "Okunuyor": t("reading"),
-      "Okunacak": t("to_read"),
+      Tümü: t("all_books"),
+      Okundu: t("read"),
+      Okunuyor: t("reading"),
+      Okunacak: t("to_read"),
     };
     return titles[filter] || filter;
   };
@@ -111,7 +111,7 @@ export default function HomeScreen() {
             <Image
               source={require("../../assets/images/logo.png")}
               style={{ width: 28, height: 28 }}
-              resizeMode="contain"
+              contentFit="contain"
             />
           </View>
           <View>
@@ -217,7 +217,10 @@ export default function HomeScreen() {
             >
               <Text
                 className="text-[11px] mb-1.5 text-center"
-                style={{ color: "#667085", fontFamily: Platform.OS === "ios" ? "Courier" : "monospace" }}
+                style={{
+                  color: "#667085",
+                  fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+                }}
               >
                 {t("all_books")}
               </Text>
@@ -236,7 +239,10 @@ export default function HomeScreen() {
             >
               <Text
                 className="text-[11px] mb-1.5 text-center"
-                style={{ color: "#667085", fontFamily: Platform.OS === "ios" ? "Courier" : "monospace" }}
+                style={{
+                  color: "#667085",
+                  fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+                }}
               >
                 {t("read")}
               </Text>
@@ -255,7 +261,10 @@ export default function HomeScreen() {
             >
               <Text
                 className="text-[11px] mb-1.5 text-center"
-                style={{ color: "#667085", fontFamily: Platform.OS === "ios" ? "Courier" : "monospace" }}
+                style={{
+                  color: "#667085",
+                  fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+                }}
               >
                 {t("reading")}
               </Text>
@@ -274,7 +283,10 @@ export default function HomeScreen() {
             >
               <Text
                 className="text-[11px] mb-1.5 text-center"
-                style={{ color: "#667085", fontFamily: Platform.OS === "ios" ? "Courier" : "monospace" }}
+                style={{
+                  color: "#667085",
+                  fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+                }}
               >
                 {t("to_read")}
               </Text>
@@ -293,7 +305,10 @@ export default function HomeScreen() {
       <View className="flex-row justify-between items-center px-5 mb-4">
         <Text
           className="text-lg font-bold tracking-tighter"
-          style={{ color: colors.text, fontFamily: Platform.OS === "ios" ? "Courier" : "monospace" }}
+          style={{
+            color: colors.text,
+            fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+          }}
         >
           {getFilterTitle(activeFilter)}
         </Text>
@@ -330,6 +345,15 @@ export default function HomeScreen() {
         data={filteredBooks}
         keyExtractor={(item) => item.id}
         numColumns={viewMode === "grid" ? 2 : 1}
+        // @ts-ignore - FlashList getItemLayout for performance
+        getItemLayout={(
+          _data: ArrayLike<Book> | null | undefined,
+          index: number,
+        ) => ({
+          length: viewMode === "grid" ? 230 : 120,
+          offset: (viewMode === "grid" ? 230 : 120) * index,
+          index,
+        })}
         // @ts-ignore
         estimatedItemSize={280}
         renderItem={({ item }) => (
@@ -350,7 +374,11 @@ export default function HomeScreen() {
         contentContainerStyle={{ paddingBottom: 100 }}
         columnWrapperStyle={
           viewMode === "grid"
-            ? { justifyContent: "space-between", marginBottom: 24, paddingHorizontal: 24 }
+            ? {
+                justifyContent: "space-between",
+                marginBottom: 24,
+                paddingHorizontal: 24,
+              }
             : undefined
         }
         showsVerticalScrollIndicator={false}

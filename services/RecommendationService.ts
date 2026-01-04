@@ -4,6 +4,19 @@ import { logError } from "../utils/errorUtils";
 
 const GOOGLE_BOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes";
 
+// Google Books API response item interface
+interface GoogleBooksApiItem {
+  id: string;
+  volumeInfo: {
+    title?: string;
+    authors?: string[];
+    categories?: string[];
+    imageLinks?: { thumbnail?: string };
+    description?: string;
+    pageCount?: number;
+  };
+}
+
 export interface RecommendationResult {
   source: "library" | "external";
   book: Book;
@@ -63,7 +76,7 @@ export const RecommendationService = {
       }
 
       // Filter out books that are in the excluded list
-      const candidates = data.items.filter((item: any) => {
+      const candidates = data.items.filter((item: GoogleBooksApiItem) => {
         const title = item.volumeInfo.title;
         return (
           title &&

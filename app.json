@@ -23,6 +23,15 @@
       "output": "single"
     },
     "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 29,
+            "usesCleartextTraffic": false
+          }
+        }
+      ],
       "expo-router",
       [
         "expo-image-picker",
@@ -60,8 +69,12 @@
         "backgroundColor": "#F7F6EE"
       },
       "permissions": [
-        "android.permission.CAMERA"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES"
       ],
+      "blockedPermissions": ["android.permission.RECORD_AUDIO"],
+      "allowBackup": false,
       "package": "com.kitaplik.app",
       "googleServicesFile": "./google-services.json"
     },

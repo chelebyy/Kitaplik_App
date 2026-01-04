@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 import { Tabs } from "expo-router";
 import { Home, Book, Settings } from "lucide-react-native";
-import { Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
@@ -47,16 +47,15 @@ const TabBarBackground = React.memo(function TabBarBackground({
   );
 });
 
-
-
 export default function TabLayout() {
   const { colors, isDarkMode } = useTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   // TabBar arka plan render fonksiyonu - useCallback ile memoize edildi
   const renderTabBarBackground = useCallback(
     () => <TabBarBackground isDarkMode={isDarkMode} />,
-    [isDarkMode]
+    [isDarkMode],
   );
 
   // Screen options - useMemo ile memoize edildi
@@ -67,13 +66,15 @@ export default function TabLayout() {
       tabBarInactiveTintColor: colors.textSecondary,
       tabBarBackground: renderTabBarBackground,
       tabBarStyle: {
-        height: Platform.OS === "ios" ? 80 : 60,
+        // Dinamik yükseklik: İçerik (60) + sistem navigasyon inset'i
+        height: 60 + insets.bottom,
         backgroundColor: "transparent",
         borderTopWidth: 0,
         elevation: 0,
         shadowOpacity: 0,
-        paddingBottom: Platform.OS === "ios" ? 28 : 8,
-        paddingTop: 8,
+        // Dinamik alt padding: Sistem navigasyon tuşları için yer bırak
+        paddingBottom: insets.bottom,
+        paddingTop: 6,
       },
       tabBarItemStyle: {
         justifyContent: "center" as const,
@@ -87,7 +88,12 @@ export default function TabLayout() {
         marginBottom: 0,
       },
     }),
-    [colors.primary, colors.textSecondary, renderTabBarBackground]
+    [
+      colors.primary,
+      colors.textSecondary,
+      renderTabBarBackground,
+      insets.bottom,
+    ],
   );
 
   return (

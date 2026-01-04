@@ -18,7 +18,7 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
-  undefined
+  undefined,
 );
 const LANGUAGE_KEY = "user_language";
 
@@ -34,7 +34,9 @@ const getDeviceLanguage = (): Language => {
   return deviceLangCode === "tr" ? "tr" : "en";
 };
 
-export function LanguageProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+export function LanguageProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [language, setLanguage] = useState<Language>("tr");
 
   useEffect(() => {
@@ -83,7 +85,7 @@ export function LanguageProvider({ children }: Readonly<{ children: React.ReactN
       language,
       changeLanguage,
     }),
-    [language, changeLanguage]
+    [language, changeLanguage],
   );
 
   return (

@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { Text, View, Modal, TouchableOpacity, Dimensions } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { X } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
 interface BarcodeScannerModalProps {
   visible: boolean;
@@ -23,6 +18,7 @@ export default function BarcodeScannerModal({
   onClose,
   onScan,
 }: Readonly<BarcodeScannerModalProps>) {
+  const { t } = useTranslation();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
 
@@ -52,16 +48,27 @@ export default function BarcodeScannerModal({
         <View className="flex-1 bg-black justify-center items-center">
           <View className="bg-white p-5 rounded-xl items-center w-[80%]">
             <Text className="text-base mb-5 text-center font-medium">
-              Kamera izni gerekiyor
+              {t("camera_permission_required")}
             </Text>
             <TouchableOpacity
               onPress={requestPermission}
               className="bg-blue-600 px-5 py-2.5 rounded-lg mb-2.5 w-full items-center"
+              accessibilityRole="button"
+              accessibilityLabel={t("grant_permission")}
             >
-              <Text className="text-white text-base font-semibold">İzin Ver</Text>
+              <Text className="text-white text-base font-semibold">
+                {t("grant_permission")}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onClose} className="p-2.5">
-              <Text className="text-blue-600 text-base font-medium">Kapat</Text>
+            <TouchableOpacity
+              onPress={onClose}
+              className="p-2.5"
+              accessibilityRole="button"
+              accessibilityLabel={t("close")}
+            >
+              <Text className="text-blue-600 text-base font-medium">
+                {t("close")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -86,8 +93,18 @@ export default function BarcodeScannerModal({
         />
         <View className="absolute inset-0 bg-black/50 justify-between">
           <View className="flex-row justify-between items-center p-5 pt-[50px]">
-            <Text className="text-white text-lg font-semibold">Barkod Tara</Text>
-            <TouchableOpacity onPress={onClose} className="p-2">
+            <Text
+              className="text-white text-lg font-semibold"
+              accessibilityRole="header"
+            >
+              {t("scan_barcode")}
+            </Text>
+            <TouchableOpacity
+              onPress={onClose}
+              className="p-2"
+              accessibilityRole="button"
+              accessibilityLabel={t("close")}
+            >
               <X size={24} color="#FFF" />
             </TouchableOpacity>
           </View>
@@ -98,9 +115,10 @@ export default function BarcodeScannerModal({
                 width: scanSize,
                 height: scanSize * 0.6,
               }}
+              accessibilityLabel={t("barcode_scan_area")}
             />
             <Text className="text-white mt-5 text-sm opacity-80 font-medium">
-              Barkodu çerçeve içine getirin
+              {t("barcode_scan_hint")}
             </Text>
           </View>
         </View>

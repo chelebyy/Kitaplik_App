@@ -96,7 +96,7 @@ describe("SettingsScreen", () => {
 
       await waitFor(() => {
         expect(Linking.openURL).toHaveBeenCalledWith(
-          "mailto:iletisim@kitaplikapp.com?subject=Geri Bildirim"
+          "mailto:iletisim@kitaplikapp.com?subject=Geri Bildirim",
         );
       });
     }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
-  Image,
   TouchableOpacity,
   ScrollView,
   TextInput,
@@ -10,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from "react-native";
+import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { ArrowLeft, Trash2, ShoppingCart } from "lucide-react-native";
@@ -21,9 +21,9 @@ import PriceComparisonModal from "../components/PriceComparisonModal";
 // Helper function to get translation key for status
 const getStatusTranslationKey = (status: BookStatus): string => {
   const keys: Record<BookStatus, string> = {
-    "Okundu": "read",
-    "Okunuyor": "reading",
-    "Okunacak": "to_read",
+    Okundu: "read",
+    Okunuyor: "reading",
+    Okunacak: "to_read",
   };
   return keys[status];
 };
@@ -68,10 +68,7 @@ export default function BookDetailScreen() {
         style={{ backgroundColor: colors.background }}
       >
         <View className="flex-row items-center justify-between px-6 py-4">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="p-2"
-          >
+          <TouchableOpacity onPress={() => router.back()} className="p-2">
             <ArrowLeft size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
@@ -176,9 +173,10 @@ export default function BookDetailScreen() {
             }}
           >
             <Image
-              source={{ uri: book.coverUrl }}
+              source={book.coverUrl}
               className="w-[180px] h-[270px] rounded-xl bg-[#E0E0E0]"
-              resizeMode="cover"
+              contentFit="cover"
+              transition={200}
             />
           </View>
 
@@ -192,7 +190,10 @@ export default function BookDetailScreen() {
             </Text>
             <Text
               className="text-base font-semibold mb-4"
-              style={{ fontFamily: "Inter_600SemiBold", color: colors.textSecondary }}
+              style={{
+                fontFamily: "Inter_600SemiBold",
+                color: colors.textSecondary,
+              }}
             >
               {book.author}
             </Text>
@@ -204,7 +205,10 @@ export default function BookDetailScreen() {
               >
                 <Text
                   className="text-xs font-semibold"
-                  style={{ fontFamily: "Inter_600SemiBold", color: colors.text }}
+                  style={{
+                    fontFamily: "Inter_600SemiBold",
+                    color: colors.text,
+                  }}
                 >
                   {book.genre || t("general")}
                 </Text>
@@ -223,7 +227,10 @@ export default function BookDetailScreen() {
               />
               <Text
                 className="text-sm font-semibold"
-                style={{ fontFamily: "Inter_600SemiBold", color: colors.primary }}
+                style={{
+                  fontFamily: "Inter_600SemiBold",
+                  color: colors.primary,
+                }}
               >
                 {t("price_compare")}
               </Text>
@@ -233,7 +240,10 @@ export default function BookDetailScreen() {
           <View className="mb-6">
             <Text
               className="text-base font-bold mb-3"
-              style={{ fontFamily: "Inter_700Bold", color: colors.sectionHeader }}
+              style={{
+                fontFamily: "Inter_700Bold",
+                color: colors.sectionHeader,
+              }}
             >
               {t("book_detail_status")}
             </Text>
@@ -275,7 +285,10 @@ export default function BookDetailScreen() {
             <View className="flex-row justify-between items-center mb-3">
               <Text
                 className="text-base font-bold mb-0"
-                style={{ fontFamily: "Inter_700Bold", color: colors.sectionHeader }}
+                style={{
+                  fontFamily: "Inter_700Bold",
+                  color: colors.sectionHeader,
+                }}
               >
                 {t("book_detail_progress")}
               </Text>
@@ -293,7 +306,10 @@ export default function BookDetailScreen() {
 
             <View
               className="rounded-2xl p-4 border"
-              style={{ backgroundColor: colors.card, borderColor: colors.border }}
+              style={{
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+              }}
             >
               {/* Progress Bar */}
               <View
@@ -373,7 +389,10 @@ export default function BookDetailScreen() {
           <View className="mb-6">
             <Text
               className="text-base font-bold mb-3"
-              style={{ fontFamily: "Inter_700Bold", color: colors.sectionHeader }}
+              style={{
+                fontFamily: "Inter_700Bold",
+                color: colors.sectionHeader,
+              }}
             >
               {t("book_detail_notes")}
             </Text>

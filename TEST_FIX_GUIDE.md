@@ -20,19 +20,19 @@ Proje ana dizinindeki `jest.setup.js` dosyasını açın ve aşağıdaki mock ta
 
 ```javascript
 // jest.setup.js
-import 'react-native-gesture-handler/jestSetup';
+import "react-native-gesture-handler/jestSetup";
 
 // Google Mobile Ads Mock
-jest.mock('react-native-google-mobile-ads', () => ({
+jest.mock("react-native-google-mobile-ads", () => ({
   TestIds: {
-    BANNER: 'ca-app-pub-3940256099942544/6300978111',
-    INTERSTITIAL: 'ca-app-pub-3940256099942544/1033173712',
-    REWARDED: 'ca-app-pub-3940256099942544/5224354917',
-    REWARDED_INTERSTITIAL: 'ca-app-pub-3940256099942544/5354046379',
+    BANNER: "ca-app-pub-3940256099942544/6300978111",
+    INTERSTITIAL: "ca-app-pub-3940256099942544/1033173712",
+    REWARDED: "ca-app-pub-3940256099942544/5224354917",
+    REWARDED_INTERSTITIAL: "ca-app-pub-3940256099942544/5354046379",
   },
-  BannerAd: 'BannerAd',
+  BannerAd: "BannerAd",
   BannerAdSize: {
-    BANNER: 'BANNER',
+    BANNER: "BANNER",
   },
   InterstitialAd: {
     createForAdRequest: jest.fn(() => ({
@@ -56,30 +56,30 @@ jest.mock('react-native-google-mobile-ads', () => ({
     })),
   },
   AdEventType: {
-    LOADED: 'loaded',
-    ERROR: 'error',
-    OPENED: 'opened',
-    CLOSED: 'closed',
+    LOADED: "loaded",
+    ERROR: "error",
+    OPENED: "opened",
+    CLOSED: "closed",
   },
   RewardedAdEventType: {
-    LOADED: 'loaded',
-    EARNED_REWARD: 'earned_reward',
+    LOADED: "loaded",
+    EARNED_REWARD: "earned_reward",
   },
 }));
 
 // Expo Router Mock (Eğer router hataları alırsanız)
-jest.mock('expo-router', () => ({
+jest.mock("expo-router", () => ({
   useRouter: () => ({
     push: jest.fn(),
     replace: jest.fn(),
     back: jest.fn(),
   }),
   useLocalSearchParams: () => ({}),
-  Link: 'Link',
+  Link: "Link",
 }));
 
 // Expo SecureStore Mock
-jest.mock('expo-secure-store', () => ({
+jest.mock("expo-secure-store", () => ({
   getItemAsync: jest.fn(),
   setItemAsync: jest.fn(),
   deleteItemAsync: jest.fn(),
@@ -91,7 +91,7 @@ jest.mock('expo-secure-store', () => ({
  */
 const originalConsoleError = console.error;
 console.error = (...args) => {
-  if (typeof args[0] === 'string' && /Warning:/.test(args[0])) return;
+  if (typeof args[0] === "string" && /Warning:/.test(args[0])) return;
   originalConsoleError(...args);
 };
 ```
@@ -106,7 +106,7 @@ console.error = (...args) => {
 ]
 ```
 
-*(Not: `lucide-react-native` sonrasına `|react-native-google-mobile-ads` eklendi)*
+_(Not: `lucide-react-native` sonrasına `|react-native-google-mobile-ads` eklendi)_
 
 ### 3. Testleri Tekrar Çalıştırma
 

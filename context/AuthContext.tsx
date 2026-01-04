@@ -28,7 +28,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const USER_STORAGE_KEY = "local_user_profile";
 
-export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+export function AuthProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -87,7 +89,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       signIn,
       signOut,
     }),
-    [user, isLoading, signIn, signOut]
+    [user, isLoading, signIn, signOut],
   );
 
   return (

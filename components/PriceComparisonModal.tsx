@@ -96,7 +96,7 @@ export default function PriceComparisonModal({
         <View
           className={cn(
             "rounded-t-3xl max-h-[80%] overflow-hidden",
-            isDarkMode ? "bg-slate-900" : "bg-white"
+            isDarkMode ? "bg-slate-900" : "bg-white",
           )}
           style={{ backgroundColor: colors.card }}
         >
@@ -104,14 +104,14 @@ export default function PriceComparisonModal({
           <View
             className={cn(
               "flex-row justify-between items-center p-5 border-b",
-              isDarkMode ? "border-slate-700" : "border-slate-100"
+              isDarkMode ? "border-slate-700" : "border-slate-100",
             )}
             style={{ borderBottomColor: colors.border }}
           >
             <Text
               className={cn(
                 "text-lg font-bold",
-                isDarkMode ? "text-white" : "text-slate-900"
+                isDarkMode ? "text-white" : "text-slate-900",
               )}
               style={{ color: colors.text }}
             >
@@ -122,12 +122,14 @@ export default function PriceComparisonModal({
             </TouchableOpacity>
           </View>
 
-          <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }}>
+          <ScrollView
+            contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+          >
             {/* Fiyat Karşılaştırma Bölümü */}
             <View
               className={cn(
                 "p-4 rounded-xl mb-5",
-                isDarkMode ? "bg-[#1E3A5F]" : "bg-blue-50"
+                isDarkMode ? "bg-[#1E3A5F]" : "bg-blue-50",
               )}
             >
               <View className="flex-row items-center mb-2">
@@ -135,7 +137,7 @@ export default function PriceComparisonModal({
                 <Text
                   className={cn(
                     "text-base font-bold ml-2",
-                    isDarkMode ? "text-white" : "text-slate-900"
+                    isDarkMode ? "text-white" : "text-slate-900",
                   )}
                   style={{ color: colors.text }}
                 >
@@ -145,7 +147,7 @@ export default function PriceComparisonModal({
               <Text
                 className={cn(
                   "text-[13px] mb-4",
-                  isDarkMode ? "text-slate-400" : "text-slate-600"
+                  isDarkMode ? "text-slate-400" : "text-slate-600",
                 )}
                 style={{ color: colors.textSecondary }}
               >
@@ -189,7 +191,7 @@ export default function PriceComparisonModal({
             <View
               className={cn(
                 "flex-row items-center p-2.5 rounded-lg mb-3 gap-2",
-                isDarkMode ? "bg-slate-700" : "bg-amber-50"
+                isDarkMode ? "bg-slate-700" : "bg-amber-50",
               )}
             >
               <AlertCircle
@@ -199,7 +201,7 @@ export default function PriceComparisonModal({
               <Text
                 className={cn(
                   "text-xs flex-1",
-                  isDarkMode ? "text-amber-300" : "text-amber-800"
+                  isDarkMode ? "text-amber-300" : "text-amber-800",
                 )}
               >
                 {t("store_availability_note") ||
@@ -214,7 +216,7 @@ export default function PriceComparisonModal({
                   "p-3 mb-2 rounded-xl border",
                   isDarkMode
                     ? "bg-slate-800 border-slate-700"
-                    : "bg-slate-50 border-slate-200"
+                    : "bg-slate-50 border-slate-200",
                 )}
                 style={{ borderColor: colors.border }}
               >

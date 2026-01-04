@@ -18,7 +18,9 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+export function ThemeProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [theme, setTheme] = useState<Theme>("light");
 
   // Tema değiştirme fonksiyonu - useCallback ile memoize edildi
@@ -38,7 +40,7 @@ export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode
       toggleTheme,
       isDarkMode,
     }),
-    [theme, colors, toggleTheme, isDarkMode]
+    [theme, colors, toggleTheme, isDarkMode],
   );
 
   return (
@@ -55,4 +57,3 @@ export function useTheme() {
   }
   return context;
 }
-

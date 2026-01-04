@@ -5,63 +5,63 @@ import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
 jest.mock("../../utils/fetchWithTimeout");
 
 describe("GoogleBooksService Integration Test", () => {
-    const mockBooks = {
-        items: [
-            {
-                id: "1",
-                volumeInfo: {
-                    title: "Test Kitabı",
-                    authors: ["Yazar"],
-                },
-            },
-            {
-                id: "2",
-                volumeInfo: {
-                    title: "İkinci Kitap",
-                    authors: ["Yazar 2"],
-                },
-            },
-        ],
-    };
+  const mockBooks = {
+    items: [
+      {
+        id: "1",
+        volumeInfo: {
+          title: "Test Kitabı",
+          authors: ["Yazar"],
+        },
+      },
+      {
+        id: "2",
+        volumeInfo: {
+          title: "İkinci Kitap",
+          authors: ["Yazar 2"],
+        },
+      },
+    ],
+  };
 
-    beforeEach(() => {
-        jest.clearAllMocks();
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return a list of books when search is successful", async () => {
+    // Mock response
+    (fetchWithTimeout as jest.Mock).mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockBooks),
     });
 
-    it("should return a list of books when search is successful", async () => {
-        // Mock response
-        (fetchWithTimeout as jest.Mock).mockResolvedValue({
-            json: jest.fn().mockResolvedValue(mockBooks),
-        });
+    const result = await GoogleBooksService.searchBooks("test");
 
-        const result = await GoogleBooksService.searchBooks("test");
+    expect(fetchWithTimeout).toHaveBeenCalledWith(
+      expect.stringContaining("q=test"),
+    );
+    expect(result).toHaveLength(2);
+    expect(result[0].volumeInfo.title).toBe("Test Kitabı");
+  });
 
-        expect(fetchWithTimeout).toHaveBeenCalledWith(
-            expect.stringContaining("q=test")
-        );
-        expect(result).toHaveLength(2);
-        expect(result[0].volumeInfo.title).toBe("Test Kitabı");
+  it("should return empty array when no items found", async () => {
+    (fetchWithTimeout as jest.Mock).mockResolvedValue({
+      json: jest.fn().mockResolvedValue({ items: [] }),
     });
 
-    it("should return empty array when no items found", async () => {
-        (fetchWithTimeout as jest.Mock).mockResolvedValue({
-            json: jest.fn().mockResolvedValue({ items: [] }),
-        });
+    const result = await GoogleBooksService.searchBooks("nothing");
+    expect(result).toEqual([]);
+  });
 
-        const result = await GoogleBooksService.searchBooks("nothing");
-        expect(result).toEqual([]);
+  it("should find book by ISBN", async () => {
+    (fetchWithTimeout as jest.Mock).mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockBooks),
     });
 
-    it("should find book by ISBN", async () => {
-        (fetchWithTimeout as jest.Mock).mockResolvedValue({
-            json: jest.fn().mockResolvedValue(mockBooks),
-        });
-
-        const result = await GoogleBooksService.searchByIsbn("12345");
-        expect(result).toBeDefined();
-        expect(result?.id).toBe("1");
-        expect(fetchWithTimeout).toHaveBeenCalledWith(
-            expect.stringContaining("isbn:12345")
-        );
-    });
+    const result = await GoogleBooksService.searchByIsbn("12345");
+    expect(result).toBeDefined();
+    expect(result?.id).toBe("1");
+    expect(fetchWithTimeout).toHaveBeenCalledWith(
+      expect.stringContaining("isbn:12345"),
+    );
+  });
 });

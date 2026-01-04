@@ -1,6 +1,10 @@
 import { fetchWithTimeout } from "../utils/fetchWithTimeout";
 import { logError } from "../utils/errorUtils";
-import { convertISBN10ToISBN13, convertISBN13ToISBN10, normalizeISBN } from "../utils/isbnConverter";
+import {
+  convertISBN10ToISBN13,
+  convertISBN13ToISBN10,
+  normalizeISBN,
+} from "../utils/isbnConverter";
 import { normalizeForMatching } from "../utils/stringUtils";
 import { OpenLibraryService } from "./OpenLibraryService";
 
@@ -51,7 +55,11 @@ export const GoogleBooksService = {
 
       if (specificResults.length > 0) {
         // Apply filters
-        const filtered = filterRelevantResults(query, specificResults, searchType);
+        const filtered = filterRelevantResults(
+          query,
+          specificResults,
+          searchType,
+        );
         const withCovers = prioritizeCovers(filtered);
         return filterByLanguage(withCovers, lang);
       }
@@ -66,14 +74,19 @@ export const GoogleBooksService = {
       // STEP 3: IF results are scarce, try Open Library Fallback
       if (!skipFallback && finalResults.length < 5) {
         try {
-          const openLibraryResults = await OpenLibraryService.searchBooks(query, searchType);
+          const openLibraryResults = await OpenLibraryService.searchBooks(
+            query,
+            searchType,
+          );
 
           if (openLibraryResults.length > 0) {
             // Convert to Google Book format and merge
             // Use a Map to deduplicate by title (simple dedupe)
-            const existingTitles = new Set(finalResults.map(b => b.volumeInfo.title.toLowerCase()));
+            const existingTitles = new Set(
+              finalResults.map((b) => b.volumeInfo.title.toLowerCase()),
+            );
 
-            const newBooks = openLibraryResults.filter(b => {
+            const newBooks = openLibraryResults.filter((b) => {
               if (!b.volumeInfo.title) return false;
               const title = b.volumeInfo.title.toLowerCase();
               if (existingTitles.has(title)) return false;
@@ -81,7 +94,10 @@ export const GoogleBooksService = {
               return true;
             });
 
-            finalResults = [...finalResults, ...filterByLanguage(newBooks, lang)];
+            finalResults = [
+              ...finalResults,
+              ...filterByLanguage(newBooks, lang),
+            ];
           }
         } catch (olError) {
           // Silent fail for fallback
@@ -102,7 +118,7 @@ export const GoogleBooksService = {
    * 1. Try Google Books with original ISBN
    * 2. Try Google Books with converted ISBN (10↔13)
    * 3. Fallback to Open Library with both formats
-   * 
+   *
    * @param isbn ISBN-10 or ISBN-13
    * @param lang Language code (e.g., 'tr', 'en')
    * @returns The first matching book or null
@@ -137,7 +153,8 @@ export const GoogleBooksService = {
 
       // Try converted format in Open Library too
       if (convertedISBN) {
-        const openLibResultConverted = await OpenLibraryService.searchByIsbn(convertedISBN);
+        const openLibResultConverted =
+          await OpenLibraryService.searchByIsbn(convertedISBN);
         if (openLibResultConverted) {
           return OpenLibraryService.toGoogleBookFormat(openLibResultConverted);
         }
@@ -250,8 +267,6 @@ function filterByLanguage(
  * @returns Filtered books with high relevance
  */
 
-
-
 function filterRelevantResults(
   query: string,
   books: GoogleBookResult[],
@@ -277,7 +292,6 @@ function filterRelevantResults(
     return matchRatio >= 0.7; // At least 70% word match
   });
 }
-
 
 /**
  * Prioritize books with cover images

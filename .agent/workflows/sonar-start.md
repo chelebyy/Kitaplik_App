@@ -1,5 +1,13 @@
 ---
-description: 
+description: SonarQube kod analizi başlatır (sonar-project.properties kullanır)
 ---
 
-sonar -Dsonar.host.url=<http://localhost:9000> -Dsonar.token=squ_752e4b323a8a2983f1ecfd3898735282d538c950 -Dsonar.projectKey=book2
+# SonarQube Taraması Başlat
+
+SonarQube Docker container'ının çalıştığından emin ol (localhost:9000).
+
+// turbo
+
+1. `npx sonar-scanner`
+
+> Not: Tüm ayarlar `sonar-project.properties` dosyasından okunur.

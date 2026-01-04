@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>React Native Security Report - 03.01.2026</title>
+  <title>React Native Security Report - 04.01.2026</title>
   <style>
     * {
       margin: 0;
@@ -703,7 +703,7 @@
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
       </svg>
-      <span>Scan completed in <span class="scan-status-text">0.6s</span> <span class="divider">•</span> <span class="scan-status-text">53 files analyzed</span></span>
+      <span>Scan completed in <span class="scan-status-text">0.5s</span> <span class="divider">•</span> <span class="scan-status-text">61 files analyzed</span></span>
     </div>
 
     <div class="header">
@@ -719,25 +719,25 @@
         </div>
       </div>
       <div class="header-info">
-        <div class="info-item">Jan 3, 2026 • 1:51 PM</div>
+        <div class="info-item">Jan 4, 2026 • 2:04 PM</div>
       </div>
     </div>
     
     <div class="summary">
       <div class="summary-card total active" onclick="filterBySeverity('all')" data-filter="all">
-        <div class="number">1</div>
+        <div class="number">5</div>
         <h3>Total</h3>
       </div>
       <div class="summary-card high" onclick="filterBySeverity('high')" data-filter="high">
-        <div class="number">0</div>
+        <div class="number">2</div>
         <h3>High</h3>
       </div>
       <div class="summary-card medium" onclick="filterBySeverity('medium')" data-filter="medium">
-        <div class="number">0</div>
+        <div class="number">1</div>
         <h3>Medium</h3>
       </div>
       <div class="summary-card low" onclick="filterBySeverity('low')" data-filter="low">
-        <div class="number">1</div>
+        <div class="number">2</div>
         <h3>Low</h3>
       </div>
     </div>
@@ -745,7 +745,178 @@
     
     <div class="findings">
       
+      <div class="finding-group high" data-severity="high">
+        
+        <div class="group-header">
+          <div class="finding-left">
+            <span class="severity-badge high">
+              <span class="severity-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </span>
+              HIGH
+            </span>
+            <div class="finding-title">
+              android:usesCleartextTraffic is set to true
+              
+            </div>
+          </div>
+          <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+        
+        <div class="instances-container">
+          <div class="instances-list">
+            
+      <div class="finding-content-inner">
+        
+            
+        
+            <div class="finding-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            <span class="file-path">C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/android/app/src/debugOptimized/AndroidManifest.xml</span>
+            
+            </div>
+        
+            
+        
+        
+        
+            
+        
+            <div class="suggestion">
+              <div class="suggestion-title">
+                💡 Recommendation
+              </div>
+            <div class="suggestion-text">Disable cleartext traffic or use network security config to restrict it to specific domains</div>
+          </div>
+        
+      </div>
+    
+          </div>
+        </div>
       
+      </div>
+    
+      <div class="finding-group high" data-severity="high">
+        
+        <div class="group-header">
+          <div class="finding-left">
+            <span class="severity-badge high">
+              <span class="severity-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </span>
+              HIGH
+            </span>
+            <div class="finding-title">
+              Exported activity without permission protection - accessible by any app
+              
+            </div>
+          </div>
+          <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+        
+        <div class="instances-container">
+          <div class="instances-list">
+            
+      <div class="finding-content-inner">
+        
+            
+        
+            <div class="finding-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            <span class="file-path">C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/android/app/src/main/AndroidManifest.xml</span>
+            
+            </div>
+        
+            
+        
+        
+        
+            
+        
+            <div class="suggestion">
+              <div class="suggestion-title">
+                💡 Recommendation
+              </div>
+            <div class="suggestion-text">Add android:permission attribute to exported activity or set android:exported=&quot;false&quot; if external access is not needed.</div>
+          </div>
+        
+      </div>
+    
+          </div>
+        </div>
+      
+      </div>
+    
+      
+      <div class="finding-group medium" data-severity="medium">
+        
+        <div class="group-header">
+          <div class="finding-left">
+            <span class="severity-badge medium">
+              <span class="severity-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </span>
+              MEDIUM
+            </span>
+            <div class="finding-title">
+              Permissive intent filter with android.intent.action.VIEW: Can be invoked by any app
+              
+            </div>
+          </div>
+          <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+        
+        <div class="instances-container">
+          <div class="instances-list">
+            
+      <div class="finding-content-inner">
+        
+            
+        
+            <div class="finding-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            <span class="file-path">C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/android/app/src/main/AndroidManifest.xml</span>
+            
+            </div>
+        
+            
+        
+        
+        
+            
+        
+            <div class="suggestion">
+              <div class="suggestion-title">
+                💡 Recommendation
+              </div>
+            <div class="suggestion-text">Validate all incoming intents and restrict with custom permissions if external access is not required.</div>
+          </div>
+        
+      </div>
+    
+          </div>
+        </div>
+      
+      </div>
+    
       
       <div class="finding-group low" data-severity="low">
         
@@ -795,6 +966,63 @@
                 💡 Recommendation
               </div>
             <div class="suggestion-text">Only request necessary permissions and explain usage to users</div>
+          </div>
+        
+      </div>
+    
+          </div>
+        </div>
+      
+      </div>
+    
+      <div class="finding-group low" data-severity="low">
+        
+        <div class="group-header">
+          <div class="finding-left">
+            <span class="severity-badge low">
+              <span class="severity-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </span>
+              LOW
+            </span>
+            <div class="finding-title">
+              Potentially excessive permissions declared: android.permission.CAMERA, android.permission.READ_EXTERNAL_STORAGE, android.permission.WRITE_EXTERNAL_STORAGE
+              
+            </div>
+          </div>
+          <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+        
+        <div class="instances-container">
+          <div class="instances-list">
+            
+      <div class="finding-content-inner">
+        
+            
+        
+            <div class="finding-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            <span class="file-path">C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/android/app/src/main/AndroidManifest.xml</span>
+            
+            </div>
+        
+            
+        
+        
+        
+            
+        
+            <div class="suggestion">
+              <div class="suggestion-title">
+                💡 Recommendation
+              </div>
+            <div class="suggestion-text">Review declared permissions and remove those not actively used. Request permissions at runtime only when needed.</div>
           </div>
         
       </div>

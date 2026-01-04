@@ -10,15 +10,15 @@
 
 ## 📊 Özet
 
-| Kategori | Sayı | Durum |
-|----------|------|-------|
-| 🔴 BLOCKER (Token - SKIP) | 1 | ⏭️ Atlanacak |
-| 🟠 Duplicate Imports | 6 | ⏳ Bekliyor |
-| 🟡 Unused Imports | 8 | ⏳ Bekliyor |
-| 🟣 Deprecated API Usage | 2 | ⏳ Bekliyor |
-| 🔵 Props Read-Only | 4 | ⏳ Bekliyor |
-| ⚪ window → globalThis | 1 | ⏳ Bekliyor |
-| 🟤 Diğer Code Smells | 12 | ⏳ Bekliyor |
+| Kategori                  | Sayı | Durum        |
+| ------------------------- | ---- | ------------ |
+| 🔴 BLOCKER (Token - SKIP) | 1    | ⏭️ Atlanacak |
+| 🟠 Duplicate Imports      | 6    | ⏳ Bekliyor  |
+| 🟡 Unused Imports         | 8    | ⏳ Bekliyor  |
+| 🟣 Deprecated API Usage   | 2    | ⏳ Bekliyor  |
+| 🔵 Props Read-Only        | 4    | ⏳ Bekliyor  |
+| ⚪ window → globalThis    | 1    | ⏳ Bekliyor  |
+| 🟤 Diğer Code Smells      | 12   | ⏳ Bekliyor  |
 
 ---
 
@@ -101,17 +101,17 @@
 
 ## 🔄 Progress Tracker
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Task 1 | ⏳ | - |
-| Task 2 | ⏳ | - |
-| Task 3 | ⏳ | - |
-| Task 4 | ⏳ | - |
-| Task 5 | ⏳ | - |
-| Task 6 | ⏳ | - |
-| Task 7 | ⏳ | - |
-| Task 8 | ⏳ | - |
-| Task 9 | ⏳ | - |
-| Task 10 | ⏳ | - |
-| Task 11 | ⏳ | - |
-| Task 12 | ⏳ | - |
+| Task    | Status | Notes |
+| ------- | ------ | ----- |
+| Task 1  | ⏳     | -     |
+| Task 2  | ⏳     | -     |
+| Task 3  | ⏳     | -     |
+| Task 4  | ⏳     | -     |
+| Task 5  | ⏳     | -     |
+| Task 6  | ⏳     | -     |
+| Task 7  | ⏳     | -     |
+| Task 8  | ⏳     | -     |
+| Task 9  | ⏳     | -     |
+| Task 10 | ⏳     | -     |
+| Task 11 | ⏳     | -     |
+| Task 12 | ⏳     | -     |

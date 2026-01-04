@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, Pressable, Image } from "react-native";
+import { View, Text, Pressable } from "react-native";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { Book } from "../context/BooksContext";
 import { cn } from "../utils/cn";
@@ -57,19 +58,16 @@ const GridBookCard = ({
   >
     <View className="relative">
       <Image
-        source={{
-          uri: book.coverUrl || "https://via.placeholder.com/150",
-        }}
+        source={book.coverUrl || "https://via.placeholder.com/150"}
         className="w-full h-48 bg-slate-200"
-        resizeMode="cover"
+        contentFit="cover"
+        transition={200}
       />
       <View
         className="absolute top-2 right-2 px-2 py-1 rounded-md"
         style={{ backgroundColor: statusColor }}
       >
-        <Text className="text-[10px] font-bold text-white">
-          {statusLabel}
-        </Text>
+        <Text className="text-[10px] font-bold text-white">{statusLabel}</Text>
       </View>
     </View>
 
@@ -83,10 +81,7 @@ const GridBookCard = ({
       >
         {book.title}
       </Text>
-      <Text
-        className="text-xs text-slate-500 font-medium"
-        numberOfLines={1}
-      >
+      <Text className="text-xs text-slate-500 font-medium" numberOfLines={1}>
         {book.author}
       </Text>
 
@@ -161,11 +156,10 @@ const ListBookCard = ({
       {/* Cover */}
       <View className="mr-4 shadow-sm">
         <Image
-          source={{
-            uri: book.coverUrl || "https://via.placeholder.com/100x150",
-          }}
+          source={book.coverUrl || "https://via.placeholder.com/100x150"}
           className="w-16 h-24 rounded-md bg-slate-200"
-          resizeMode="cover"
+          contentFit="cover"
+          transition={200}
         />
       </View>
 
@@ -299,7 +293,9 @@ export const BookCard = React.memo(function BookCard({
   };
 
   // Delegate to appropriate variant
-  return variant === "grid"
-    ? <GridBookCard {...renderProps} />
-    : <ListBookCard {...renderProps} />;
+  return variant === "grid" ? (
+    <GridBookCard {...renderProps} />
+  ) : (
+    <ListBookCard {...renderProps} />
+  );
 });

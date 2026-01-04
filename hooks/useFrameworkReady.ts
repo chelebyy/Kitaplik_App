@@ -8,5 +8,5 @@ declare global {
 export function useFrameworkReady() {
   useEffect(() => {
     globalThis.frameworkReady?.();
-  });
+  }, []);
 }

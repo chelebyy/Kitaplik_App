@@ -11,7 +11,8 @@ import { ThemeProvider, useTheme } from "../context/ThemeContext";
 import { BooksProvider, useBooks } from "../context/BooksContext";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { LanguageProvider } from "../context/LanguageContext";
-import { CreditsProvider } from "../context/CreditsContext";
+import { CreditsProvider, useCredits } from "../context/CreditsContext";
+import { NotificationProvider } from "../context/NotificationContext";
 import { useEffect, useState, useCallback } from "react";
 import { View } from "react-native";
 import { AnimatedSplash } from "../components/AnimatedSplash";
@@ -32,6 +33,21 @@ function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
     };
     trackAppOpen();
   }, []);
+
+  // Günlük giriş kredisi: Uygulama açılışında otomatik talep et
+  const { claimDailyCredit, hasDailyCreditAvailable } = useCredits();
+  useEffect(() => {
+    const checkDailyCredit = async () => {
+      if (hasDailyCreditAvailable) {
+        const claimed = await claimDailyCredit();
+        if (claimed) {
+          // Kredi başarıyla alındı - Sessiz log
+          console.log("[DailyCredit] +1 kredi kazanıldı!");
+        }
+      }
+    };
+    checkDailyCredit();
+  }, [hasDailyCreditAvailable, claimDailyCredit]);
 
   // Animasyonlu splash gösterilsin mi?
   const [showAnimatedSplash, setShowAnimatedSplash] = useState(true);
@@ -94,7 +110,9 @@ export default function RootLayout() {
         <AuthProvider>
           <BooksProvider>
             <CreditsProvider>
-              <RootLayoutContent fontsLoaded={fontsLoaded} />
+              <NotificationProvider>
+                <RootLayoutContent fontsLoaded={fontsLoaded} />
+              </NotificationProvider>
             </CreditsProvider>
           </BooksProvider>
         </AuthProvider>

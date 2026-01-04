@@ -4,9 +4,9 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Image,
   useWindowDimensions,
 } from "react-native";
+import { Image } from "expo-image";
 import { FlashList } from "@shopify/flash-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -124,7 +124,7 @@ export default function BooksScreen() {
               <Image
                 source={require("../../assets/images/logo.png")}
                 style={{ width: 28, height: 28 }}
-                resizeMode="contain"
+                contentFit="contain"
               />
             </View>
             <View>
@@ -247,7 +247,10 @@ export default function BooksScreen() {
           // @ts-ignore
           estimatedItemSize={180}
           keyExtractor={(item) => item.id}
-          getItemLayout={(_data: ArrayLike<Book> | null | undefined, index: number) => ({
+          getItemLayout={(
+            _data: ArrayLike<Book> | null | undefined,
+            index: number,
+          ) => ({
             length: 180, // Approximate height of a card item
             offset: 180 * index,
             index,
@@ -269,7 +272,10 @@ export default function BooksScreen() {
               />
               <Text
                 className="font-regular text-center text-base"
-                style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
+                style={{
+                  color: colors.textSecondary,
+                  fontFamily: "Inter_400Regular",
+                }}
               >
                 {searchQuery
                   ? t("empty_search", { query: searchQuery })

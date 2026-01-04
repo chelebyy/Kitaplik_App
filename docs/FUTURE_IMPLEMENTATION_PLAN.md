@@ -64,13 +64,17 @@ Google ISBN-10 → Google ISBN-13 → Open Library ISBN-10 → Open Library ISBN
 **Dosya:** `services/MultiSourceBookService.ts`
 
 ```typescript
-import { GoogleBooksService, GoogleBookResult } from './GoogleBooksService';
-import { OpenLibraryService } from './OpenLibraryService';
-import { normalizeISBN, convertISBN10ToISBN13, convertISBN13ToISBN10 } from '../utils/isbnConverter';
+import { GoogleBooksService, GoogleBookResult } from "./GoogleBooksService";
+import { OpenLibraryService } from "./OpenLibraryService";
+import {
+  normalizeISBN,
+  convertISBN10ToISBN13,
+  convertISBN13ToISBN10,
+} from "../utils/isbnConverter";
 
 interface BookSearchResult {
   book: GoogleBookResult;
-  source: 'google' | 'openlibrary';
+  source: "google" | "openlibrary";
   searchTime: number; // milliseconds
 }
 
@@ -81,7 +85,7 @@ export const MultiSourceBookService = {
    */
   searchByIsbnParallel: async (
     isbn: string,
-    lang: string = 'tr'
+    lang: string = "tr",
   ): Promise<BookSearchResult | null> => {
     const normalized = normalizeISBN(isbn);
     const isISBN10 = normalized.length === 10;
@@ -91,12 +95,12 @@ export const MultiSourceBookService = {
 
     // Create array of all search promises
     const searches: Promise<BookSearchResult | null>[] = [
-      searchWithSource('google', normalized, lang),
+      searchWithSource("google", normalized, lang),
     ];
 
     // Add converted format search for Google
     if (convertedISBN) {
-      searches.push(searchWithSource('google', convertedISBN, lang));
+      searches.push(searchWithSource("google", convertedISBN, lang));
     }
 
     // Add Open Library searches
@@ -107,12 +111,12 @@ export const MultiSourceBookService = {
 
     // Race: Return first successful result
     return Promise.race(
-      searches.map(p => 
-        p.then(result => {
+      searches.map((p) =>
+        p.then((result) => {
           if (result) return result;
           return new Promise(() => {}); // Never resolve if null
-        })
-      )
+        }),
+      ),
     ).catch(() => null);
   },
 
@@ -122,7 +126,7 @@ export const MultiSourceBookService = {
    */
   searchByIsbnAll: async (
     isbn: string,
-    lang: string = 'tr'
+    lang: string = "tr",
   ): Promise<BookSearchResult[]> => {
     const normalized = normalizeISBN(isbn);
     const isISBN10 = normalized.length === 10;
@@ -131,11 +135,11 @@ export const MultiSourceBookService = {
       : convertISBN13ToISBN10(normalized);
 
     const searches: Promise<BookSearchResult | null>[] = [
-      searchWithSource('google', normalized, lang),
+      searchWithSource("google", normalized, lang),
     ];
 
     if (convertedISBN) {
-      searches.push(searchWithSource('google', convertedISBN, lang));
+      searches.push(searchWithSource("google", convertedISBN, lang));
     }
 
     searches.push(searchOpenLibrary(normalized));
@@ -146,13 +150,13 @@ export const MultiSourceBookService = {
     // Wait for all, filter out nulls
     const results = await Promise.all(searches);
     return results.filter((r): r is BookSearchResult => r !== null);
-  }
+  },
 };
 
 async function searchWithSource(
-  source: 'google',
+  source: "google",
   isbn: string,
-  lang: string
+  lang: string,
 ): Promise<BookSearchResult | null> {
   const startTime = Date.now();
   try {
@@ -160,8 +164,8 @@ async function searchWithSource(
     if (result) {
       return {
         book: result,
-        source: 'google',
-        searchTime: Date.now() - startTime
+        source: "google",
+        searchTime: Date.now() - startTime,
       };
     }
     return null;
@@ -170,15 +174,17 @@ async function searchWithSource(
   }
 }
 
-async function searchOpenLibrary(isbn: string): Promise<BookSearchResult | null> {
+async function searchOpenLibrary(
+  isbn: string,
+): Promise<BookSearchResult | null> {
   const startTime = Date.now();
   try {
     const result = await OpenLibraryService.searchByIsbn(isbn);
     if (result) {
       return {
         book: OpenLibraryService.toGoogleBookFormat(result),
-        source: 'openlibrary',
-        searchTime: Date.now() - startTime
+        source: "openlibrary",
+        searchTime: Date.now() - startTime,
       };
     }
     return null;
@@ -203,23 +209,26 @@ const handleBarcodeScanned = async (isbn: string) => {
   setIsLoading(true);
   try {
     // Paralel arama yap
-    const result = await MultiSourceBookService.searchByIsbnParallel(isbn, i18n.language?.split('-')[0]);
-    
+    const result = await MultiSourceBookService.searchByIsbnParallel(
+      isbn,
+      i18n.language?.split("-")[0],
+    );
+
     if (result) {
       selectBook(result.book);
-      
+
       // Kaynağı kaydet
       setBookSources([result.source]);
-      
+
       Alert.alert(
-        t('add_book_success'),
-        `${t('add_book_success_msg')} (Kaynak: ${result.source === 'google' ? 'Google Books' : 'Open Library'})`
+        t("add_book_success"),
+        `${t("add_book_success_msg")} (Kaynak: ${result.source === "google" ? "Google Books" : "Open Library"})`,
       );
     } else {
-      Alert.alert(t('add_book_not_found'), t('add_book_not_found_msg'));
+      Alert.alert(t("add_book_not_found"), t("add_book_not_found_msg"));
     }
   } catch {
-    Alert.alert(t('settings_restore_error'), t('settings_restore_error_msg'));
+    Alert.alert(t("settings_restore_error"), t("settings_restore_error_msg"));
   } finally {
     setIsLoading(false);
   }
@@ -243,8 +252,8 @@ Kullanıcı hangi kaynağı tercih ettiğini ayarlarda seçebilir:
 ```tsx
 <View>
   <Text>Bu kitap 2 kaynakta bulundu:</Text>
-  <Button onPress={() => showSource('google')}>Google Books</Button>
-  <Button onPress={() => showSource('openlibrary')}>Open Library</Button>
+  <Button onPress={() => showSource("google")}>Google Books</Button>
+  <Button onPress={() => showSource("openlibrary")}>Open Library</Button>
 </View>
 ```
 
@@ -253,10 +262,10 @@ Kullanıcı hangi kaynağı tercih ettiğini ayarlarda seçebilir:
 Hangi kaynaktan kaç kitap bulunduğunu logla:
 
 ```typescript
-analytics().logEvent('book_found', {
+analytics().logEvent("book_found", {
   source: result.source,
   searchTime: result.searchTime,
-  isbn: isbn
+  isbn: isbn,
 });
 ```
 

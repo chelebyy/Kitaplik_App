@@ -35,7 +35,7 @@ interface BooksContextType {
   updateBookProgress: (
     id: string,
     currentPage: number,
-    pageCount: number
+    pageCount: number,
   ) => void;
   deleteBook: (id: string) => void;
   getBookById: (id: string) => Book | undefined;
@@ -103,7 +103,9 @@ const INITIAL_BOOKS: Book[] = [
   },
 ];
 
-export function BooksProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+export function BooksProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -119,7 +121,7 @@ export function BooksProvider({ children }: Readonly<{ children: React.ReactNode
           setBooks(INITIAL_BOOKS);
           await AsyncStorage.setItem(
             BOOKS_STORAGE_KEY,
-            JSON.stringify(INITIAL_BOOKS)
+            JSON.stringify(INITIAL_BOOKS),
           );
         }
       } catch (error) {
@@ -177,7 +179,7 @@ export function BooksProvider({ children }: Readonly<{ children: React.ReactNode
           return updatedBook;
         }
         return book;
-      })
+      }),
     );
   }, []);
 
@@ -189,7 +191,7 @@ export function BooksProvider({ children }: Readonly<{ children: React.ReactNode
           return { ...book, notes };
         }
         return book;
-      })
+      }),
     );
   }, []);
 
@@ -208,10 +210,10 @@ export function BooksProvider({ children }: Readonly<{ children: React.ReactNode
             };
           }
           return book;
-        })
+        }),
       );
     },
-    []
+    [],
   );
 
   // Kitap silme - useCallback ile memoize edildi
@@ -224,7 +226,7 @@ export function BooksProvider({ children }: Readonly<{ children: React.ReactNode
     (id: string) => {
       return books.find((book) => book.id === id);
     },
-    [books]
+    [books],
   );
 
   // Tüm verileri temizle - useCallback ile memoize edildi
@@ -234,7 +236,7 @@ export function BooksProvider({ children }: Readonly<{ children: React.ReactNode
       setBooks(INITIAL_BOOKS);
       Alert.alert(
         "Başarılı",
-        "Tüm veriler sıfırlandı ve varsayılan kitaplar yüklendi."
+        "Tüm veriler sıfırlandı ve varsayılan kitaplar yüklendi.",
       );
     } catch (error) {
       logError("BooksContext.clearAllData", error);
@@ -249,7 +251,7 @@ export function BooksProvider({ children }: Readonly<{ children: React.ReactNode
       // useEffect will handle saving to AsyncStorage
       Alert.alert(
         "Başarılı",
-        `${restoredBooks.length} kitap başarıyla geri yüklendi.`
+        `${restoredBooks.length} kitap başarıyla geri yüklendi.`,
       );
     } catch (error) {
       logError("BooksContext.restoreBooks", error);
@@ -282,7 +284,7 @@ export function BooksProvider({ children }: Readonly<{ children: React.ReactNode
       getBookById,
       clearAllData,
       restoreBooks,
-    ]
+    ],
   );
 
   return (

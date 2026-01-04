@@ -11,49 +11,49 @@ Bu rapor, projenin mevcut durumunu analiz etmek ve iyileştirme alanlarını bel
 
 **Durum:** Karışık yapı mevcut. Modernizasyon gerekliliği tespit edildi.
 
-* **⚠️ Sorunlar:**
-  * `components/ProfileModal.tsx`, `RecommendationModal.tsx` vb. bileşenlerde eski yöntem `StyleSheet.create` kullanımı devam ediyor.
-  * Projenin "Golden Sample" standardı olan **NativeWind** (`className="..."`) tam olarak kullanılmıyor.
-  * **Accessibility:** Çoğu modal ve interaktif elementte `accessibilityLabel` eksik.
+- **⚠️ Sorunlar:**
+  - `components/ProfileModal.tsx`, `RecommendationModal.tsx` vb. bileşenlerde eski yöntem `StyleSheet.create` kullanımı devam ediyor.
+  - Projenin "Golden Sample" standardı olan **NativeWind** (`className="..."`) tam olarak kullanılmıyor.
+  - **Accessibility:** Çoğu modal ve interaktif elementte `accessibilityLabel` eksik.
 
-* **✅ Aksiyon Planı:**
-  * Mevcut `StyleSheet` kullanan bileşenlerin NativeWind'e dönüştürülmesi.
-  * Erişilebilirlik etiketlerinin eklenmesi.
+- **✅ Aksiyon Planı:**
+  - Mevcut `StyleSheet` kullanan bileşenlerin NativeWind'e dönüştürülmesi.
+  - Erişilebilirlik etiketlerinin eklenmesi.
 
 ## 2. 🛡️ Güvenlik Kontrolü (`/guvenlik-kontrol`)
 
 **Durum:** Genel güvenlik durumu iyi, kritik bir uyarı mevcut değil ancak dikkat edilmesi gereken noktalar var.
 
-* **✅ İyi Uygulamalar:**
-  * `utils/errorUtils.ts`: Production ortamında güvenli hata loglama mekanizması kurulu. Hassas veriler gizleniyor.
-  * `app.json`: İzinler (Kamera vb.) gerekçeleriyle birlikte tanımlanmış.
-  * Kod tabanında hardcoded (gömülü) API key veya şifre bulunamadı.
+- **✅ İyi Uygulamalar:**
+  - `utils/errorUtils.ts`: Production ortamında güvenli hata loglama mekanizması kurulu. Hassas veriler gizleniyor.
+  - `app.json`: İzinler (Kamera vb.) gerekçeleriyle birlikte tanımlanmış.
+  - Kod tabanında hardcoded (gömülü) API key veya şifre bulunamadı.
 
-* **⚠️ İyileştirme Alanları:**
-  * **Veri Saklama:** `AuthContext.tsx` içinde kullanıcı bilgileri (`USER_STORAGE_KEY`) şifrelenmemiş `AsyncStorage`'da tutuluyor. Şu an sadece "Nickname" saklandığı için kritik değil, ancak hassas veri (token, şifre) eklenecekse **SecureStore**'a geçilmeli.
+- **⚠️ İyileştirme Alanları:**
+  - **Veri Saklama:** `AuthContext.tsx` içinde kullanıcı bilgileri (`USER_STORAGE_KEY`) şifrelenmemiş `AsyncStorage`'da tutuluyor. Şu an sadece "Nickname" saklandığı için kritik değil, ancak hassas veri (token, şifre) eklenecekse **SecureStore**'a geçilmeli.
 
 ## 3. ⚡ Hız Testi (`/hiz-testi`)
 
 **Durum:** Performans kabul edilebilir seviyede, optimizasyon fırsatları var.
 
-* **💡 Fırsatlar:**
-  * **Liste Yönetimi:** Standart `FlatList` kullanılıyor. `@shopify/flashlist` kütüphanesine geçiş, özellikle uzun listelerde ve düşük donanımlı Android cihazlarda performansı 5 kata kadar artırabilir.
-  * **Render Yönetimi:** `AuthContext` gibi kritik noktalarda `useMemo` ve `useCallback` doğru kullanılmış, gereksiz renderlar engellenmiş.
+- **💡 Fırsatlar:**
+  - **Liste Yönetimi:** Standart `FlatList` kullanılıyor. `@shopify/flashlist` kütüphanesine geçiş, özellikle uzun listelerde ve düşük donanımlı Android cihazlarda performansı 5 kata kadar artırabilir.
+  - **Render Yönetimi:** `AuthContext` gibi kritik noktalarda `useMemo` ve `useCallback` doğru kullanılmış, gereksiz renderlar engellenmiş.
 
 ## 4. 🧪 Test Durumu (`/test`)
 
 **Durum:** Altyapı kurulu ancak test kapsamı çok düşük.
 
-* **📊 Mevcut Durum:**
-  * `jest` kurulumu ve `jest.setup.js` yapılandırması tamam.
-  * Sadece 2 test dosyası mevcut:
-    * `app/(tabs)/__tests__/settings.test.tsx`
-    * `components/__tests__/BookCard.test.tsx`
+- **📊 Mevcut Durum:**
+  - `jest` kurulumu ve `jest.setup.js` yapılandırması tamam.
+  - Sadece 2 test dosyası mevcut:
+    - `app/(tabs)/__tests__/settings.test.tsx`
+    - `components/__tests__/BookCard.test.tsx`
 
-* **❌ Eksikler:**
-  * Ana servisler (`SearchEngine`, `PriceService`) tamamen test edilmemiş durumda.
-  * Projenin en kritik özelliği olan "Kitap Ekleme" akışı test edilmemiş.
-  * Genel test coverage (kapsama oranı) %5'in altında.
+- **❌ Eksikler:**
+  - Ana servisler (`SearchEngine`, `PriceService`) tamamen test edilmemiş durumda.
+  - Projenin en kritik özelliği olan "Kitap Ekleme" akışı test edilmemiş.
+  - Genel test coverage (kapsama oranı) %5'in altında.
 
 ---
 

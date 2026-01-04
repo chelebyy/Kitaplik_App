@@ -15,20 +15,41 @@ interface CreditsContextType {
   credits: number;
   addCredits: (amount: number) => Promise<void>;
   spendCredits: (amount: number) => Promise<boolean>;
+  claimDailyCredit: () => Promise<boolean>;
+  hasDailyCreditAvailable: boolean;
   isLoading: boolean;
 }
 
 const CreditsContext = createContext<CreditsContextType | undefined>(undefined);
 
-const CREDITS_STORAGE_KEY = "user_credits_v2"; // Changed key for migration
+const CREDITS_STORAGE_KEY = "user_credits_v2";
+const LAST_DAILY_CLAIM_KEY = "last_daily_claim_date";
 
-export function CreditsProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+// Bugünün tarihini YYYY-MM-DD formatında al
+const getTodayString = (): string => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
+
+export function CreditsProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [credits, setCredits] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastDailyClaimDate, setLastDailyClaimDate] = useState<string | null>(
+    null,
+  );
 
-  // Load credits on mount
+  // Günlük kredi alınabilir mi?
+  const hasDailyCreditAvailable = useMemo(() => {
+    if (!lastDailyClaimDate) return true;
+    return lastDailyClaimDate !== getTodayString();
+  }, [lastDailyClaimDate]);
+
+  // Load credits and last claim date on mount
   useEffect(() => {
     loadCredits();
+    loadLastClaimDate();
   }, []);
 
   const loadCredits = async () => {
@@ -50,6 +71,20 @@ export function CreditsProvider({ children }: Readonly<{ children: React.ReactNo
     }
   };
 
+  const loadLastClaimDate = async () => {
+    try {
+      let storedDate: string | null = null;
+      if (Platform.OS === "web") {
+        storedDate = await AsyncStorage.getItem(LAST_DAILY_CLAIM_KEY);
+      } else {
+        storedDate = await SecureStore.getItemAsync(LAST_DAILY_CLAIM_KEY);
+      }
+      setLastDailyClaimDate(storedDate);
+    } catch (error) {
+      logError("CreditsContext.loadLastClaimDate", error);
+    }
+  };
+
   const saveCredits = async (newCredits: number) => {
     try {
       if (Platform.OS === "web") {
@@ -57,7 +92,7 @@ export function CreditsProvider({ children }: Readonly<{ children: React.ReactNo
       } else {
         await SecureStore.setItemAsync(
           CREDITS_STORAGE_KEY,
-          newCredits.toString()
+          newCredits.toString(),
         );
       }
     } catch (error) {
@@ -65,40 +100,82 @@ export function CreditsProvider({ children }: Readonly<{ children: React.ReactNo
     }
   };
 
-  // Kredi ekleme fonksiyonu - useCallback ile memoize edildi
+  const saveLastClaimDate = async (date: string) => {
+    try {
+      if (Platform.OS === "web") {
+        await AsyncStorage.setItem(LAST_DAILY_CLAIM_KEY, date);
+      } else {
+        await SecureStore.setItemAsync(LAST_DAILY_CLAIM_KEY, date);
+      }
+      setLastDailyClaimDate(date);
+    } catch (error) {
+      logError("CreditsContext.saveLastClaimDate", error);
+    }
+  };
+
+  // Kredi ekleme fonksiyonu
   const addCredits = useCallback(async (amount: number) => {
     setCredits((prev) => {
       const newValue = prev + amount;
-      saveCredits(newValue);
+      void saveCredits(newValue);
       return newValue;
     });
   }, []);
 
-  // Kredi harcama fonksiyonu - useCallback ile memoize edildi
+  // Kredi harcama fonksiyonu
   const spendCredits = useCallback(
     async (amount: number): Promise<boolean> => {
       if (credits >= amount) {
         setCredits((prev) => {
           const newValue = prev - amount;
-          saveCredits(newValue);
+          void saveCredits(newValue);
           return newValue;
         });
         return true;
       }
       return false;
     },
-    [credits]
+    [credits],
   );
 
-  // Context value - useMemo ile memoize edildi (S6481 düzeltmesi)
+  // Günlük kredi alma fonksiyonu
+  const claimDailyCredit = useCallback(async (): Promise<boolean> => {
+    const today = getTodayString();
+
+    // Bugün zaten alınmış mı kontrol et
+    if (lastDailyClaimDate === today) {
+      return false; // Zaten alınmış
+    }
+
+    // Kredi ekle ve tarihi kaydet
+    setCredits((prev) => {
+      const newValue = prev + 1;
+      void saveCredits(newValue);
+      return newValue;
+    });
+
+    await saveLastClaimDate(today);
+    return true; // Başarılı
+  }, [lastDailyClaimDate]);
+
+  // Context value
   const contextValue = useMemo<CreditsContextType>(
     () => ({
       credits,
       addCredits,
       spendCredits,
+      claimDailyCredit,
+      hasDailyCreditAvailable,
       isLoading,
     }),
-    [credits, addCredits, spendCredits, isLoading]
+    [
+      credits,
+      addCredits,
+      spendCredits,
+      claimDailyCredit,
+      hasDailyCreditAvailable,
+      isLoading,
+    ],
   );
 
   return (

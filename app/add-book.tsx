@@ -9,9 +9,9 @@ import {
   KeyboardAvoidingView,
   Alert,
   ActivityIndicator,
-  Image,
   ActionSheetIOS,
 } from "react-native";
+import { Image } from "expo-image";
 import { FlashList } from "@shopify/flash-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -36,9 +36,9 @@ type InputMode = "manual" | "search";
 // Helper function to get translation key for status (reduces cognitive complexity)
 const getStatusTranslationKey = (status: BookStatus): string => {
   const keys: Record<BookStatus, string> = {
-    "Okundu": "read",
-    "Okunuyor": "reading",
-    "Okunacak": "to_read",
+    Okundu: "read",
+    Okunuyor: "reading",
+    Okunacak: "to_read",
   };
   return keys[status];
 };
@@ -157,7 +157,7 @@ export default function AddBookScreen() {
       const items = await SearchEngine.search(
         isbn,
         i18n.language?.split("-")[0],
-        "book"
+        "book",
       );
 
       if (items.length > 0) {
@@ -270,14 +270,18 @@ export default function AddBookScreen() {
           }}
           className="flex-1 py-3 px-4 rounded-lg items-center justify-center transition-all bg-transparent"
           style={{
-            backgroundColor: searchType === "book" ? colors.primary : "transparent",
+            backgroundColor:
+              searchType === "book" ? colors.primary : "transparent",
           }}
         >
           <Text
             className="text-sm font-semibold"
             style={{
               color: searchType === "book" ? "#FFFFFF" : colors.text,
-              fontFamily: searchType === "book" ? "Inter_600SemiBold" : "Inter_400Regular",
+              fontFamily:
+                searchType === "book"
+                  ? "Inter_600SemiBold"
+                  : "Inter_400Regular",
             }}
           >
             📚 {t("add_book_search_books")}
@@ -292,14 +296,18 @@ export default function AddBookScreen() {
           }}
           className="flex-1 py-3 px-4 rounded-lg items-center justify-center transition-all bg-transparent"
           style={{
-            backgroundColor: searchType === "author" ? colors.primary : "transparent",
+            backgroundColor:
+              searchType === "author" ? colors.primary : "transparent",
           }}
         >
           <Text
             className="text-sm font-semibold"
             style={{
               color: searchType === "author" ? "#FFFFFF" : colors.text,
-              fontFamily: searchType === "author" ? "Inter_600SemiBold" : "Inter_400Regular",
+              fontFamily:
+                searchType === "author"
+                  ? "Inter_600SemiBold"
+                  : "Inter_400Regular",
             }}
           >
             👤 {t("add_book_search_authors")}
@@ -324,10 +332,7 @@ export default function AddBookScreen() {
           returnKeyType="search"
           onSubmitEditing={searchGoogleBooks}
         />
-        <TouchableOpacity
-          onPress={searchGoogleBooks}
-          className="px-2 py-1"
-        >
+        <TouchableOpacity onPress={searchGoogleBooks} className="px-2 py-1">
           <Search size={20} color={colors.primary} />
         </TouchableOpacity>
       </View>
@@ -337,7 +342,10 @@ export default function AddBookScreen() {
           <ActivityIndicator size="large" color={colors.primary} />
           <Text
             className="mt-3 font-medium text-sm"
-            style={{ color: colors.textSecondary, fontFamily: "Inter_500Medium" }}
+            style={{
+              color: colors.textSecondary,
+              fontFamily: "Inter_500Medium",
+            }}
           >
             {t("add_book_searching")}
           </Text>
@@ -348,13 +356,25 @@ export default function AddBookScreen() {
           // @ts-ignore
           estimatedItemSize={100}
           keyExtractor={(item) => item.id}
+          // @ts-ignore - FlashList getItemLayout for performance
+          getItemLayout={(
+            _data: ArrayLike<GoogleBookResult> | null | undefined,
+            index: number,
+          ) => ({
+            length: 100,
+            offset: 100 * index,
+            index,
+          })}
           contentContainerStyle={{ paddingBottom: 24 }}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             searchResults.length === 0 && searchQuery ? (
               <Text
                 className="text-center mt-6 font-regular"
-                style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
+                style={{
+                  color: colors.textSecondary,
+                  fontFamily: "Inter_400Regular",
+                }}
               >
                 {t("add_book_no_results")}
               </Text>
@@ -367,27 +387,33 @@ export default function AddBookScreen() {
               onPress={() => selectBook(item)}
             >
               <Image
-                source={{
-                  uri:
-                    item.volumeInfo.imageLinks?.thumbnail?.replace(
-                      "http://",
-                      "https://",
-                    ) || "https://placehold.co/100x150/png",
-                }}
+                source={
+                  item.volumeInfo.imageLinks?.thumbnail?.replace(
+                    "http://",
+                    "https://",
+                  ) || "https://placehold.co/100x150/png"
+                }
                 className="w-[50px] h-[75px] rounded mr-3 bg-[#E0E0E0]"
-                resizeMode="cover"
+                contentFit="cover"
+                transition={200}
               />
               <View className="flex-1 mr-2">
                 <Text
                   className="font-semibold text-[15px] mb-1 leading-5"
-                  style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+                  style={{
+                    color: colors.text,
+                    fontFamily: "Inter_600SemiBold",
+                  }}
                   numberOfLines={2}
                 >
                   {item.volumeInfo.title || t("add_book_book_name_placeholder")}
                 </Text>
                 <Text
                   className="font-regular text-[13px] mb-1.5"
-                  style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
+                  style={{
+                    color: colors.textSecondary,
+                    fontFamily: "Inter_400Regular",
+                  }}
                   numberOfLines={1}
                 >
                   {item.volumeInfo.authors?.join(", ") ||
@@ -401,7 +427,10 @@ export default function AddBookScreen() {
                     >
                       <Text
                         className="text-[10px] font-medium"
-                        style={{ color: colors.textSecondary, fontFamily: "Inter_500Medium" }}
+                        style={{
+                          color: colors.textSecondary,
+                          fontFamily: "Inter_500Medium",
+                        }}
                       >
                         {item.volumeInfo.categories[0]}
                       </Text>
@@ -410,7 +439,10 @@ export default function AddBookScreen() {
                 {item.volumeInfo.pageCount ? (
                   <Text
                     className="text-xs font-regular mt-1"
-                    style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
+                    style={{
+                      color: colors.textSecondary,
+                      fontFamily: "Inter_400Regular",
+                    }}
                   >
                     {item.volumeInfo.pageCount} {t("book_detail_pages")}
                   </Text>
@@ -468,9 +500,10 @@ export default function AddBookScreen() {
         {coverUrl ? (
           <View className="w-full items-center">
             <Image
-              source={{ uri: coverUrl }}
+              source={coverUrl}
               className="w-[120px] h-[180px] rounded-lg mb-3"
-              resizeMode="contain"
+              contentFit="contain"
+              transition={200}
             />
             <TouchableOpacity
               className="px-3 py-1.5 rounded-xl bg-black/60"
@@ -500,7 +533,10 @@ export default function AddBookScreen() {
             </Text>
             <Text
               className="font-regular text-sm mb-4"
-              style={{ color: colors.textSecondary, fontFamily: "Inter_400Regular" }}
+              style={{
+                color: colors.textSecondary,
+                fontFamily: "Inter_400Regular",
+              }}
             >
               {t("add_book_add_cover")}
             </Text>
@@ -690,10 +726,7 @@ export default function AddBookScreen() {
         className="flex-row items-center justify-between px-6 py-4"
         style={{ backgroundColor: colors.background }}
       >
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="p-1 -ml-1"
-        >
+        <TouchableOpacity onPress={() => router.back()} className="p-1 -ml-1">
           <ArrowLeft size={24} color={colors.text} />
         </TouchableOpacity>
         <Text
@@ -715,12 +748,12 @@ export default function AddBookScreen() {
             style={
               mode === "manual"
                 ? {
-                  backgroundColor: colors.card,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 2,
-                  elevation: 2,
-                }
+                    backgroundColor: colors.card,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowRadius: 2,
+                    elevation: 2,
+                  }
                 : {}
             }
             onPress={() => setMode("manual")}
@@ -745,12 +778,12 @@ export default function AddBookScreen() {
             style={
               mode === "search"
                 ? {
-                  backgroundColor: colors.card,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 2,
-                  elevation: 2,
-                }
+                    backgroundColor: colors.card,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowRadius: 2,
+                    elevation: 2,
+                  }
                 : {}
             }
             onPress={() => setMode("search")}
