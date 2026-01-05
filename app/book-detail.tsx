@@ -28,6 +28,8 @@ const getStatusTranslationKey = (status: BookStatus): string => {
   return keys[status];
 };
 
+import { BookNotes } from "../components/BookNotes";
+
 export default function BookDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
@@ -50,7 +52,7 @@ export default function BookDetailScreen() {
   const [notes, setNotes] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const [isPriceModalVisible, setPriceModalVisible] = useState(false);
+  const [isPriceModalVisible, setPriceModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (book) {
@@ -386,32 +388,7 @@ export default function BookDetailScreen() {
             </View>
           </View>
 
-          <View className="mb-6">
-            <Text
-              className="text-base font-bold mb-3"
-              style={{
-                fontFamily: "Inter_700Bold",
-                color: colors.sectionHeader,
-              }}
-            >
-              {t("book_detail_notes")}
-            </Text>
-            <View
-              className="rounded-2xl p-4 min-h-[150px]"
-              style={{ backgroundColor: colors.noteBackground }}
-            >
-              <TextInput
-                className="text-[15px] h-full leading-6"
-                style={{ fontFamily: "Inter_400Regular", color: colors.text }}
-                placeholder={t("book_detail_notes_placeholder")}
-                placeholderTextColor={colors.placeholder}
-                multiline
-                textAlignVertical="top"
-                value={notes}
-                onChangeText={handleNotesChange}
-              />
-            </View>
-          </View>
+          <BookNotes notes={notes} onNotesChange={handleNotesChange} />
 
           <View className="h-10" />
         </ScrollView>
