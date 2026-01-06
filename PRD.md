@@ -1,16 +1,18 @@
 # Kitaplik_App - Ürün Gereksinim Dokümanı (PRD)
 
 > **Durum:** Canlı / Geriye Dönük Mühendislik ile Oluşturuldu
-> **Tarih:** 14 Aralık 2025
-> **Versiyon:** 1.1
+> **Tarih:** Ocak 2026
+> **Versiyon:** 1.2
 
 ## 1. Ürün Özeti
 
 **Kitaplik_App**, kitap severlerin fiziksel veya dijital kütüphanelerini mobil cihazları üzerinden kolayca yönetmelerini sağlayan, kullanıcı dostu ve **çevrimdışı öncelikli (offline-first)** bir mobil uygulamadır. Kullanıcılar kitaplarını kaydedebilir, okuma durumlarını (okunacak, okunuyor, okundu) takip edebilir ve kitap satın alımları için popüler mağazalara hızlı erişim sağlayabilir. Uygulama, modern bir arayüz ve akıcı bir kullanıcı deneyimi sunar.
 
-## 2. Teknik Mimari ve Kısıtlar
+## 2. Teknik Mimari ve Standartlar
 
 Uygulama, sunucu maliyetlerini ortadan kaldıran ve maksimum gizlilik sağlayan "Sunucusuz" (Serverless) ve "Yerel Veri" (Local Storage) mimarisi üzerine inşa edilmiştir.
+
+### 2.1. Temel Stack
 
 - **Platform:** React Native (Expo Managed Workflow SDK 52+)
 - **Programlama Dili:** TypeScript
@@ -18,10 +20,19 @@ Uygulama, sunucu maliyetlerini ortadan kaldıran ve maksimum gizlilik sağlayan 
 - **Navigasyon:** Expo Router (Dosya tabanlı yönlendirme).
 - **Global Durum Yönetimi:** React Context API (`AuthContext`, `BooksContext`, `ThemeContext`, `CreditsContext`).
 - **UI Framework:** NativeWind (Tailwind CSS) & Lucide Icons.
-- **Dış Servisler:**
-  - **Google Books API:** Kitap meta verilerini (kapak, yazar, özet) çekmek için.
-  - **Expo Camera:** ISBN (EAN-13) barkod taraması için.
-  - **AdMob:** Ödüllü reklamlar (Rewarded Ads) üzerinden kredi kazanımı için.
+
+### 2.2. Dış Servisler
+
+- **Google Books API:** Birincil kitap veri kaynağı.
+- **Open Library API:** Tamamlayıcı kitap veri kaynağı (Hybrid Search).
+- **Expo Camera:** ISBN (EAN-13) barkod taraması için.
+- **AdMob:** Ödüllü reklamlar (Rewarded Ads) üzerinden kredi kazanımı için.
+
+### 2.3. Kalite ve Test Standartları
+
+- **Test:** Jest ile Unit Test zorunluluğu (TDD prensipleri).
+- **Kod Analizi:** SonarQube ile sürekli denetim (Quality Gate).
+- **Stil:** NativeWind (Tailwind) ile tutarlı UI/UX.
 
 ## 3. Temel Özellikler ve Modüller
 
@@ -36,7 +47,7 @@ Uygulama, sunucu maliyetlerini ortadan kaldıran ve maksimum gizlilik sağlayan 
 Kullanıcılar kütüphanelerine 3 yöntemle kitap ekleyebilir:
 
 1. **Barkod Tarama:** Kamera ile ISBN taranarak Google Books verisi otomatik çekilir.
-2. **Akıllı Arama:** Kitap/Yazar adı ile arama yapılır.
+2. **Hybrid Akıllı Arama:** Kitap/Yazar adı ile yapılan aramalarda **Google Books** ve **Open Library** sonuçları birleştirilir, puanlanır ve en alakalı sonuçlar sunulur.
 3. **Manuel Giriş:** Özel basımlar için elle veri girişi.
 
 ### 3.3. Okuma Takibi ve İstatistikler

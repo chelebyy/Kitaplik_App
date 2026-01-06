@@ -9,6 +9,8 @@ import React, {
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logError } from "../utils/errorUtils";
+import i18n from "../i18n/i18n";
+import { sendBookCompletionNotification } from "../services/NotificationService";
 
 export type BookStatus = "Okunacak" | "Okunuyor" | "Okundu";
 
@@ -29,7 +31,7 @@ export interface Book {
 interface BooksContextType {
   books: Book[];
   isLoading: boolean;
-  addBook: (book: Omit<Book, "id" | "addedAt">) => void;
+  addBook: (book: Omit<Book, "id" | "addedAt">) => boolean;
   updateBookStatus: (id: string, status: BookStatus) => void;
   updateBookNotes: (id: string, notes: string) => void;
   updateBookProgress: (
@@ -153,35 +155,84 @@ export function BooksProvider({
   }, [books, isLoading]);
 
   // Kitap ekleme - useCallback ile memoize edildi
-  const addBook = useCallback((newBookData: Omit<Book, "id" | "addedAt">) => {
-    const newBook: Book = {
-      id: Date.now().toString(),
-      addedAt: Date.now(),
-      ...newBookData,
-    };
-    setBooks((prev) => [newBook, ...prev]);
-  }, []);
+  const addBook = useCallback(
+    (newBookData: Omit<Book, "id" | "addedAt">): boolean => {
+      // Duplicate kontrolü: title + author kombinasyonu
+      const normalizedTitle = newBookData.title.trim().toLowerCase();
+      const normalizedAuthor = newBookData.author.trim().toLowerCase();
+
+      const isDuplicate = books.some(
+        (book) =>
+          book.title.trim().toLowerCase() === normalizedTitle &&
+          book.author.trim().toLowerCase() === normalizedAuthor,
+      );
+
+      if (isDuplicate) {
+        Alert.alert(
+          i18n.t("duplicate_book_title"),
+          i18n.t("duplicate_book_message"),
+        );
+        return false;
+      }
+
+      const newBook: Book = {
+        id: Date.now().toString(),
+        addedAt: Date.now(),
+        ...newBookData,
+      };
+      setBooks((prev) => [newBook, ...prev]);
+      return true;
+    },
+    [books],
+  );
 
   // Kitap durumu güncelleme - useCallback ile memoize edildi
-  const updateBookStatus = useCallback((id: string, status: BookStatus) => {
-    setBooks((prev) =>
-      prev.map((book) => {
-        if (book.id === id) {
-          const updatedBook = { ...book, status };
-          // Status değiştiğinde progress güncelleme mantığı
-          if (status === "Okundu") {
-            updatedBook.progress = 1;
-            updatedBook.currentPage = book.pageCount || book.currentPage;
-          } else if (status === "Okunacak") {
-            updatedBook.progress = 0;
-            updatedBook.currentPage = 0;
+  const updateBookStatus = useCallback(
+    (id: string, status: BookStatus) => {
+      // Önceki durumu bul (bildirim kararı için)
+      const previousBook = books.find((b) => b.id === id);
+      const wasNotCompleted = previousBook?.status !== "Okundu";
+
+      setBooks((prev) =>
+        prev.map((book) => {
+          if (book.id === id) {
+            const updatedBook = { ...book, status };
+            // Status değiştiğinde progress güncelleme mantığı
+            if (status === "Okundu") {
+              updatedBook.progress = 1;
+              updatedBook.currentPage = book.pageCount || book.currentPage;
+            } else if (status === "Okunacak") {
+              updatedBook.progress = 0;
+              updatedBook.currentPage = 0;
+            }
+            return updatedBook;
           }
-          return updatedBook;
+          return book;
+        }),
+      );
+
+      // Kitap yeni tamamlandıysa bildirim gönder
+      if (status === "Okundu" && wasNotCompleted && previousBook) {
+        void triggerBookCompletionNotification(previousBook.title);
+      }
+    },
+    [books],
+  );
+
+  // Kitap bitirme bildirimi tetikleyici (ayar kontrolü dahil)
+  const triggerBookCompletionNotification = async (bookTitle: string) => {
+    try {
+      const settingsStr = await AsyncStorage.getItem("notification_settings_v1");
+      if (settingsStr) {
+        const settings = JSON.parse(settingsStr);
+        if (settings.bookCompletionCelebration) {
+          await sendBookCompletionNotification(bookTitle);
         }
-        return book;
-      }),
-    );
-  }, []);
+      }
+    } catch {
+      // Bildirim gönderilemezse sessizce devam et
+    }
+  };
 
   // Kitap notları güncelleme - useCallback ile memoize edildi
   const updateBookNotes = useCallback((id: string, notes: string) => {

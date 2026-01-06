@@ -57,6 +57,7 @@ describe("SearchEngine 🦁", () => {
           title: "Nutuk",
           language: "tr",
           imageLinks: { thumbnail: "img" },
+          industryIdentifiers: [{ type: "ISBN_13", identifier: "9781" }],
         },
       }; // +20 cover, +30 title, +15 lang = 65
 
@@ -66,17 +67,26 @@ describe("SearchEngine 🦁", () => {
           title: "Nutuk",
           language: "en",
           imageLinks: { thumbnail: "img" },
+          industryIdentifiers: [{ type: "ISBN_13", identifier: "9782" }],
         },
       }; // +20 cover, +30 title, +0 lang = 50
 
       const bookNoCover = {
         id: "3",
-        volumeInfo: { title: "Nutuk", language: "tr" },
+        volumeInfo: {
+          title: "Nutuk",
+          language: "tr",
+          industryIdentifiers: [{ type: "ISBN_13", identifier: "9783" }],
+        },
       }; // +0 cover, +30 title, +15 lang = 45
 
       const bookVague = {
         id: "4",
-        volumeInfo: { title: "Nutuk Analizi", language: "tr" }, // Removed image to lower score
+        volumeInfo: {
+          title: "Nutuk Analizi",
+          language: "tr",
+          industryIdentifiers: [{ type: "ISBN_13", identifier: "9784" }],
+        }, // Removed image to lower score
       }; // +0 cover, +15 title (partial), +15 lang = 30
 
       // Return them in shuffled order

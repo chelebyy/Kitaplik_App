@@ -17,7 +17,7 @@ describe("GoogleBooksService Integration Test", () => {
       {
         id: "2",
         volumeInfo: {
-          title: "İkinci Kitap",
+          title: "Test Kitabı 2",
           authors: ["Yazar 2"],
         },
       },
@@ -37,7 +37,7 @@ describe("GoogleBooksService Integration Test", () => {
     const result = await GoogleBooksService.searchBooks("test");
 
     expect(fetchWithTimeout).toHaveBeenCalledWith(
-      expect.stringContaining("q=test"),
+      expect.stringContaining("intitle%3Atest"),
     );
     expect(result).toHaveLength(2);
     expect(result[0].volumeInfo.title).toBe("Test Kitabı");

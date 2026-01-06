@@ -38,22 +38,24 @@ describe("NotificationContext", () => {
   });
 
   describe("default settings", () => {
-    it("should have all notifications enabled by default", async () => {
+    it("should have optimized default notifications", async () => {
       const { result } = renderHook(() => useNotifications(), { wrapper });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      // Tüm bildirimler varsayılan olarak açık olmalı
+      // Açık olması gereken bildirimler (günde max 1 bildirim prensibine uygun)
       expect(result.current.settings.dailyReadingReminder).toBe(true);
       expect(result.current.settings.inactiveUserAlert).toBe(true);
       expect(result.current.settings.readingProgressAlert).toBe(true);
-      expect(result.current.settings.dailyCreditReminder).toBe(true);
-      expect(result.current.settings.weeklyToReadSummary).toBe(true);
       expect(result.current.settings.bookCompletionCelebration).toBe(true);
       expect(result.current.settings.yearEndSummary).toBe(true);
-      expect(result.current.settings.magicRecommendationAlert).toBe(true);
+
+      // Kapalı olması gereken bildirimler (spam önleme)
+      expect(result.current.settings.dailyCreditReminder).toBe(false);
+      expect(result.current.settings.weeklyToReadSummary).toBe(false);
+      expect(result.current.settings.magicRecommendationAlert).toBe(false);
     });
 
     it("should have default reminder time as 20:00", async () => {

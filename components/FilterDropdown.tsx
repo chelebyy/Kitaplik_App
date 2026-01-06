@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, memo } from "react";
 import {
   Text,
   View,
@@ -19,7 +19,7 @@ interface FilterDropdownProps {
   onValueChange: (value: string) => void;
 }
 
-export default function FilterDropdown({
+function FilterDropdown({
   label,
   items,
   selectedValue,
@@ -29,10 +29,14 @@ export default function FilterDropdown({
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
-  const handleSelect = (item: string) => {
-    onValueChange(item);
-    setVisible(false);
-  };
+  // Optimized with useCallback to prevent unnecessary re-renders
+  const handleSelect = useCallback(
+    (item: string) => {
+      onValueChange(item);
+      setVisible(false);
+    },
+    [onValueChange],
+  );
 
   return (
     <>
@@ -126,15 +130,15 @@ export default function FilterDropdown({
               data={items}
               keyExtractor={(item) => item}
               contentContainerStyle={{ paddingVertical: 8 }}
-              renderItem={({ item }) => {
-                const isSelected = item === selectedValue;
+              renderItem={({ item: listItem }) => {
+                const isSelected = listItem === selectedValue;
                 return (
                   <TouchableOpacity
                     className={cn(
                       "flex-row justify-between items-center py-3.5 px-5",
                       isSelected && (isDarkMode ? "bg-[#333]" : "bg-[#F0F9F0]"),
                     )}
-                    onPress={() => handleSelect(item)}
+                    onPress={() => handleSelect(listItem)}
                   >
                     <Text
                       className={cn(
@@ -149,7 +153,7 @@ export default function FilterDropdown({
                         color: isSelected ? colors.primary : colors.text,
                       }}
                     >
-                      {item}
+                      {listItem}
                     </Text>
                     {isSelected && <Check size={18} color={colors.primary} />}
                   </TouchableOpacity>
@@ -162,3 +166,5 @@ export default function FilterDropdown({
     </>
   );
 }
+
+export default memo(FilterDropdown);

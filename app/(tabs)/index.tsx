@@ -43,8 +43,9 @@ export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [isRecommendationModalVisible, setRecommendationModalVisible] =
-    useState(false);
-  const [isProfileModalVisible, setProfileModalVisible] = useState(false);
+    useState<boolean>(false);
+  const [isProfileModalVisible, setProfileModalVisible] =
+    useState<boolean>(false);
 
   // Helper function to get localized filter title (reduces cognitive complexity)
   const getFilterTitle = (filter: string): string => {
@@ -96,236 +97,221 @@ export default function HomeScreen() {
     [router],
   );
 
-  const renderHeader = () => (
-    <View className="mb-2">
-      {/* Top Bar */}
-      <View className="flex-row justify-between items-center px-5 py-4">
-        <View className="flex-row items-center flex-1">
-          <View
-            className="w-11 h-11 rounded-xl items-center justify-center mr-3 border-[1.5px]"
+  // Optimized renderItem with useCallback to prevent unnecessary re-renders
+  const renderBookItem = React.useCallback(
+    ({ item }: { item: Book }) => (
+      <View
+        style={{
+          width: viewMode === "grid" ? COLUMN_WIDTH : "100%",
+          paddingHorizontal: viewMode === "list" ? 24 : 0,
+        }}
+      >
+        <BookCard book={item} variant={viewMode} onPressId={handleBookPress} />
+      </View>
+    ),
+    [viewMode, COLUMN_WIDTH, handleBookPress],
+  );
+
+  // Helper: Top Bar with logo, user greeting, and action buttons
+  const renderTopBar = () => (
+    <View className="flex-row justify-between items-center px-5 py-4">
+      <View className="flex-row items-center flex-1">
+        <View
+          className="w-11 h-11 rounded-xl items-center justify-center mr-3 border-[1.5px]"
+          style={{
+            backgroundColor: colors.primary + "15",
+            borderColor: isDarkMode ? colors.primary : "#334155",
+          }}
+        >
+          <Image
+            source={require("../../assets/images/logo.png")}
+            style={{ width: 28, height: 28 }}
+            contentFit="contain"
+          />
+        </View>
+        <View>
+          <Text
+            className="text-[13px] font-medium"
             style={{
-              backgroundColor: colors.primary + "15",
-              borderColor: isDarkMode ? colors.primary : "#334155",
+              color: colors.textSecondary,
+              fontFamily: "Inter_500Medium",
             }}
           >
-            <Image
-              source={require("../../assets/images/logo.png")}
-              style={{ width: 28, height: 28 }}
-              contentFit="contain"
-            />
-          </View>
-          <View>
-            <Text
-              className="text-[13px] font-medium"
-              style={{
-                color: colors.textSecondary,
-                fontFamily: "Inter_500Medium",
-              }}
-            >
-              {t("hello")},
-            </Text>
-            <Text
-              className="text-2xl font-bold tracking-tighter"
-              style={{
-                color: colors.text,
-                fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
-              }}
-              numberOfLines={1}
-            >
-              {user?.displayName || t("book_lover")}
-            </Text>
-          </View>
-        </View>
-
-        <View className="flex-row gap-3">
-          {/* Profil Butonu */}
-          <TouchableOpacity
-            onPress={() => setProfileModalVisible(true)}
-            className="w-10 h-10 rounded-full justify-center items-center border"
-            style={{ backgroundColor: colors.card, borderColor: colors.border }}
-            activeOpacity={0.7}
+            {t("hello")},
+          </Text>
+          <Text
+            className="text-2xl font-bold tracking-tighter"
+            style={{
+              color: colors.text,
+              fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+            }}
+            numberOfLines={1}
           >
-            <User size={20} color={colors.text} />
-          </TouchableOpacity>
-
-          {/* Öneri Butonu */}
-          <TouchableOpacity
-            onPress={() => setRecommendationModalVisible(true)}
-            className="w-10 h-10 rounded-full justify-center items-center border"
-            style={{ backgroundColor: colors.card, borderColor: colors.border }}
-            activeOpacity={0.7}
-          >
-            <Sparkles size={20} color="#F79009" />
-          </TouchableOpacity>
-
-          {/* Karanlık Mod Toggle Butonu */}
-          <TouchableOpacity
-            onPress={toggleTheme}
-            className="w-10 h-10 rounded-full justify-center items-center border"
-            style={{ backgroundColor: colors.card, borderColor: colors.border }}
-            activeOpacity={0.7}
-          >
-            {isDarkMode ? (
-              <Sun size={22} color={colors.text} />
-            ) : (
-              <Moon size={22} color={colors.text} />
-            )}
-          </TouchableOpacity>
+            {user?.displayName || t("book_lover")}
+          </Text>
         </View>
       </View>
 
-      {/* Search Bar */}
-      <View className="px-5 mb-5">
-        <View
-          className="flex-row items-center rounded-xl px-4 h-12"
-          style={{ backgroundColor: isDarkMode ? colors.card : "#E4E7EC" }}
-        >
-          <Search
-            size={20}
-            color={colors.placeholder}
-            style={{ marginRight: 12 }}
-          />
-          <TextInput
-            placeholder={t("search_placeholder")}
-            placeholderTextColor={colors.placeholder}
-            className="flex-1 h-full text-[15px] font-regular"
-            style={{ color: colors.text, fontFamily: "Inter_400Regular" }}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
-      </View>
-
-      {/* Summary Card (Interactive Filters) */}
-      <View className="px-5 mb-5 shadow-sm">
-        <LinearGradient
-          colors={isDarkMode ? ["#1E293B", "#27221F"] : ["#FFFFFF", "#FFF7ED"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{
-            borderRadius: 16,
-            padding: 16,
-            borderWidth: 1,
-            borderColor: colors.border,
-          }}
-        >
-          <View className="flex-row justify-between">
-            <TouchableOpacity
-              className="flex-1 items-center"
-              style={{ opacity: activeFilter === "Tümü" ? 1 : 0.5 }}
-              onPress={() => setActiveFilter("Tümü")}
-            >
-              <Text
-                className="text-[11px] mb-1.5 text-center"
-                style={{
-                  color: "#667085",
-                  fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
-                }}
-              >
-                {t("all_books")}
-              </Text>
-              <Text
-                className="text-xl font-bold text-center"
-                style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
-              >
-                {stats.totalBooks}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="flex-1 items-center"
-              style={{ opacity: activeFilter === "Okundu" ? 1 : 0.5 }}
-              onPress={() => setActiveFilter("Okundu")}
-            >
-              <Text
-                className="text-[11px] mb-1.5 text-center"
-                style={{
-                  color: "#667085",
-                  fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
-                }}
-              >
-                {t("read")}
-              </Text>
-              <Text
-                className="text-xl font-bold text-center"
-                style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
-              >
-                {stats.readBooks}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="flex-1 items-center"
-              style={{ opacity: activeFilter === "Okunuyor" ? 1 : 0.5 }}
-              onPress={() => setActiveFilter("Okunuyor")}
-            >
-              <Text
-                className="text-[11px] mb-1.5 text-center"
-                style={{
-                  color: "#667085",
-                  fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
-                }}
-              >
-                {t("reading")}
-              </Text>
-              <Text
-                className="text-xl font-bold text-center"
-                style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
-              >
-                {stats.readingBooks}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="flex-1 items-center"
-              style={{ opacity: activeFilter === "Okunacak" ? 1 : 0.5 }}
-              onPress={() => setActiveFilter("Okunacak")}
-            >
-              <Text
-                className="text-[11px] mb-1.5 text-center"
-                style={{
-                  color: "#667085",
-                  fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
-                }}
-              >
-                {t("to_read")}
-              </Text>
-              <Text
-                className="text-xl font-bold text-center"
-                style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
-              >
-                {stats.toReadBooks}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </LinearGradient>
-      </View>
-
-      {/* Section Header */}
-      <View className="flex-row justify-between items-center px-5 mb-4">
-        <Text
-          className="text-lg font-bold tracking-tighter"
-          style={{
-            color: colors.text,
-            fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
-          }}
-        >
-          {getFilterTitle(activeFilter)}
-        </Text>
+      <View className="flex-row gap-3">
         <TouchableOpacity
-          onPress={() =>
-            setViewMode((prev) => (prev === "grid" ? "list" : "grid"))
-          }
-          className="p-2 rounded-lg"
-          style={{ backgroundColor: colors.card }}
+          onPress={() => setProfileModalVisible(true)}
+          className="w-10 h-10 rounded-full justify-center items-center border"
+          style={{ backgroundColor: colors.card, borderColor: colors.border }}
+          activeOpacity={0.7}
+          accessibilityLabel={t("profile")}
+          accessibilityRole="button"
         >
-          {viewMode === "grid" ? (
-            <List size={20} color={colors.text} />
+          <User size={20} color={colors.text} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => setRecommendationModalVisible(true)}
+          className="w-10 h-10 rounded-full justify-center items-center border"
+          style={{ backgroundColor: colors.card, borderColor: colors.border }}
+          activeOpacity={0.7}
+          accessibilityLabel={t("ai_recommendation")}
+          accessibilityRole="button"
+        >
+          <Sparkles size={20} color="#F79009" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={toggleTheme}
+          className="w-10 h-10 rounded-full justify-center items-center border"
+          style={{ backgroundColor: colors.card, borderColor: colors.border }}
+          activeOpacity={0.7}
+          accessibilityLabel={isDarkMode ? t("switch_to_light") : t("switch_to_dark")}
+          accessibilityRole="button"
+        >
+          {isDarkMode ? (
+            <Sun size={22} color={colors.text} />
           ) : (
-            <Grid size={20} color={colors.text} />
+            <Moon size={22} color={colors.text} />
           )}
         </TouchableOpacity>
       </View>
+    </View>
+  );
+
+  // Helper: Search bar input
+  const renderSearchBar = () => (
+    <View className="px-5 mb-5">
+      <View
+        className="flex-row items-center rounded-xl px-4 h-12"
+        style={{ backgroundColor: isDarkMode ? colors.card : "#E4E7EC" }}
+      >
+        <Search
+          size={20}
+          color={colors.placeholder}
+          style={{ marginRight: 12 }}
+        />
+        <TextInput
+          placeholder={t("search_placeholder")}
+          placeholderTextColor={colors.placeholder}
+          className="flex-1 h-full text-[15px] font-regular"
+          style={{ color: colors.text, fontFamily: "Inter_400Regular" }}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          accessibilityLabel={t("search_books")}
+          accessibilityHint={t("search_books_hint")}
+        />
+      </View>
+    </View>
+  );
+
+  // Helper: Filter button component to reduce repetition
+  const renderFilterButton = (
+    filterKey: string,
+    label: string,
+    count: number,
+  ) => (
+    <TouchableOpacity
+      className="flex-1 items-center"
+      style={{ opacity: activeFilter === filterKey ? 1 : 0.5 }}
+      onPress={() => setActiveFilter(filterKey)}
+      accessibilityLabel={`${label}: ${count}`}
+      accessibilityRole="button"
+      accessibilityState={{ selected: activeFilter === filterKey }}
+    >
+      <Text
+        className="text-[11px] mb-1.5 text-center"
+        style={{
+          color: "#667085",
+          fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+        }}
+      >
+        {label}
+      </Text>
+      <Text
+        className="text-xl font-bold text-center"
+        style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
+      >
+        {count}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  // Helper: Summary card with interactive filters
+  const renderSummaryCard = () => (
+    <View className="px-5 mb-5 shadow-sm">
+      <LinearGradient
+        colors={isDarkMode ? ["#1E293B", "#27221F"] : ["#FFFFFF", "#FFF7ED"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          borderRadius: 16,
+          padding: 16,
+          borderWidth: 1,
+          borderColor: colors.border,
+        }}
+      >
+        <View className="flex-row justify-between">
+          {renderFilterButton("Tümü", t("all_books"), stats.totalBooks)}
+          {renderFilterButton("Okundu", t("read"), stats.readBooks)}
+          {renderFilterButton("Okunuyor", t("reading"), stats.readingBooks)}
+          {renderFilterButton("Okunacak", t("to_read"), stats.toReadBooks)}
+        </View>
+      </LinearGradient>
+    </View>
+  );
+
+  // Helper: Section header with title and view mode toggle
+  const renderSectionHeader = () => (
+    <View className="flex-row justify-between items-center px-5 mb-4">
+      <Text
+        className="text-lg font-bold tracking-tighter"
+        style={{
+          color: colors.text,
+          fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+        }}
+      >
+        {getFilterTitle(activeFilter)}
+      </Text>
+      <TouchableOpacity
+        onPress={() =>
+          setViewMode((prev) => (prev === "grid" ? "list" : "grid"))
+        }
+        className="p-2 rounded-lg"
+        style={{ backgroundColor: colors.card }}
+        accessibilityLabel={viewMode === "grid" ? t("switch_to_list") : t("switch_to_grid")}
+        accessibilityRole="button"
+      >
+        {viewMode === "grid" ? (
+          <List size={20} color={colors.text} />
+        ) : (
+          <Grid size={20} color={colors.text} />
+        )}
+      </TouchableOpacity>
+    </View>
+  );
+
+  // Main header - composed from helper functions
+  const renderHeader = () => (
+    <View className="mb-2">
+      {renderTopBar()}
+      {renderSearchBar()}
+      {renderSummaryCard()}
+      {renderSectionHeader()}
     </View>
   );
 
@@ -345,40 +331,18 @@ export default function HomeScreen() {
         data={filteredBooks}
         keyExtractor={(item) => item.id}
         numColumns={viewMode === "grid" ? 2 : 1}
-        // @ts-ignore - FlashList getItemLayout for performance
-        getItemLayout={(
-          _data: ArrayLike<Book> | null | undefined,
-          index: number,
-        ) => ({
-          length: viewMode === "grid" ? 230 : 120,
-          offset: (viewMode === "grid" ? 230 : 120) * index,
-          index,
-        })}
-        // @ts-ignore
-        estimatedItemSize={280}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              width: viewMode === "grid" ? COLUMN_WIDTH : "100%",
-              paddingHorizontal: viewMode === "list" ? 24 : 0,
-            }}
-          >
-            <BookCard
-              book={item}
-              variant={viewMode}
-              onPressId={handleBookPress}
-            />
-          </View>
-        )}
+        // @ts-expect-error - FlashList v2 type definitions missing estimatedItemSize
+        estimatedItemSize={viewMode === "grid" ? 230 : 120}
+        renderItem={renderBookItem}
         ListHeaderComponent={renderHeader}
         contentContainerStyle={{ paddingBottom: 100 }}
         columnWrapperStyle={
           viewMode === "grid"
             ? {
-                justifyContent: "space-between",
-                marginBottom: 24,
-                paddingHorizontal: 24,
-              }
+              justifyContent: "space-between",
+              marginBottom: 24,
+              paddingHorizontal: 24,
+            }
             : undefined
         }
         showsVerticalScrollIndicator={false}
@@ -398,6 +362,8 @@ export default function HomeScreen() {
         className="absolute bottom-6 right-6 w-[50px] h-[50px] rounded-2xl justify-center items-center shadow-lg elevation-6"
         onPress={() => router.push("/add-book")}
         activeOpacity={0.8}
+        accessibilityLabel={t("add_book")}
+        accessibilityRole="button"
       >
         <LinearGradient
           colors={isDarkMode ? ["#1E293B", "#27221F"] : ["#FFFFFF", "#F8FAFC"]}

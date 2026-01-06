@@ -31,17 +31,18 @@ export interface NotificationSettings {
   magicRecommendationAlert: boolean; // #8 Sihirli öneri hazır
 }
 
-// Varsayılan ayarlar - hepsi açık
+// Varsayılan ayarlar - kullanıcı deneyimini optimize etmek için bazıları kapalı
+// Günde en fazla 1 bildirim (sadece okuma hatırlatması)
 const DEFAULT_SETTINGS: NotificationSettings = {
-  dailyReadingReminder: true,
+  dailyReadingReminder: true, // Ana bildirim - günde 1 kez
   dailyReminderTime: "20:00",
-  inactiveUserAlert: true,
-  readingProgressAlert: true,
-  dailyCreditReminder: true,
-  weeklyToReadSummary: true,
-  bookCompletionCelebration: true,
-  yearEndSummary: true,
-  magicRecommendationAlert: true,
+  inactiveUserAlert: true, // 3 gün sonra bir kez
+  readingProgressAlert: true, // Event-driven, nadir
+  dailyCreditReminder: false, // KAPALI - günlük spam önleme
+  weeklyToReadSummary: false, // KAPALI - kullanıcı isterse açsın
+  bookCompletionCelebration: true, // Event-driven, nadir
+  yearEndSummary: true, // Yılda 1 kez
+  magicRecommendationAlert: false, // KAPALI - kullanıcı isterse açsın
 };
 
 interface NotificationContextType {
@@ -91,17 +92,73 @@ export function NotificationProvider({
       const storedSettings = await AsyncStorage.getItem(
         NOTIFICATION_SETTINGS_KEY,
       );
+      let finalSettings = DEFAULT_SETTINGS;
       if (storedSettings) {
         const parsed = JSON.parse(
           storedSettings,
         ) as Partial<NotificationSettings>;
         // Varsayılanlarla birleştir (yeni eklenen ayarlar için)
-        setSettings({ ...DEFAULT_SETTINGS, ...parsed });
+        finalSettings = { ...DEFAULT_SETTINGS, ...parsed };
+      }
+      setSettings(finalSettings);
+
+      // İzin varsa bildirimleri zamanla (ilk yükleme)
+      if (Platform.OS !== "web") {
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status === "granted") {
+          await scheduleAllEnabledNotifications(finalSettings);
+        }
       }
     } catch (error) {
       logError("NotificationContext.loadSettings", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Aktif bildirimleri toplu zamanlama (ilk yükleme veya izin sonrası)
+  const scheduleAllEnabledNotifications = async (
+    currentSettings: NotificationSettings,
+  ) => {
+    if (Platform.OS === "web") return;
+
+    const { hour, minute } = parseTimeString(currentSettings.dailyReminderTime);
+
+    // Günlük okuma hatırlatması
+    if (currentSettings.dailyReadingReminder) {
+      await scheduleDailyNotification(
+        NOTIFICATION_IDS.DAILY_READING_REMINDER,
+        { title: "📚 Okuma Vakti!", body: "Bugün kitabına baktın mı?" },
+        hour,
+        minute,
+      );
+    }
+
+    // Günlük kredi hatırlatması (varsayılan kapalı ama kullanıcı açarsa)
+    if (currentSettings.dailyCreditReminder) {
+      await scheduleDailyNotification(
+        NOTIFICATION_IDS.DAILY_CREDIT_REMINDER,
+        {
+          title: "🎁 Günlük Kredin Hazır!",
+          body: "Bugün kredini almayı unutma!",
+        },
+        10,
+        0,
+      );
+    }
+
+    // Haftalık özet (varsayılan kapalı ama kullanıcı açarsa)
+    if (currentSettings.weeklyToReadSummary) {
+      await scheduleWeeklyNotification(
+        NOTIFICATION_IDS.WEEKLY_SUMMARY,
+        {
+          title: "📖 Haftalık Özet",
+          body: "Bu hafta okuma listeni kontrol et!",
+        },
+        7, // Pazar
+        18,
+        0,
+      );
     }
   };
 
@@ -129,7 +186,7 @@ export function NotificationProvider({
     }
   };
 
-  // İzin isteme fonksiyonu
+  // İzin isteme fonksiyonu - kullanıcı ayarlardan toggle açtığında çağrılır
   const requestPermission = useCallback(async (): Promise<boolean> => {
     try {
       if (Platform.OS === "web") {
@@ -146,12 +203,18 @@ export function NotificationProvider({
 
       const granted = finalStatus === "granted";
       setHasPermission(granted);
+
+      // İzin verildiyse aktif bildirimleri zamanla
+      if (granted) {
+        await scheduleAllEnabledNotifications(settings);
+      }
+
       return granted;
     } catch (error) {
       logError("NotificationContext.requestPermission", error);
       return false;
     }
-  }, []);
+  }, [settings]);
 
   // Bildirim zamanlamalarını senkronize et
   const syncNotificationSchedule = useCallback(

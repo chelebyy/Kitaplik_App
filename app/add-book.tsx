@@ -68,7 +68,7 @@ export default function AddBookScreen() {
   const [searchType, setSearchType] = useState<"book" | "author">("book");
 
   // Scanner State
-  const [isScannerVisible, setScannerVisible] = useState(false);
+  const [isScannerVisible, setScannerVisible] = useState<boolean>(false);
 
   const statuses: BookStatus[] = ["Okunacak", "Okunuyor", "Okundu"];
 
@@ -748,12 +748,12 @@ export default function AddBookScreen() {
             style={
               mode === "manual"
                 ? {
-                    backgroundColor: colors.card,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.1,
-                    shadowRadius: 2,
-                    elevation: 2,
-                  }
+                  backgroundColor: colors.card,
+                  shadowColor: "#000",
+                  shadowOpacity: 0.1,
+                  shadowRadius: 2,
+                  elevation: 2,
+                }
                 : {}
             }
             onPress={() => setMode("manual")}
@@ -778,12 +778,12 @@ export default function AddBookScreen() {
             style={
               mode === "search"
                 ? {
-                    backgroundColor: colors.card,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.1,
-                    shadowRadius: 2,
-                    elevation: 2,
-                  }
+                  backgroundColor: colors.card,
+                  shadowColor: "#000",
+                  shadowOpacity: 0.1,
+                  shadowRadius: 2,
+                  elevation: 2,
+                }
                 : {}
             }
             onPress={() => setMode("search")}

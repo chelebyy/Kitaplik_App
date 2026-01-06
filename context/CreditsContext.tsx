@@ -42,14 +42,20 @@ export function CreditsProvider({
 
   // Günlük kredi alınabilir mi?
   const hasDailyCreditAvailable = useMemo(() => {
+    if (isLoading) return false; // Loading sırasında false döndür
     if (!lastDailyClaimDate) return true;
     return lastDailyClaimDate !== getTodayString();
-  }, [lastDailyClaimDate]);
+  }, [lastDailyClaimDate, isLoading]); // isLoading dependency eklendi
 
   // Load credits and last claim date on mount
   useEffect(() => {
-    loadCredits();
-    loadLastClaimDate();
+    const loadInitialData = async () => {
+      // Her iki async işlem de tamamen bitene kadar bekle
+      await Promise.all([loadCredits(), loadLastClaimDate()]);
+      // Şimdi her iki veri de güncel, güvenle isLoading=false yap
+      setIsLoading(false);
+    };
+    void loadInitialData();
   }, []);
 
   const loadCredits = async () => {
@@ -66,9 +72,8 @@ export function CreditsProvider({
       }
     } catch (error) {
       logError("CreditsContext.loadCredits", error);
-    } finally {
-      setIsLoading(false);
     }
+    // finally bloğu kaldırıldı - setIsLoading artık useEffect'te yapılıyor
   };
 
   const loadLastClaimDate = async () => {

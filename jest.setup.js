@@ -2,18 +2,18 @@
 import "react-native-gesture-handler/jestSetup";
 
 // Mock NativeWind
-jest.mock("nativewind", () => ({
-  styled: (Component) => Component,
-  useColorScheme: () => ({
-    colorScheme: "light",
-    setColorScheme: jest.fn(),
-  }),
-}));
+// jest.mock("nativewind", () => ({
+//   styled: (Component) => Component,
+//   useColorScheme: () => ({
+//     colorScheme: "light",
+//     setColorScheme: jest.fn(),
+//   }),
+// }));
 
 // Mock React Native Reanimated
-jest.mock("react-native-reanimated", () => {
+jest.mock("react-native-reanimated", function mockReanimated() {
   const Reanimated = require("react-native-reanimated/mock");
-  Reanimated.default.call = () => {};
+  Reanimated.default.call = function noop() { };
   return Reanimated;
 });
 
@@ -37,6 +37,7 @@ jest.mock("expo-router", () => ({
   }),
   usePathname: () => "/",
   useLocalSearchParams: () => ({}),
+  Link: "Link",
 }));
 
 // Mock Localization
@@ -51,3 +52,58 @@ jest.mock("expo-secure-store", () => ({
   setItemAsync: jest.fn(),
   deleteItemAsync: jest.fn(),
 }));
+
+// Google Mobile Ads Mock
+jest.mock("react-native-google-mobile-ads", () => ({
+  TestIds: {
+    BANNER: "ca-app-pub-3940256099942544/6300978111",
+    INTERSTITIAL: "ca-app-pub-3940256099942544/1033173712",
+    REWARDED: "ca-app-pub-3940256099942544/5224354917",
+    REWARDED_INTERSTITIAL: "ca-app-pub-3940256099942544/5354046379",
+  },
+  BannerAd: "BannerAd",
+  BannerAdSize: {
+    BANNER: "BANNER",
+  },
+  InterstitialAd: {
+    createForAdRequest: jest.fn(() => ({
+      load: jest.fn(),
+      show: jest.fn(),
+      addAdEventListener: jest.fn(),
+    })),
+  },
+  RewardedAd: {
+    createForAdRequest: jest.fn(() => ({
+      load: jest.fn(),
+      show: jest.fn(),
+      addAdEventListener: jest.fn(),
+    })),
+  },
+  RewardedInterstitialAd: {
+    createForAdRequest: jest.fn(() => ({
+      load: jest.fn(),
+      show: jest.fn(),
+      addAdEventListener: jest.fn(),
+    })),
+  },
+  AdEventType: {
+    LOADED: "loaded",
+    ERROR: "error",
+    OPENED: "opened",
+    CLOSED: "closed",
+  },
+  RewardedAdEventType: {
+    LOADED: "loaded",
+    EARNED_REWARD: "earned_reward",
+  },
+}));
+
+/**
+ * Sessizleştirmeler
+ * Test sırasında gereksiz console loglarını gizler
+ */
+const originalConsoleError = console.error;
+console.error = (...args) => {
+  if (typeof args[0] === "string" && /Warning:/.test(args[0])) return;
+  originalConsoleError(...args);
+};

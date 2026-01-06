@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "react-native-expo-starter",
-    "slug": "react-native-expo-starter",
+    "name": "Ayraç",
+    "slug": "ayrac",
     "version": "1.0.0",
     "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "ayrac",
     "backgroundColor": "#F7F6EE",
     "newArchEnabled": true,
     "splash": {
@@ -63,6 +63,7 @@
       "typedRoutes": true
     },
     "android": {
+      "versionCode": 1,
       "backgroundColor": "#F7F6EE",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
@@ -73,7 +74,9 @@
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.READ_MEDIA_IMAGES"
       ],
-      "blockedPermissions": ["android.permission.RECORD_AUDIO"],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
       "allowBackup": false,
       "package": "com.kitaplik.app",
       "googleServicesFile": "./google-services.json"

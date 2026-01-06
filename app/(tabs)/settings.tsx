@@ -29,6 +29,7 @@ import {
   Sparkles,
   Calendar,
   Award,
+  Lock,
 } from "lucide-react-native";
 import { useTheme } from "../../context/ThemeContext";
 import { useBooks } from "../../context/BooksContext";
@@ -47,8 +48,8 @@ export default function SettingsScreen() {
   const { language, changeLanguage } = useLanguage();
   const { t } = useTranslation();
   const { settings, updateSetting } = useNotifications();
-  const [isAboutVisible, setAboutVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isAboutVisible, setAboutVisible] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleFeedback = async () => {
     const subject = t("feedback_subject");
@@ -692,6 +693,33 @@ ${t("feedback_body_message")}
                 style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
               >
                 {t("settings_about")}
+              </Text>
+              <ChevronRight size={20} color={colors.tabIconDefault} />
+            </TouchableOpacity>
+
+            <View
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
+            />
+
+            <TouchableOpacity
+              className="flex-row items-center py-3 min-h-[56px]"
+              activeOpacity={0.7}
+              onPress={() => {
+                Alert.alert("Gizlilik Politikası", "Link henüz eklenmedi.");
+              }}
+            >
+              <View
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
+              >
+                <Lock size={22} color="#448AFF" />
+              </View>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
+                Gizlilik Politikası
               </Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>

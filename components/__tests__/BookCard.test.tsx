@@ -46,7 +46,7 @@ const mockBook = {
   updatedAt: new Date().getTime(),
 };
 
-describe.skip("BookCard (UI Tests - Waiting for NativeWind Config)", () => {
+describe("BookCard (UI Tests)", () => {
   it("matches snapshot", () => {
     const { toJSON } = render(<BookCard book={mockBook} />);
     expect(toJSON()).toMatchSnapshot();

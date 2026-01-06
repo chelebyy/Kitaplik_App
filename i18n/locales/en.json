@@ -176,5 +176,14 @@
   "notification_magic_recommendation": "Magic recommendation alert",
   "notification_reminder_time": "Reminder time",
   "daily_credit_claimed": "Daily credit added! 🎁",
-  "daily_credit_already_claimed": "You already claimed your credit today."
+  "daily_credit_already_claimed": "You already claimed your credit today.",
+  "ai_recommendation": "AI Recommendation",
+  "switch_to_light": "Switch to light theme",
+  "switch_to_dark": "Switch to dark theme",
+  "switch_to_list": "Switch to list view",
+  "switch_to_grid": "Switch to grid view",
+  "search_books": "Search books",
+  "search_books_hint": "Type book or author name to search",
+  "duplicate_book_title": "Book Already Exists",
+  "duplicate_book_message": "This book is already in your library."
 }

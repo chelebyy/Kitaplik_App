@@ -35,10 +35,11 @@ function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
   }, []);
 
   // Günlük giriş kredisi: Uygulama açılışında otomatik talep et
-  const { claimDailyCredit, hasDailyCreditAvailable } = useCredits();
+  const { claimDailyCredit, hasDailyCreditAvailable, isLoading } = useCredits();
   useEffect(() => {
     const checkDailyCredit = async () => {
-      if (hasDailyCreditAvailable) {
+      // Loading bittiyse ve kredi varsa çalıştır
+      if (!isLoading && hasDailyCreditAvailable) {
         const claimed = await claimDailyCredit();
         if (claimed) {
           // Kredi başarıyla alındı - Sessiz log
@@ -47,7 +48,7 @@ function RootLayoutContent({ fontsLoaded }: { fontsLoaded: boolean }) {
       }
     };
     checkDailyCredit();
-  }, [hasDailyCreditAvailable, claimDailyCredit]);
+  }, [hasDailyCreditAvailable, claimDailyCredit, isLoading]); // isLoading dependency eklendi
 
   // Animasyonlu splash gösterilsin mi?
   const [showAnimatedSplash, setShowAnimatedSplash] = useState(true);

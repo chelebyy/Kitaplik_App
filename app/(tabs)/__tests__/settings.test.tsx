@@ -52,6 +52,27 @@ jest.mock("react-i18next", () => ({
   }),
 }));
 
+// Mock createFeedbackMailto
+jest.mock("@/utils/email", () => ({
+  createFeedbackMailto: jest.fn(() => "mailto:mocked-url"),
+}));
+
+jest.mock("@/context/NotificationContext", () => ({
+  useNotifications: () => ({
+    settings: {
+      dailyReadingReminder: false,
+      inactiveUserAlert: false,
+      readingProgressAlert: false,
+      dailyCreditReminder: false,
+      weeklyToReadSummary: false,
+      bookCompletionCelebration: false,
+      yearEndSummary: false,
+      magicRecommendationAlert: false,
+    },
+    updateSetting: jest.fn(),
+  }),
+}));
+
 jest.mock("@/services/BackupService", () => ({
   BackupService: {
     saveToDevice: jest.fn(),
@@ -95,9 +116,7 @@ describe("SettingsScreen", () => {
       fireEvent.press(feedbackButton);
 
       await waitFor(() => {
-        expect(Linking.openURL).toHaveBeenCalledWith(
-          "mailto:iletisim@kitaplikapp.com?subject=Geri Bildirim",
-        );
+        expect(Linking.openURL).toHaveBeenCalledWith("mailto:mocked-url");
       });
     }
   });

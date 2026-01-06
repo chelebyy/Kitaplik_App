@@ -178,5 +178,14 @@
   "notification_magic_recommendation": "Sihirli öneri bildirimi",
   "notification_reminder_time": "Hatırlatma saati",
   "daily_credit_claimed": "Günlük krediniz eklendi! 🎁",
-  "daily_credit_already_claimed": "Bugün zaten kredinizi aldınız."
+  "daily_credit_already_claimed": "Bugün zaten kredinizi aldınız.",
+  "ai_recommendation": "Yapay Zeka Önerisi",
+  "switch_to_light": "Açık temaya geç",
+  "switch_to_dark": "Koyu temaya geç",
+  "switch_to_list": "Liste görünümüne geç",
+  "switch_to_grid": "Izgara görünümüne geç",
+  "search_books": "Kitap ara",
+  "search_books_hint": "Kitap veya yazar adı yazarak arayın",
+  "duplicate_book_title": "Kitap Zaten Ekli",
+  "duplicate_book_message": "Bu kitap kütüphanenizde zaten mevcut."
 }

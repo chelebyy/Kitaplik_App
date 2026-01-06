@@ -120,6 +120,19 @@ export async function sendInstantNotification(
 }
 
 /**
+ * Kitap bitirme kutlaması bildirimi gönder
+ */
+export async function sendBookCompletionNotification(
+  bookTitle: string,
+): Promise<string | null> {
+  return sendInstantNotification({
+    title: "🎉 Tebrikler!",
+    body: `"${bookTitle}" kitabını bitirdin!`,
+    data: { type: "book-completion", bookTitle },
+  });
+}
+
+/**
  * Belirli bir bildirimi iptal et
  */
 export async function cancelNotification(id: string): Promise<void> {

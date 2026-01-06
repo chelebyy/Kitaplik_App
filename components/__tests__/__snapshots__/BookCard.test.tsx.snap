@@ -1,0 +1,343 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BookCard (UI Tests) matches snapshot 1`] = `
+<View
+  accessibilityHint="Kitap detaylarına git"
+  accessibilityLabel="Test Kitabı, Test Yazarı, Okunuyor"
+  accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    [
+      {
+        "flexDirection": "row",
+      },
+      {
+        "paddingBottom": 16,
+        "paddingLeft": 16,
+        "paddingRight": 16,
+        "paddingTop": 16,
+      },
+      {
+        "marginBottom": 16,
+      },
+      {
+        "borderBottomLeftRadius": 16,
+        "borderBottomRightRadius": 16,
+        "borderTopLeftRadius": 16,
+        "borderTopRightRadius": 16,
+      },
+      {
+        "borderBottomWidth": 1,
+        "borderLeftWidth": 1,
+        "borderRightWidth": 1,
+        "borderTopWidth": 1,
+      },
+      {
+        "shadowColor": "rgba(0, 0, 0, 0.1)",
+        "shadowOffset": {
+          "height": 1,
+          "width": 0,
+        },
+        "shadowOpacity": 1,
+        "shadowRadius": 2,
+      },
+      {
+        "backgroundColor": "#fff",
+      },
+      {
+        "borderBottomColor": "rgba(236, 72, 153, 0.2)",
+        "borderLeftColor": "rgba(236, 72, 153, 0.2)",
+        "borderRightColor": "rgba(236, 72, 153, 0.2)",
+        "borderTopColor": "rgba(236, 72, 153, 0.2)",
+      },
+      {
+        "elevation": 2,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 2,
+          "width": 0,
+        },
+        "shadowOpacity": 0.05,
+        "shadowRadius": 4,
+      },
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "marginRight": 16,
+        },
+        {
+          "shadowColor": "rgba(0, 0, 0, 0.1)",
+          "shadowOffset": {
+            "height": 1,
+            "width": 0,
+          },
+          "shadowOpacity": 1,
+          "shadowRadius": 2,
+        },
+      ]
+    }
+  >
+    <ViewManagerAdapter_ExpoImage
+      backgroundColor={4293060848}
+      borderBottomLeftRadius={6}
+      borderBottomRightRadius={6}
+      borderTopLeftRadius={6}
+      borderTopRightRadius={6}
+      containerViewRef={"[React.ref]"}
+      contentFit="cover"
+      contentPosition={
+        {
+          "left": "50%",
+          "top": "50%",
+        }
+      }
+      height={96}
+      nativeViewRef={"[React.ref]"}
+      onError={[Function]}
+      onLoad={[Function]}
+      onLoadStart={[Function]}
+      onProgress={[Function]}
+      placeholder={[]}
+      source={
+        [
+          {
+            "uri": "https://example.com/cover.jpg",
+          },
+        ]
+      }
+      style={
+        {
+          "backgroundColor": "#e2e8f0",
+          "borderBottomLeftRadius": 6,
+          "borderBottomRightRadius": 6,
+          "borderTopLeftRadius": 6,
+          "borderTopRightRadius": 6,
+          "height": 96,
+          "width": 64,
+        }
+      }
+      transition={
+        {
+          "duration": 200,
+        }
+      }
+      width={64}
+    />
+  </View>
+  <View
+    style={
+      [
+        {
+          "flexBasis": "0%",
+          "flexGrow": 1,
+          "flexShrink": 1,
+        },
+        {
+          "justifyContent": "space-between",
+        },
+        {
+          "paddingBottom": 2,
+          "paddingTop": 2,
+        },
+      ]
+    }
+  >
+    <View>
+      <Text
+        numberOfLines={1}
+        style={
+          [
+            {
+              "fontSize": 16,
+              "lineHeight": 24,
+            },
+            {
+              "fontWeight": "700",
+            },
+            {
+              "marginBottom": 4,
+            },
+            {
+              "color": "#0f172a",
+            },
+          ]
+        }
+      >
+        Test Kitabı
+      </Text>
+      <Text
+        numberOfLines={1}
+        style={
+          [
+            {
+              "fontSize": 14,
+              "lineHeight": 20,
+            },
+            {
+              "color": "#64748b",
+            },
+            {
+              "fontWeight": "500",
+            },
+          ]
+        }
+      >
+        Test Yazarı
+      </Text>
+    </View>
+    <View
+      style={
+        [
+          {
+            "marginTop": 8,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          [
+            {
+              "height": 6,
+            },
+            {
+              "borderBottomLeftRadius": 9999,
+              "borderBottomRightRadius": 9999,
+              "borderTopLeftRadius": 9999,
+              "borderTopRightRadius": 9999,
+            },
+            {
+              "marginBottom": 6,
+            },
+            {
+              "overflow": "hidden",
+            },
+            {
+              "backgroundColor": "#f3f4f6",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            [
+              {
+                "height": "100%",
+              },
+              {
+                "borderBottomLeftRadius": 9999,
+                "borderBottomRightRadius": 9999,
+                "borderTopLeftRadius": 9999,
+                "borderTopRightRadius": 9999,
+              },
+              {
+                "backgroundColor": "#007AFF",
+                "width": "25%",
+              },
+            ]
+          }
+        />
+      </View>
+      <View
+        style={
+          [
+            {
+              "flexDirection": "row",
+            },
+            {
+              "justifyContent": "space-between",
+            },
+            {
+              "alignItems": "center",
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "fontSize": 12,
+                "lineHeight": 16,
+              },
+              {
+                "color": "#64748b",
+              },
+              {
+                "fontWeight": "400",
+              },
+            ]
+          }
+        >
+          Durum
+          :
+           
+          <Text
+            style={
+              [
+                {
+                  "fontWeight": "600",
+                },
+                {
+                  "color": "#334155",
+                },
+              ]
+            }
+          >
+            Okunuyor
+          </Text>
+        </Text>
+        <Text
+          style={
+            [
+              {
+                "fontSize": 11,
+              },
+              {
+                "color": "#94a3b8",
+              },
+              {
+                "fontWeight": "500",
+              },
+            ]
+          }
+        >
+          %25
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;

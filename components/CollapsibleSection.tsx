@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, memo } from "react";
 import {
   View,
   Text,
@@ -30,20 +30,21 @@ interface CollapsibleSectionProps {
  * Açılır/kapanır bölüm komponenti.
  * Ayarlar sayfasındaki bildirimler gibi uzun listeleri gruplamak için kullanılır.
  */
-export function CollapsibleSection({
+export const CollapsibleSection = memo(function CollapsibleSection({
   title,
   icon,
   children,
   defaultOpen = false,
-}: CollapsibleSectionProps) {
+}: Readonly<CollapsibleSectionProps>) {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
-  const toggleOpen = () => {
+  // Optimized with useCallback to prevent unnecessary re-renders
+  const toggleOpen = useCallback(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsOpen((prev) => !prev);
-  };
+  }, []);
 
   return (
     <View className="mb-6">
@@ -95,4 +96,4 @@ export function CollapsibleSection({
       )}
     </View>
   );
-}
+});
