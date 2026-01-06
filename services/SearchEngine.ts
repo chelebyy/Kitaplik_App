@@ -1,6 +1,7 @@
 import { GoogleBooksService, GoogleBookResult } from "./GoogleBooksService";
 import { OpenLibraryService } from "./OpenLibraryService";
 import { normalizeForMatching } from "../utils/stringUtils";
+import { mergeSearchResults } from "./BookMergeService";
 
 /**
  * The Hybrid Search Engine 🦁
@@ -46,41 +47,9 @@ export const SearchEngine = {
         OpenLibraryService.searchBooks(query, searchType),
       ]);
 
-      // 3. Merge Results
-      // Deduplicate by ID and Title key
-      const mergedMap = new Map<string, GoogleBookResult>();
-
-      // Helper to generate a unique key for deduplication
-      const getUniqueKey = (book: GoogleBookResult) => {
-        if (book.volumeInfo.industryIdentifiers?.length) {
-          const isbn = book.volumeInfo.industryIdentifiers.find((id) =>
-            id.type.includes("ISBN"),
-          )?.identifier;
-          if (isbn) return `isbn:${isbn}`;
-        }
-        // Fallback to title+author normalization
-        const title = normalizeForMatching(book.volumeInfo.title || "");
-        const auth = normalizeForMatching(book.volumeInfo.authors?.[0] || "");
-        return `title:${title}|${auth}`;
-      };
-
-      // Add Google Books first (with unique key)
-      googleBooks.forEach((book) => {
-        const key = getUniqueKey(book);
-        if (!mergedMap.has(key)) {
-          mergedMap.set(key, book);
-        }
-      });
-
-      // Add OpenLib books if not exists
-      openLibBooks.forEach((book) => {
-        const key = getUniqueKey(book);
-        if (!mergedMap.has(key)) {
-          mergedMap.set(key, book);
-        }
-      });
-
-      const allBooks = Array.from(mergedMap.values());
+      // 3. Smart Merge Results (Enrichment)
+      // Akıllı birleştirme: Eksik alanları karşı kaynaktan tamamla
+      const allBooks = mergeSearchResults(googleBooks, openLibBooks);
 
       // 4. Score & Sort
       const scoredBooks = allBooks.map((book) => ({
