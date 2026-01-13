@@ -20,7 +20,7 @@
 
 > **Legend:** `file.ts <- A.tsx, B.tsx` = This file is **imported by** A.tsx and B.tsx.
 > Directories with `[N files: ...]` are summarized to reduce size.
-> [STATS] Showing 189 files. 12 dirs summarized, 5 dirs excluded (node_modules, etc.)
+> [STATS] Showing 195 files. 12 dirs summarized, 5 dirs excluded (node_modules, etc.)
 
 
 ```
@@ -122,6 +122,7 @@
   plans/
     api-merge-smart-enrichment.md
 GEMINIDOCS/
+  HOMEPAGE_REDESIGN_IDEAS.md
   INDEX.md
   STRUCTURE.md
 android/
@@ -186,16 +187,21 @@ codeql-custom-queries-javascript/
   codeql-pack.yml
 components/
   AGENTS.md
+  AchievementCard.tsx ← index.tsx
   AnimatedSplash.tsx ← _layout.tsx
   BarcodeScannerModal.tsx ← add-book.tsx
-  BookCard.tsx ← BookCard.test.tsx, books.tsx, index.tsx
+  BookCard.tsx ← BookCard.test.tsx, books.tsx
   BookNotes.tsx ← book-detail.tsx
   BookSelectionModal.tsx ← add-book.tsx
+  BookShelf.tsx ← index.tsx
   CollapsibleSection.tsx ← CollapsibleSection.test.tsx, settings.tsx
+  CurrentlyReadingCard.tsx ← index.tsx
   FilterDropdown.tsx ← books.tsx
   NotificationPermissionModal.tsx
   PriceComparisonModal.tsx ← book-detail.tsx
   ProfileModal.tsx ← ProfileModal.test.skip.tsx, index.tsx
+  ReadingChallengeCard.tsx ← index.tsx
+  ReadingGoalModal.tsx ← ReadingChallengeCard.tsx
   RecommendationModal.tsx ← index.tsx
   SearchResultsList.tsx ← add-book.tsx
   __tests__/ [3 files: 3 .tsx]
@@ -226,13 +232,13 @@ constants/
 context/
   AGENTS.md
   AuthContext.tsx ← _layout.tsx, ProfileModal.tsx, books.tsx +1 more
-  BooksContext.tsx ← add-book.tsx, book-detail.tsx, _layout.tsx +13 more
+  BooksContext.tsx ← add-book.tsx, book-detail.tsx, _layout.tsx +17 more
   CreditsContext.tsx ← _layout.tsx, RecommendationModal.tsx, CreditsContext.test.tsx
   LanguageContext.tsx ← _layout.tsx, settings.tsx
   NotificationContext.tsx ← _layout.tsx, NotificationContext.test.tsx, settings.tsx
-  ThemeContext.tsx ← add-book.tsx, book-detail.tsx, _layout.tsx +13 more
+  ThemeContext.tsx ← add-book.tsx, book-detail.tsx, _layout.tsx +18 more
   __tests__/ [3 files: 3 .tsx]
-docs/ [8 files: 8 .md]
+docs/ [10 files: 10 .md]
 hooks/
   __tests__/ [2 files: 2 .ts]
   book/
@@ -263,7 +269,7 @@ services/
     AsyncStorageAdapter.ts ← index.ts, StorageService.ts
     IStorageAdapter.ts ← AsyncStorageAdapter.ts, index.ts, StorageService.ts
     StorageService.ts ← index.ts
-    index.ts ← add-book.tsx, book-detail.tsx, _layout.tsx +13 more
+    index.ts ← add-book.tsx, book-detail.tsx, _layout.tsx +18 more
 utils/
   AGENTS.md
   __tests__/ [6 files: 6 .ts]
@@ -288,7 +294,7 @@ web/
 
 ## File Dependencies
 
-> Scanned 98 files
+> Scanned 103 files
 
 ### High-Impact Files
 
@@ -296,9 +302,9 @@ web/
 
 | File | Imported by |
 |------|-------------|
+| `context/ThemeContext` | 21 files |
+| `context/BooksContext` | 20 files |
 | `utils/errorUtils` | 17 files |
-| `context/ThemeContext` | 16 files |
-| `context/BooksContext` | 16 files |
 | `services/GoogleBooksService` | 8 files |
 | `utils/cn` | 7 files |
 

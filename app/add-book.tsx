@@ -115,7 +115,7 @@ export default function AddBookScreen() {
   const [mode, setMode] = useState<InputMode>("manual");
 
   // Form State
-  const [status, setStatus] = useState<BookStatus>("Okunuyor");
+  const [status, setStatus] = useState<BookStatus>("Okunacak");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [genre, setGenre] = useState("");
@@ -136,10 +136,10 @@ export default function AddBookScreen() {
   } = useBookSearch();
 
   // Scanner State
-  const [isScannerVisible, setScannerVisible] = useState<boolean>(false);
+  const [isScannerVisible, setIsScannerVisible] = useState(false);
 
   // Selection Modal State
-  const [isSelectionModalVisible, setSelectionModalVisible] = useState(false);
+  const [isSelectionModalVisible, setIsSelectionModalVisible] = useState(false);
   const [candidateBooks, setCandidateBooks] = useState<GoogleBookResult[]>([]);
 
   const statuses: BookStatus[] = ["Okunacak", "Okunuyor", "Okundu"];
@@ -240,7 +240,7 @@ export default function AddBookScreen() {
       // Show selection modal for multiple editions
       if (hasMultipleEditions) {
         setCandidateBooks(items);
-        setSelectionModalVisible(true);
+        setIsSelectionModalVisible(true);
         return;
       }
 
@@ -277,7 +277,7 @@ export default function AddBookScreen() {
   };
 
   const handleBookSelect = (book: GoogleBookResult) => {
-    setSelectionModalVisible(false);
+    setIsSelectionModalVisible(false);
 
     const { title, author, image, genre, pageCount } = extractBookData(book);
 
@@ -445,7 +445,7 @@ export default function AddBookScreen() {
           backgroundColor: colors.card,
           borderColor: colors.primary,
         }}
-        onPress={() => setScannerVisible(true)}
+        onPress={() => setIsScannerVisible(true)}
       >
         <ScanLine size={20} color={colors.primary} style={{ marginRight: 8 }} />
         <Text
@@ -833,7 +833,7 @@ export default function AddBookScreen() {
 
       <BarcodeScannerModal
         visible={isScannerVisible}
-        onClose={() => setScannerVisible(false)}
+        onClose={() => setIsScannerVisible(false)}
         onScan={handleBarcodeScanned}
       />
 
@@ -841,7 +841,7 @@ export default function AddBookScreen() {
         visible={isSelectionModalVisible}
         books={candidateBooks}
         onSelect={handleBookSelect}
-        onClose={() => setSelectionModalVisible(false)}
+        onClose={() => setIsSelectionModalVisible(false)}
       />
 
       {isLoading && mode === "manual" && (

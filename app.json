@@ -10,6 +10,10 @@
     "scheme": "ayrac",
     "backgroundColor": "#F7F6EE",
     "newArchEnabled": true,
+    "notification": {
+      "icon": "./assets/images/icon.png",
+      "color": "#3b82f6"
+    },
     "splash": {
       "image": "./assets/images/icon.png",
       "backgroundColor": "#F7F6EE",

@@ -145,11 +145,17 @@ export default function BookDetailScreen() {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20} // Adjust based on header
       >
         <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 24 }}
+          contentContainerStyle={{
+            paddingHorizontal: 24,
+            paddingBottom: Platform.OS === "ios" ? 40 : 100 // Extra space for keyboard
+          }}
           showsVerticalScrollIndicator={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
         >
           <View
             className="items-center mt-4 mb-6 shadow-lg elevation-10"

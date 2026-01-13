@@ -65,7 +65,27 @@ const translations = {
         contactPageTitle: "İletişim",
         contactPageDesc: "Görüş, öneri ve destek talepleriniz için bize ulaşın.",
         contactEmailLabel: "E-posta Adresemiz:",
-        contactNote: "Mesajlarınıza en kısa sürede dönüş yapmaya çalışıyoruz."
+        contactNote: "Mesajlarınıza en kısa sürede dönüş yapmaya çalışıyoruz.",
+
+        // Terms of Use Page
+        termsTitle: "Kullanım Koşulları",
+        termsLastUpdate: "Son Güncelleme: 14 Ocak 2026",
+        termsIntro: "Ayraç uygulamasını kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız. Bu koşullar, uygulamaya erişiminizi ve kullanımınızı düzenler.",
+
+        termsSec1: "1. Hizmet Tanımı",
+        termsSec1Text: "Ayraç, kullanıcıların kitaplarını takip etmelerini sağlayan kişisel bir kütüphane yönetim uygulamasıdır. Uygulama 'olduğu gibi' sunulmaktadır ve geliştirici özellikleri istediği zaman değiştirme hakkını saklı tutar.",
+
+        termsSec2: "2. Kullanım Şartları",
+        termsSec2Text: "Uygulamayı yasalara aykırı amaçlarla kullanamazsınız. Uygulamanın çalışmasını engelleyecek tersine mühendislik, kaynak koda dönüştürme veya benzeri faaliyetlerde bulunamazsınız.",
+
+        termsSec3: "3. Veri ve Sorumluluk",
+        termsSec3Text: "Ayraç çevrimdışı çalışan bir uygulamadır. Verilerinizin güvenliği, gizliliği ve düzenli yedeklenmesi tamamen sizin sorumluluğunuzdadır. Cihaz kaybı, teknik hata veya veri bozulması durumunda Ayraç (ve geliştiricisi) hiçbir veri kaybından sorumlu tutulamaz.",
+
+        termsSec4: "4. Fikri Mülkiyet",
+        termsSec4Text: "Uygulama tasarımı, logosu, metinleri ve kaynak kodları Ayraç geliştiricisine aittir. Herhangi bir bölümü izinsiz kopyalanamaz, çoğaltılamaz veya başka bir projede kullanılamaz.",
+
+        termsSec5: "5. Değişiklikler",
+        termsSec5Text: "Kullanım koşulları zaman zaman güncellenebilir. Uygulamayı kullanmaya devam ederek güncel koşulları kabul etmiş sayılırsınız. Değişiklikleri bu sayfa üzerinden takip edebilirsiniz."
     },
     en: {
         title: "Manage Your Books With Ease",
@@ -133,7 +153,27 @@ const translations = {
         contactPageTitle: "Contact Us",
         contactPageDesc: "Reach out for feedback, suggestions, or support.",
         contactEmailLabel: "Our Email Address:",
-        contactNote: "We try to respond to all messages as soon as possible."
+        contactNote: "We try to respond to all messages as soon as possible.",
+
+        // Terms of Use Page
+        termsTitle: "Terms of Use",
+        termsLastUpdate: "Last Updated: January 14, 2026",
+        termsIntro: "By using the Ayraç app, you agree to the following terms and conditions. These terms govern your access to and use of the application.",
+
+        termsSec1: "1. Service Description",
+        termsSec1Text: "Ayraç is a personal library management application that allows users to track their books. The application is provided 'as is' and the developer reserves the right to modify features at any time.",
+
+        termsSec2: "2. Terms of Use",
+        termsSec2Text: "You may not use the app for illegal purposes. You may not engage in reverse engineering, decompiling, or similar activities that would interfere with the operation of the app.",
+
+        termsSec3: "3. Data and Responsibility",
+        termsSec3Text: "Ayraç is an offline-working application. The security, privacy, and regular backup of your data are entirely your responsibility. Ayraç (and its developer) cannot be held responsible for any data loss due to device loss, technical errors, or data corruption.",
+
+        termsSec4: "4. Intellectual Property",
+        termsSec4Text: "The app design, logo, texts, and source code belong to the Ayraç developer. No part may be copied, reproduced, or used in another project without permission.",
+
+        termsSec5: "5. Changes",
+        termsSec5Text: "The terms of use may be updated from time to time. By continuing to use the app, you agree to the updated terms. You can follow the changes via this page."
     }
 };
 
@@ -143,7 +183,7 @@ function setLanguage(lang) {
     });
 
     document.querySelectorAll('[data-i18n]').forEach(element => {
-        const key = element.getAttribute('data-i18n');
+        const key = element.dataset.i18n;
         if (translations[lang] && translations[lang][key]) {
             if (translations[lang][key].includes('<')) {
                 element.innerHTML = translations[lang][key];

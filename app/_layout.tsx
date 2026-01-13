@@ -23,7 +23,7 @@ import { NotificationProvider } from "../context/NotificationContext";
 import { useEffect, useState, useCallback } from "react";
 import { View } from "react-native";
 import { AnimatedSplash } from "../components/AnimatedSplash";
-import analytics from "@react-native-firebase/analytics";
+import { getAnalytics, logEvent } from "@react-native-firebase/analytics";
 
 cssInterop(Image, {
   className: "style",
@@ -47,7 +47,12 @@ function RootLayoutContent({ fontsLoaded }: { readonly fontsLoaded: boolean }) {
   // Firebase Analytics: Track app open event
   useEffect(() => {
     const trackAppOpen = async () => {
-      await analytics().logEvent("app_open");
+      try {
+        const analyticsInstance = getAnalytics();
+        await logEvent(analyticsInstance, "app_open");
+      } catch (error) {
+        console.warn("[Firebase] Analytics error:", error);
+      }
     };
     trackAppOpen();
   }, []);

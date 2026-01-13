@@ -30,6 +30,8 @@ import {
   Calendar,
   Award,
   Lock,
+  Star,
+  Share2,
 } from "lucide-react-native";
 import { useTheme } from "../../context/ThemeContext";
 import { useBooks } from "../../context/BooksContext";
@@ -611,18 +613,75 @@ ${t("feedback_body_message")}
           </View>
         </View>
 
-        {/* Section: DİĞER */}
+        {/* Section: DESTEK & İLETİŞİM */}
         <View className="mb-6">
           <Text
             className="text-[13px] mb-3 uppercase tracking-wider ml-1"
             style={{ color: colors.sectionHeader, fontFamily: "Inter_700Bold" }}
           >
-            {t("settings_other")}
+            {t("settings_support")}
           </Text>
           <View
             className="rounded-2xl py-2 px-4 shadow-sm"
             style={{ backgroundColor: colors.card }}
           >
+            {/* Uygulamayı Değerlendir */}
+            <TouchableOpacity
+              className="flex-row items-center py-3 min-h-[56px]"
+              activeOpacity={0.7}
+              onPress={() => {
+                Alert.alert(t("rate_app"), "Yakında...");
+              }}
+            >
+              <View
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
+              >
+                <Star size={22} color="#448AFF" />
+              </View>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
+                {t("rate_app")}
+              </Text>
+              <ChevronRight size={20} color={colors.tabIconDefault} />
+            </TouchableOpacity>
+
+            <View
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
+            />
+
+            {/* Uygulamayı Paylaş */}
+            <TouchableOpacity
+              className="flex-row items-center py-3 min-h-[56px]"
+              activeOpacity={0.7}
+              onPress={() => {
+                Alert.alert(t("share_app"), "Yakında...");
+              }}
+            >
+              <View
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
+              >
+                <Share2 size={22} color="#448AFF" />
+              </View>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
+                {t("share_app")}
+              </Text>
+              <ChevronRight size={20} color={colors.tabIconDefault} />
+            </TouchableOpacity>
+
+            <View
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
+            />
+
+            {/* İletişim */}
             <TouchableOpacity
               className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
@@ -642,41 +701,22 @@ ${t("feedback_body_message")}
               </Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
+          </View>
+        </View>
 
-            <View
-              className="h-[1px] ml-14"
-              style={{ backgroundColor: colors.border }}
-            />
-
-            <View className="flex-row items-center py-3 min-h-[56px]">
-              <View
-                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
-                style={{ backgroundColor: colors.iconBackground }}
-              >
-                <Info size={22} color="#448AFF" />
-              </View>
-              <Text
-                className="flex-1 text-base font-semibold"
-                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
-              >
-                {t("settings_version")}
-              </Text>
-              <Text
-                className="text-[15px] font-regular"
-                style={{
-                  color: colors.textSecondary,
-                  fontFamily: "Inter_400Regular",
-                }}
-              >
-                1.0.0
-              </Text>
-            </View>
-
-            <View
-              className="h-[1px] ml-14"
-              style={{ backgroundColor: colors.border }}
-            />
-
+        {/* Section: HAKKINDA & YASAL */}
+        <View className="mb-6">
+          <Text
+            className="text-[13px] mb-3 uppercase tracking-wider ml-1"
+            style={{ color: colors.sectionHeader, fontFamily: "Inter_700Bold" }}
+          >
+            {t("settings_legal")}
+          </Text>
+          <View
+            className="rounded-2xl py-2 px-4 shadow-sm"
+            style={{ backgroundColor: colors.card }}
+          >
+            {/* Hakkında */}
             <TouchableOpacity
               className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
@@ -702,11 +742,40 @@ ${t("feedback_body_message")}
               style={{ backgroundColor: colors.border }}
             />
 
+            {/* Kullanım Koşulları */}
             <TouchableOpacity
               className="flex-row items-center py-3 min-h-[56px]"
               activeOpacity={0.7}
               onPress={() => {
-                Alert.alert("Gizlilik Politikası", "Link henüz eklenmedi.");
+                Alert.alert(t("terms_of_use"), "Yakında...");
+              }}
+            >
+              <View
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
+              >
+                <FileText size={22} color="#448AFF" />
+              </View>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
+                {t("terms_of_use")}
+              </Text>
+              <ChevronRight size={20} color={colors.tabIconDefault} />
+            </TouchableOpacity>
+
+            <View
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
+            />
+
+            {/* Gizlilik Politikası */}
+            <TouchableOpacity
+              className="flex-row items-center py-3 min-h-[56px]"
+              activeOpacity={0.7}
+              onPress={() => {
+                void Linking.openURL("https://ayrac-app.netlify.app/privacy");
               }}
             >
               <View
@@ -719,10 +788,40 @@ ${t("feedback_body_message")}
                 className="flex-1 text-base font-semibold"
                 style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
               >
-                Gizlilik Politikası
+                {t("privacy_policy")}
               </Text>
               <ChevronRight size={20} color={colors.tabIconDefault} />
             </TouchableOpacity>
+
+            <View
+              className="h-[1px] ml-14"
+              style={{ backgroundColor: colors.border }}
+            />
+
+            {/* Sürüm */}
+            <View className="flex-row items-center py-3 min-h-[56px]">
+              <View
+                className="w-10 h-10 rounded-xl justify-center items-center mr-4"
+                style={{ backgroundColor: colors.iconBackground }}
+              >
+                <Info size={22} color="#448AFF" />
+              </View>
+              <Text
+                className="flex-1 text-base font-semibold"
+                style={{ color: colors.text, fontFamily: "Inter_600SemiBold" }}
+              >
+                {t("settings_version")}
+              </Text>
+              <Text
+                className="text-[15px] font-regular"
+                style={{
+                  color: colors.textSecondary,
+                  fontFamily: "Inter_400Regular",
+                }}
+              >
+                1.0.0
+              </Text>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -776,7 +875,7 @@ ${t("feedback_body_message")}
                 }}
               >
                 <Image
-                  source="https://img.icons8.com/fluency/96/books.png"
+                  source={require("../../assets/images/logo.png")}
                   style={{ width: 80, height: 80 }}
                   contentFit="contain"
                   transition={200}
@@ -813,7 +912,7 @@ ${t("feedback_body_message")}
                   fontFamily: "Inter_400Regular",
                 }}
               >
-                {t("settings_copyright")}
+                {t("settings_copyright", { year: new Date().getFullYear() })}
               </Text>
             </View>
           </View>

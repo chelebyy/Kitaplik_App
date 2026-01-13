@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 import { Image } from "expo-image";
 import { FlashList } from "@shopify/flash-list";
@@ -41,6 +42,16 @@ export default function BooksScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState(t("all_genres"));
   const [sortBy, setSortBy] = useState<SortOption>("title_asc");
+  const [activeStatus, setActiveStatus] = useState("Tümü");
+
+  // İstatistikler
+  const stats = useMemo(() => {
+    const totalBooks = books.length;
+    const readBooks = books.filter((b) => b.status === "Okundu").length;
+    const readingBooks = books.filter((b) => b.status === "Okunuyor").length;
+    const toReadBooks = books.filter((b) => b.status === "Okunacak").length;
+    return { totalBooks, readBooks, readingBooks, toReadBooks };
+  }, [books]);
 
   // Reset filter when language changes
   useEffect(() => {
@@ -59,17 +70,21 @@ export default function BooksScreen() {
   // Filtreleme ve Sıralama Mantığı
   const processedBooks = useMemo(() => {
     let result = books.filter((book) => {
-      // 1. Tür Filtresi
+      // 1. Durum Filtresi
+      const matchesStatus =
+        activeStatus === "Tümü" || book.status === activeStatus;
+
+      // 2. Tür Filtresi
       const bookGenre = book.genre || t("general");
       const matchesGenre =
         selectedGenre === t("all_genres") || bookGenre === selectedGenre;
 
-      // 2. Arama Filtresi
+      // 3. Arama Filtresi
       const matchesSearch =
         book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         book.author.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchesGenre && matchesSearch;
+      return matchesStatus && matchesGenre && matchesSearch;
     });
 
     // 3. Sıralama
@@ -87,7 +102,7 @@ export default function BooksScreen() {
     });
 
     return result;
-  }, [books, selectedGenre, searchQuery, sortBy, t]);
+  }, [books, activeStatus, selectedGenre, searchQuery, sortBy, t]);
 
   const handleBookPress = React.useCallback(
     (id: string) => {
@@ -209,6 +224,56 @@ export default function BooksScreen() {
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
+        </View>
+
+        {/* Durum Sekmeleri (Ana sayfa ile aynı tasarım) */}
+        <View className="px-6 mb-4 shadow-sm">
+          <LinearGradient
+            colors={isDarkMode ? ["#1E293B", "#27221F"] : ["#FFFFFF", "#FFF7ED"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{
+              borderRadius: 16,
+              padding: 12,
+              borderWidth: 1,
+              borderColor: colors.border,
+            }}
+          >
+            <View className="flex-row justify-between">
+              {[
+                { key: "Tümü", label: t("all_books"), count: stats.totalBooks },
+                { key: "Okunuyor", label: t("reading"), count: stats.readingBooks },
+                { key: "Okunacak", label: t("to_read"), count: stats.toReadBooks },
+                { key: "Okundu", label: t("read"), count: stats.readBooks },
+              ].map((item) => (
+                <TouchableOpacity
+                  key={item.key}
+                  className="flex-1 items-center"
+                  style={{ opacity: activeStatus === item.key ? 1 : 0.5 }}
+                  onPress={() => setActiveStatus(item.key)}
+                  accessibilityLabel={`${item.label}: ${item.count}`}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: activeStatus === item.key }}
+                >
+                  <Text
+                    className="text-[11px] mb-1.5 text-center"
+                    style={{
+                      color: "#667085",
+                      fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                  <Text
+                    className="text-xl font-bold text-center"
+                    style={{ color: colors.text, fontFamily: "Inter_700Bold" }}
+                  >
+                    {item.count}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </LinearGradient>
         </View>
 
         {/* Minimal Dropdown Filtre Alanı */}
