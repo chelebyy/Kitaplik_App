@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Ayraç</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="index.html" class="logo">
+                <img src="assets/icon.png" alt="Ayraç Logo">
+                <span>Ayraç</span>
+            </a>
+            <div class="lang-switch">
+                <button class="lang-btn active" data-lang="tr">TR</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="text-page-content">
+        <a href="index.html" class="btn btn-outline" style="margin-bottom: 2rem; display: inline-flex;"
+            data-i18n="backHome">← Ana Sayfaya Dön</a>
+
+        <div style="text-align: center;">
+            <h1 data-i18n="contactPageTitle">İletişim</h1>
+            <p data-i18n="contactPageDesc" style="font-size: 1.25rem;">Görüş, öneri ve destek talepleriniz için bize
+                ulaşın.</p>
+
+            <div class="contact-card">
+                <p data-i18n="contactEmailLabel"
+                    style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">E-posta
+                    Adresimiz</p>
+                <a href="mailto:chelebyapp@gmail.com" class="email-link">chelebyapp@gmail.com</a>
+                <p data-i18n="contactNote" style="margin-top: 2rem; font-size: 0.95rem;">Mesajlarınıza en kısa sürede
+                    dönüş yapmaya çalışıyoruz.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="copyright">
+                <p data-i18n="footerRights">© 2024 Ayraç. Tüm hakları saklıdır.</p>
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html" data-i18n="linkPrivacy">Gizlilik Politikası</a>
+                <a href="#" data-i18n="linkTerms">Kullanım Koşulları</a>
+                <a href="contact.html" data-i18n="linkContact" style="color: var(--primary);">İletişim</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

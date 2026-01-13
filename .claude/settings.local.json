@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "mcp__MCP_DOCKER__search_my_sonarqube_projects",
+      "mcp__MCP_DOCKER__get_system_health",
+      "Bash(npm run lint)",
+      "Bash(npx tsc:*)",
+      "Bash(set SONAR_TOKEN=squ_752e4b323a8a2983f1ecfd3898735282d538c950)",
+      "Bash(npm run sonar:scan:*)",
+      "Bash($env:SONAR_TOKEN=\"squ_752e4b323a8a2983f1ecfd3898735282d538c950\")",
+      "Bash(npx sonar-scanner:*)",
+      "mcp__MCP_DOCKER__search_sonar_issues_in_projects",
+      "mcp__MCP_DOCKER__get_component_measures",
+      "mcp__MCP_DOCKER__get_project_quality_gate_status",
+      "mcp__MCP_DOCKER__get_system_status",
+      "Bash(dir:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run lint:*)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(git checkout:*)",
+      "Bash(node:*)",
+      "Bash(npx eslint:*)",
+      "Bash(timeout:*)",
+      "mcp__serena__check_onboarding_performed"
+    ]
+  }
+}

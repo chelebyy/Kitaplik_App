@@ -1,0 +1,15 @@
+node_modules/
+.expo/
+.agent/
+.vscode/
+.idea/
+.scannerwork/
+android/
+ios/
+dist/
+web-build/
+*.jks
+*.keystore
+*.log
+npm-debug.log
+yarn-error.log

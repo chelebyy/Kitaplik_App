@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BookCard (UI Tests) matches snapshot 1`] = `
+<View
+  accessibilityHint="Kitap detaylarına git"
+  accessibilityLabel="Test Kitabı, Test Yazarı, Okunuyor"
+  accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  className="flex-row p-4 mb-4 rounded-2xl border shadow-sm bg-white border-pink-500/20"
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    {
+      "elevation": 2,
+      "shadowColor": "#000",
+      "shadowOffset": {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.05,
+      "shadowRadius": 4,
+    }
+  }
+>
+  <View
+    className="mr-4 shadow-sm"
+  >
+    <ViewManagerAdapter_ExpoImage
+      cachePolicy="memory-disk"
+      className="w-16 h-24 rounded-md bg-slate-200"
+      containerViewRef={"[React.ref]"}
+      contentFit="cover"
+      contentPosition={
+        {
+          "left": "50%",
+          "top": "50%",
+        }
+      }
+      nativeViewRef={"[React.ref]"}
+      onError={[Function]}
+      onLoad={[Function]}
+      onLoadStart={[Function]}
+      onProgress={[Function]}
+      placeholder={[]}
+      source={
+        [
+          {
+            "uri": "https://example.com/cover.jpg",
+          },
+        ]
+      }
+      style={{}}
+      transition={
+        {
+          "duration": 200,
+        }
+      }
+    />
+  </View>
+  <View
+    className="flex-1 justify-between py-0.5"
+  >
+    <View>
+      <Text
+        className="text-base font-bold mb-1 text-slate-900"
+        numberOfLines={1}
+      >
+        Test Kitabı
+      </Text>
+      <Text
+        className="text-sm text-slate-500 font-medium"
+        numberOfLines={1}
+      >
+        Test Yazarı
+      </Text>
+    </View>
+    <View
+      className="mt-2"
+    >
+      <View
+        className="h-1.5 rounded-full mb-1.5 overflow-hidden bg-gray-100"
+      >
+        <View
+          className="h-full rounded-full"
+          style={
+            {
+              "backgroundColor": "#007AFF",
+              "width": "25%",
+            }
+          }
+        />
+      </View>
+      <View
+        className="flex-row justify-between items-center"
+      >
+        <Text
+          className="text-xs text-slate-500 font-normal"
+        >
+          Durum
+          :
+           
+          <Text
+            className="font-semibold text-slate-700"
+          >
+            Okunuyor
+          </Text>
+        </Text>
+        <Text
+          className="text-[11px] text-slate-400 font-medium"
+        >
+          %25
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;

@@ -1,0 +1,93 @@
+{
+  "expo": {
+    "name": "Ayraç",
+    "slug": "react-native-expo-starter",
+    "version": "1.0.0",
+    "jsEngine": "hermes",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/images/icon.png",
+    "scheme": "ayrac",
+    "backgroundColor": "#F7F6EE",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/icon.png",
+      "backgroundColor": "#F7F6EE",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "icon": "./assets/images/icon.png"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 29,
+            "usesCleartextTraffic": false
+          }
+        }
+      ],
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Kitap kapağı seçmek için galeriye erişim izni gerekiyor.",
+          "cameraPermission": "Kitap kapağı çekmek için kameraya erişim izni gerekiyor."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Barkod taramak için kameraya erişim izni gerekiyor."
+        }
+      ],
+      "expo-web-browser",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-8736697399468029~2415851631",
+          "iosAppId": "ca-app-pub-8736697399468029~2415851631"
+        }
+      ],
+      "expo-secure-store",
+      "@react-native-firebase/app",
+      "@react-native-firebase/perf",
+      "@react-native-firebase/crashlytics"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "android": {
+      "versionCode": 1,
+      "backgroundColor": "#F7F6EE",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#F7F6EE"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES"
+      ],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "allowBackup": false,
+      "package": "com.kitaplik.app",
+      "googleServicesFile": "./google-services.json"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "da2ee961-92a2-44c8-98eb-f2eda0d37d12"
+      }
+    },
+    "owner": "cheleby"
+  }
+}

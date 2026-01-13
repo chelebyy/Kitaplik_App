@@ -1,0 +1,42 @@
+{
+  "findings": [
+    {
+      "ruleId": "EXPO_INSECURE_PERMISSIONS",
+      "description": "Dangerous permission detected: android.permission.CAMERA",
+      "severity": "LOW",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/app.json",
+      "suggestion": "Only request necessary permissions and explain usage to users"
+    },
+    {
+      "ruleId": "ANDROID_CLEARTEXT_ENABLED",
+      "description": "android:usesCleartextTraffic is set to true",
+      "severity": "HIGH",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/android/app/src/debugOptimized/AndroidManifest.xml",
+      "suggestion": "Disable cleartext traffic or use network security config to restrict it to specific domains"
+    },
+    {
+      "ruleId": "ANDROID_EXPORTED_COMPONENT",
+      "description": "Exported activity without permission protection - accessible by any app",
+      "severity": "HIGH",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/android/app/src/main/AndroidManifest.xml",
+      "suggestion": "Add android:permission attribute to exported activity or set android:exported=\"false\" if external access is not needed."
+    },
+    {
+      "ruleId": "ANDROID_INTENT_FILTER_PERMISSIVE",
+      "description": "Permissive intent filter with android.intent.action.VIEW: Can be invoked by any app",
+      "severity": "MEDIUM",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/android/app/src/main/AndroidManifest.xml",
+      "suggestion": "Validate all incoming intents and restrict with custom permissions if external access is not required."
+    },
+    {
+      "ruleId": "EXCESSIVE_PERMISSIONS",
+      "description": "Potentially excessive permissions declared: android.permission.CAMERA, android.permission.READ_EXTERNAL_STORAGE, android.permission.WRITE_EXTERNAL_STORAGE",
+      "severity": "LOW",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/android/app/src/main/AndroidManifest.xml",
+      "suggestion": "Review declared permissions and remove those not actively used. Request permissions at runtime only when needed."
+    }
+  ],
+  "scannedFiles": 78,
+  "duration": 748,
+  "timestamp": "2026-01-11T18:01:24.413Z"
+}

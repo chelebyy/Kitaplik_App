@@ -1,0 +1,162 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+  <!--
+    PERMISSION DOCUMENTATION
+    ========================
+    Below is the justification for each permission used in the app:
+
+    CAMERA: Required for barcode scanning feature (ISBN detection)
+           Used by: expo-camera
+           Privacy: Images are processed locally, not transmitted
+           User control: User explicitly grants permission when using barcode scanner
+
+    INTERNET: Required for external API calls (Google Books, Open Library)
+              Used by: fetch API calls in services layer
+              Privacy: Only book metadata is fetched, no personal data sent
+              Security: All connections use HTTPS (usesCleartextTraffic="false")
+
+    POST_NOTIFICATIONS: Required for push notification support
+                       Used by: expo-notifications
+                       Privacy: Only for app-related alerts (reading reminders)
+                       User control: User can disable in app settings
+
+    READ_EXTERNAL_STORAGE: Required for backup/restore functionality
+                          Used by: expo-document-picker
+                          Privacy: Only user-selected JSON files for book data export/import
+                          User control: User explicitly selects files
+
+    READ_MEDIA_IMAGES: Required for custom book cover uploads
+                      Used by: expo-image-picker
+                      Privacy: Images are stored locally on device
+                      User control: User explicitly selects images from gallery
+
+    RECORD_AUDIO: Explicitly REMOVED (tools:node="remove")
+                 Not used by this app
+                 Removed for security compliance
+
+    SYSTEM_ALERT_WINDOW: Required for development overlay (dev builds only)
+                        Used by: Expo dev client
+                        Privacy: Only active in development mode
+                        Production: Not used in release builds
+
+    VIBRATE: Required for haptic feedback on user interactions
+            Used by: expo-haptics
+            Privacy: Local device feedback only
+            User control: Can be disabled in system settings
+
+    WRITE_EXTERNAL_STORAGE: Required for backup file creation
+                           Used by: expo-file-system for export
+                           Privacy: Only app-specific directories
+                           User control: User initiates export action
+  -->
+
+  <uses-permission android:name="android.permission.CAMERA"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+  <uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove"/>
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+  <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+  <!--
+    QUERIES CONFIGURATION
+    =====================
+    Allows app to open HTTPS URLs in external browser (price comparison links)
+    Security: Only HTTPS schemes are permitted (no cleartext traffic)
+  -->
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.VIEW"/>
+      <category android:name="android.intent.category.BROWSABLE"/>
+      <data android:scheme="https"/>
+    </intent>
+  </queries>
+
+  <!--
+    APPLICATION CONFIGURATION
+    =========================
+
+    allowBackup: Set to "true" for development convenience
+                 In production, backup rules are controlled by:
+                 - fullBackupContent="@xml/secure_store_backup_rules"
+                 - dataExtractionRules="@xml/secure_store_data_extraction_rules"
+                 These rules ensure sensitive data (SecureStore) is NOT backed up
+
+    usesCleartextTraffic: Set to "false" (secure)
+                          All network traffic must use HTTPS
+                          Debug builds may use cleartext for development tools
+
+    fullBackupContent: Custom backup rules that exclude sensitive data
+                       See: android/app/src/main/res/xml/secure_store_backup_rules.xml
+
+    dataExtractionRules: Controls data extraction for Android 12+
+                         See: android/app/src/main/res/xml/secure_store_data_extraction_rules.xml
+  -->
+  <application
+    android:name=".MainApplication"
+    android:label="@string/app_name"
+    android:icon="@mipmap/ic_launcher"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:allowBackup="false"
+    android:theme="@style/AppTheme"
+    android:supportsRtl="true"
+    android:enableOnBackInvokedCallback="false"
+    android:fullBackupContent="@xml/secure_store_backup_rules"
+    android:dataExtractionRules="@xml/secure_store_data_extraction_rules"
+    android:usesCleartextTraffic="false"
+    android:networkSecurityConfig="@xml/network_security_config">
+
+    <!-- AdMob Configuration -->
+    <meta-data
+      android:name="com.google.android.gms.ads.APPLICATION_ID"
+      android:value="ca-app-pub-8736697399468029~2415851631"
+      tools:replace="android:value"/>
+    <meta-data
+      android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
+      android:value="true"
+      tools:replace="android:value"/>
+    <meta-data
+      android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
+      android:value="true"
+      tools:replace="android:value"/>
+
+    <!-- Expo Updates Configuration (Disabled for local development) -->
+    <meta-data
+      android:name="expo.modules.updates.ENABLED"
+      android:value="false"/>
+    <meta-data
+      android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH"
+      android:value="ALWAYS"/>
+    <meta-data
+      android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS"
+      android:value="0"/>
+
+    <!-- Main Activity Configuration -->
+    <activity
+      android:name=".MainActivity"
+      android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|uiMode"
+      android:launchMode="singleTask"
+      android:windowSoftInputMode="adjustResize"
+      android:theme="@style/Theme.App.SplashScreen"
+      android:exported="true"
+      android:screenOrientation="portrait">
+
+      <!-- Launcher Intent Filter (App Icon) -->
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+
+      <!-- Deep Link Intent Filter (Custom Schemes) -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="myapp"/>
+        <data android:scheme="exp+react-native-expo-starter"/>
+      </intent-filter>
+    </activity>
+  </application>
+</manifest>
