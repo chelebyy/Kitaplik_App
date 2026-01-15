@@ -6,12 +6,12 @@
 
 ## API Differences Analysis
 
-| Property | react-native Image | expo-image |
-|----------|-------------------|------------|
-| `resizeMode` | ✅ | ❌ → Use `contentFit` |
-| `accessibilityIgnoresInvertColors` | ✅ | ❌ Not supported (remove) |
-| `source={{ uri }}` | ✅ | ✅ Same |
-| `className` | ✅ | ✅ Same |
+| Property                           | react-native Image | expo-image                |
+| ---------------------------------- | ------------------ | ------------------------- |
+| `resizeMode`                       | ✅                 | ❌ → Use `contentFit`     |
+| `accessibilityIgnoresInvertColors` | ✅                 | ❌ Not supported (remove) |
+| `source={{ uri }}`                 | ✅                 | ✅ Same                   |
+| `className`                        | ✅                 | ✅ Same                   |
 
 ## Proposed Changes
 
@@ -22,7 +22,7 @@
    ```tsx
    // Before:
    import { Modal, View, Text, Pressable, Image } from "react-native";
-   
+
    // After:
    import { Modal, View, Text, Pressable } from "react-native";
    import { Image } from "expo-image";
@@ -38,7 +38,7 @@
      resizeMode="cover"
      accessibilityIgnoresInvertColors
    />
-   
+
    // After:
    <Image
      source={{ uri: coverUrl }}

@@ -83,7 +83,7 @@ export const BookNotes = ({ notes, onNotesChange }: BookNotesProps) => {
 
       <View
         className={cn(
-          "relative overflow-hidden rounded-3xl border shadow-sm min-h-[160px]",
+          "relative overflow-hidden rounded-2xl border shadow-sm min-h-[160px]",
           isDarkMode
             ? "bg-slate-800/40 border-slate-700/50"
             : "bg-white/60 border-indigo-100/50",
@@ -96,11 +96,12 @@ export const BookNotes = ({ notes, onNotesChange }: BookNotesProps) => {
         />
 
         <TextInput
-          className="flex-1 p-5 text-[15px] leading-7"
+          className="flex-1 w-full text-[15px] leading-7"
           style={{
             fontFamily: "Inter_400Regular",
             color: colors.text,
             textAlignVertical: "top",
+            padding: 20,
           }}
           placeholder={
             t("book_detail_notes_placeholder") ||

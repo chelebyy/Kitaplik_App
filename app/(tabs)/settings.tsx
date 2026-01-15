@@ -819,7 +819,7 @@ ${t("feedback_body_message")}
                   fontFamily: "Inter_400Regular",
                 }}
               >
-                1.0.0
+                1.0
               </Text>
             </View>
           </View>

@@ -26,7 +26,10 @@ import FilterDropdown from "../../components/FilterDropdown";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
 import { BookCard } from "../../components/BookCard";
-import { getGenreTranslationKey } from "../../utils/genreTranslator";
+import {
+  getGenreTranslationKey,
+  translateGenre,
+} from "../../utils/genreTranslator";
 
 type SortOption = "title_asc" | "title_desc" | "author_asc" | "rating_desc";
 
@@ -66,16 +69,34 @@ export default function BooksScreen() {
 
   // Dinamik Tür Listesi (Mevcut kitaplardan) - Translated
   const genreFilters = useMemo(() => {
-    const uniqueGenres = new Set(
-      books.map((b) => t(getGenreTranslationKey(b.genre || "Diğer"))),
-    );
-    return [t("all_genres"), ...Array.from(uniqueGenres).sort((a, b) => a.localeCompare(b, "tr"))];
+    const uniqueGenres = new Set<string>();
+
+    books.forEach((b) => {
+      // 1. İngilizce/Ham türü Türkçe kategoriye çevir ("Science Fiction" -> "Bilim Kurgu")
+      const translatedGenreName = translateGenre(b.genre);
+      const genreKey = getGenreTranslationKey(translatedGenreName);
+      // 2. Bu kategorinin ekranda görünecek çevirisini al
+      const displayLabel = t(genreKey);
+      uniqueGenres.add(displayLabel);
+    });
+
+    // "Tümü" seçeneğini başa ekle, diğerlerini Alfabetik sırala
+    return [
+      t("all_genres"),
+      ...Array.from(uniqueGenres).sort((a, b) => a.localeCompare(b, "tr")),
+    ];
   }, [books, t]);
 
   // Dinamik Yazar Filtre Listesi
   const authorFilters = useMemo(() => {
-    const authors = new Set(books.map((b) => b.author));
-    return [t("all_authors"), ...Array.from(authors).sort((a, b) => a.localeCompare(b, "tr"))];
+    // Boş olmayan yazarları filtrele
+    const authors = new Set(
+      books.map((b) => b.author).filter((a) => a && a.trim().length > 0),
+    );
+    return [
+      t("all_authors"),
+      ...Array.from(authors).sort((a, b) => a.localeCompare(b, "tr")),
+    ];
   }, [books, t]);
 
   // Filtreleme ve Sıralama Mantığı
@@ -86,10 +107,11 @@ export default function BooksScreen() {
         activeStatus === "Tümü" || book.status === activeStatus;
 
       // 2. Tür Filtresi
-      // Kitabın türünü çevir ve seçili olan (zaten çevrilmiş) değerle kıyasla
-      const bookGenreTranslated = t(
-        getGenreTranslationKey(book.genre || "Diğer"),
-      );
+      // Kitabın türünü önce normalize et (Science Fiction -> Bilim Kurgu -> genre_bilim_kurgu -> Çeviri)
+      const normalizedGenre = translateGenre(book.genre);
+      const bookGenreKey = getGenreTranslationKey(normalizedGenre);
+      const bookGenreTranslated = t(bookGenreKey);
+
       const matchesGenre =
         selectedGenre === t("all_genres") ||
         bookGenreTranslated === selectedGenre;

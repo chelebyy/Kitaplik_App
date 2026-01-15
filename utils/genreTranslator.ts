@@ -218,32 +218,63 @@ const GENRE_MAP: Record<string, GenreType> = {
  * @param englishGenre - API'den gelen İngilizce tür
  * @returns Türkçe karşılık veya "Diğer"
  */
+function findBestPartialMatch(parts: string[]): string {
+  let bestMatch = "";
+  let bestMatchLength = 0;
+
+  for (const part of parts) {
+    const lowerPart = part.toLowerCase();
+
+    for (const [key, value] of Object.entries(GENRE_MAP)) {
+      const lowerKey = key.toLowerCase();
+
+      // Check if key is contained in part
+      if (lowerPart.includes(lowerKey)) {
+        // Priority: Longer key is better match (e.g. "Science Fiction" > "Fiction")
+        if (lowerKey.length > bestMatchLength) {
+          bestMatch = value;
+          bestMatchLength = lowerKey.length;
+        }
+      }
+    }
+  }
+  return bestMatch;
+}
+
+/**
+ * İngilizce tür ismini Türkçe'ye çevirir
+ * @param englishGenre - API'den gelen İngilizce tür
+ * @returns Türkçe karşılık veya "Diğer"
+ */
 export function translateGenre(englishGenre: string | undefined): GenreType {
   if (!englishGenre) return "Diğer";
 
-  // Önce birebir eşleşme dene
-  const directMatch = GENRE_MAP[englishGenre];
-  if (directMatch) return directMatch;
+  // 1. Pre-processing: Split by / or & or -
+  // Google Books often sends "Juvenile Fiction / Fantasy / Epic"
+  const parts = englishGenre.split(/[/&]|\s-\s/).map((p) => p.trim());
 
-  // Case-insensitive arama
-  const lowerGenre = englishGenre.toLowerCase();
-  for (const [key, value] of Object.entries(GENRE_MAP)) {
-    if (key.toLowerCase() === lowerGenre) {
-      return value;
+  // 2. Try direct match for each part
+  for (const part of parts) {
+    if (!part) continue;
+
+    // A. Direct Match
+    const directMatch = GENRE_MAP[part];
+    if (directMatch) return directMatch as GenreType;
+
+    // B. Case-insensitive exact match
+    const lowerPart = part.toLowerCase();
+    for (const [key, value] of Object.entries(GENRE_MAP)) {
+      if (key.toLowerCase() === lowerPart) {
+        return value as GenreType;
+      }
     }
   }
 
-  // Kısmi eşleşme (içeriyorsa)
-  for (const [key, value] of Object.entries(GENRE_MAP)) {
-    if (
-      lowerGenre.includes(key.toLowerCase()) ||
-      key.toLowerCase().includes(lowerGenre)
-    ) {
-      return value;
-    }
-  }
+  // 3. Try partial match with priority
+  const bestMatch = findBestPartialMatch(parts);
+  if (bestMatch) return bestMatch as GenreType;
 
-  // Zaten Türkçe mi kontrol et
+  // 4. Zaten Türkçe mi kontrol et
   if (GENRE_LIST.includes(englishGenre as GenreType)) {
     return englishGenre as GenreType;
   }

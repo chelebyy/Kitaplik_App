@@ -270,25 +270,25 @@ export default function ReadingGoalModal({
                           key={preset.value}
                           onPress={() => setPresetGoal(preset.value)}
                           activeOpacity={0.7}
-                          className={`flex-1 items-center justify-center py-3 rounded-xl border ${isSelected
-                            ? "bg-transparent"
-                            : unselectedClass
-                            }`}
+                          className={`flex-1 items-center justify-center py-3 rounded-xl border ${
+                            isSelected ? "bg-transparent" : unselectedClass
+                          }`}
                           style={
                             isSelected
                               ? {
-                                backgroundColor: isDarkMode
-                                  ? motivation.gradient[0] + "20"
-                                  : motivation.gradient[0] + "10",
-                                borderColor: motivation.gradient[0],
-                              }
+                                  backgroundColor: isDarkMode
+                                    ? motivation.gradient[0] + "20"
+                                    : motivation.gradient[0] + "10",
+                                  borderColor: motivation.gradient[0],
+                                }
                               : undefined
                           }
                         >
                           <Text className="text-lg mb-1">{preset.emoji}</Text>
                           <Text
-                            className={`text-sm font-bold ${isSelected ? "" : "text-slate-900 dark:text-white"
-                              }`}
+                            className={`text-sm font-bold ${
+                              isSelected ? "" : "text-slate-900 dark:text-white"
+                            }`}
                             style={{
                               color: isSelected
                                 ? motivation.gradient[0]
@@ -341,7 +341,7 @@ export default function ReadingGoalModal({
                   style={{
                     opacity:
                       getCurrentValue() < MIN_GOAL ||
-                        getCurrentValue() > MAX_GOAL
+                      getCurrentValue() > MAX_GOAL
                         ? 0.6
                         : 1,
                   }}

@@ -1,6 +1,12 @@
 import React, { useState, useCallback, memo } from "react";
-import { Text, View, TouchableOpacity, Modal, Pressable } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+  Pressable,
+  FlatList,
+} from "react-native";
 import { ChevronDown, Check, X } from "lucide-react-native";
 import { useTheme } from "../context/ThemeContext";
 import { useTranslation } from "react-i18next";
@@ -118,7 +124,7 @@ function FilterDropdown({
         >
           <View
             className={cn(
-              "w-full max-h-[60%] rounded-3xl shadow-xl overflow-hidden",
+              "w-full rounded-3xl shadow-xl overflow-hidden",
               isDarkMode ? "bg-slate-800" : "bg-white",
             )}
             style={{
@@ -128,6 +134,8 @@ function FilterDropdown({
               shadowOpacity: 0.25,
               shadowRadius: 20,
               elevation: 10,
+              maxHeight: "60%",
+              minHeight: 150,
             }}
           >
             <View
@@ -154,13 +162,11 @@ function FilterDropdown({
               </TouchableOpacity>
             </View>
 
-            <FlashList
+            <FlatList
               data={items}
               keyExtractor={(item) => item}
               contentContainerStyle={{ paddingVertical: 8 }}
               renderItem={renderItem}
-              // @ts-expect-error - FlashList v2 type definitions missing estimatedItemSize
-              estimatedItemSize={50}
             />
           </View>
         </Pressable>

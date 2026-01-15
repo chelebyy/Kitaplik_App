@@ -2,7 +2,7 @@
   "expo": {
     "name": "Ayraç",
     "slug": "ayrac",
-    "version": "1.0.0",
+    "version": "1.0",
     "jsEngine": "hermes",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -78,9 +78,12 @@
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.READ_MEDIA_IMAGES",
-        "android.permission.POST_NOTIFICATIONS"
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.RECORD_AUDIO"
       ],
-      "blockedPermissions": ["android.permission.RECORD_AUDIO"],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
       "allowBackup": false,
       "package": "com.kitaplik.app",
       "googleServicesFile": "./google-services.json"
@@ -88,9 +91,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "da2ee961-92a2-44c8-98eb-f2eda0d37d12"
+        "projectId": "790788de-2c32-4e77-8409-762e23d3ee76"
       }
     },
-    "owner": "cheleby"
+    "owner": "chelebyyy"
   }
 }
