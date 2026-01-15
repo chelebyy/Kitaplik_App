@@ -12,12 +12,14 @@ import {
 import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { ArrowLeft, Trash2, ShoppingCart } from "lucide-react-native";
+import { ArrowLeft, Trash2, ShoppingCart, Pencil } from "lucide-react-native";
 import { useTheme } from "../context/ThemeContext";
+import { getGenreTranslationKey } from "../utils/genreTranslator";
 import { BookStatus } from "../context/BooksContext";
 import { useBookDetails } from "../hooks/book/useBookDetails";
 import { useTranslation } from "react-i18next";
 import PriceComparisonModal from "../components/PriceComparisonModal";
+import BookEditModal from "../components/BookEditModal";
 
 import { BookNotes } from "../components/BookNotes";
 
@@ -49,11 +51,13 @@ export default function BookDetailScreen() {
     updateStatus,
     updateNotes,
     updateProgress,
+    updateBookInfo,
     deleteBook: deleteBookFromContext,
   } = useBookDetails(bookId || "");
 
-  // Modal state (UI only)
+  // Modal states
   const [isPriceModalVisible, setPriceModalVisible] = useState<boolean>(false);
+  const [isEditModalVisible, setEditModalVisible] = useState<boolean>(false);
 
   // Kitap silindiğinde veya bulunamadığında
   if (!book) {
@@ -134,13 +138,22 @@ export default function BookDetailScreen() {
         >
           {t("book_detail_title")}
         </Text>
-        <TouchableOpacity
-          onPress={handleDelete}
-          className="p-2"
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Trash2 size={24} color={colors.danger} />
-        </TouchableOpacity>
+        <View className="flex-row gap-1">
+          <TouchableOpacity
+            onPress={() => setEditModalVisible(true)}
+            className="p-2"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Pencil size={22} color={colors.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleDelete}
+            className="p-2"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Trash2 size={22} color={colors.danger} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <KeyboardAvoidingView
@@ -151,7 +164,7 @@ export default function BookDetailScreen() {
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: 24,
-            paddingBottom: Platform.OS === "ios" ? 40 : 100 // Extra space for keyboard
+            paddingBottom: Platform.OS === "ios" ? 40 : 100, // Extra space for keyboard
           }}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
@@ -206,7 +219,7 @@ export default function BookDetailScreen() {
                     color: colors.text,
                   }}
                 >
-                  {book.genre || t("general")}
+                  {t(getGenreTranslationKey(book.genre || "Diğer"))}
                 </Text>
               </View>
             </View>
@@ -393,6 +406,13 @@ export default function BookDetailScreen() {
         onClose={() => setPriceModalVisible(false)}
         bookTitle={book.title}
         bookAuthor={book.author}
+      />
+
+      <BookEditModal
+        visible={isEditModalVisible}
+        book={book}
+        onClose={() => setEditModalVisible(false)}
+        onSave={updateBookInfo}
       />
     </SafeAreaView>
   );

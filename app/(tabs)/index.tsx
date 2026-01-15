@@ -35,18 +35,16 @@ export default function HomeScreen() {
   const [isProfileModalVisible, setIsProfileModalVisible] =
     useState<boolean>(false);
 
-
-
   // Şu an okunan kitaplar
   const currentlyReadingBooks = useMemo(
     () => books.filter((b) => b.status === "Okunuyor").slice(0, 3),
-    [books]
+    [books],
   );
 
   // Okunan kitaplar (raf için)
   const readBooks = useMemo(
     () => books.filter((b) => b.status === "Okundu"),
-    [books]
+    [books],
   );
 
   // Helper: Top Bar with logo, user greeting, and action buttons
@@ -132,8 +130,6 @@ export default function HomeScreen() {
       </View>
     </View>
   );
-
-
 
   return (
     <SafeAreaView

@@ -19,7 +19,11 @@ import { BooksProvider, useBooks } from "../context/BooksContext";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { LanguageProvider } from "../context/LanguageContext";
 import { CreditsProvider, useCredits } from "../context/CreditsContext";
-import { NotificationProvider } from "../context/NotificationContext";
+import {
+  NotificationProvider,
+  useNotifications,
+} from "../context/NotificationContext";
+import { NotificationPermissionModal } from "../components/NotificationPermissionModal";
 import { useEffect, useState, useCallback } from "react";
 import { View } from "react-native";
 import { AnimatedSplash } from "../components/AnimatedSplash";
@@ -43,6 +47,7 @@ function RootLayoutContent({ fontsLoaded }: { readonly fontsLoaded: boolean }) {
   const { isDarkMode } = useTheme();
   const { isLoading: authLoading } = useAuth();
   const { isLoading: booksLoading } = useBooks();
+  const { showInfoModal, handleModalDismiss } = useNotifications();
 
   // Firebase Analytics: Track app open event
   useEffect(() => {
@@ -50,8 +55,8 @@ function RootLayoutContent({ fontsLoaded }: { readonly fontsLoaded: boolean }) {
       try {
         const analyticsInstance = getAnalytics();
         await logEvent(analyticsInstance, "app_open");
-      } catch (error) {
-        console.warn("[Firebase] Analytics error:", error);
+      } catch {
+        // Analytics is non-critical, silently ignore failures
       }
     };
     trackAppOpen();
@@ -63,11 +68,8 @@ function RootLayoutContent({ fontsLoaded }: { readonly fontsLoaded: boolean }) {
     const checkDailyCredit = async () => {
       // Loading bittiyse ve kredi varsa çalıştır
       if (!isLoading && hasDailyCreditAvailable) {
-        const claimed = await claimDailyCredit();
-        if (claimed) {
-          // Kredi başarıyla alındı - Sessiz log
-          console.log("[DailyCredit] +1 kredi kazanıldı!");
-        }
+        await claimDailyCredit();
+        // Kredi başarıyla alındı - sessiz (debug log kaldırıldı)
       }
     };
     checkDailyCredit();
@@ -115,6 +117,12 @@ function RootLayoutContent({ fontsLoaded }: { readonly fontsLoaded: boolean }) {
         <Stack.Screen name="book-detail" />
       </Stack>
       <StatusBar style={isDarkMode ? "light" : "dark"} />
+
+      {/* Bilgilendirme Modalı - İlk açılışta gösterilir */}
+      <NotificationPermissionModal
+        visible={showInfoModal}
+        onContinue={handleModalDismiss}
+      />
     </View>
   );
 }

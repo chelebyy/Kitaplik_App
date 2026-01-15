@@ -48,7 +48,8 @@ export const RecommendationService = {
     signal?: AbortSignal,
   ): Promise<Book | null> => {
     try {
-      console.log(`[RecommendationService] Searching for genre: ${genre}`);
+      // Debug: Searching for genre
+      // logError("RecommendationService.getDiscoveryRecommendation", `Searching for genre: ${genre}`);
 
       // 1. Try specific genre with Turkish language restriction
       let searchUrl = `${GOOGLE_BOOKS_API_URL}?q=subject:${encodeURIComponent(genre)}&langRestrict=tr&orderBy=relevance&maxResults=40&printType=books`;
@@ -57,9 +58,7 @@ export const RecommendationService = {
 
       // 2. Fallback: Try without language restriction
       if (!data.items || data.items.length === 0) {
-        console.log(
-          "[RecommendationService] No results with TR filter, trying global...",
-        );
+        // Debug: No results with TR filter, trying global
         searchUrl = `${GOOGLE_BOOKS_API_URL}?q=subject:${encodeURIComponent(genre)}&orderBy=relevance&maxResults=40&printType=books`;
         response = await fetchWithTimeout(searchUrl, { signal });
         data = await response.json();
@@ -67,16 +66,14 @@ export const RecommendationService = {
 
       // 3. Fallback: Try generic query (just the genre name)
       if (!data.items || data.items.length === 0) {
-        console.log(
-          "[RecommendationService] No results with subject, trying generic query...",
-        );
+        // Debug: No results with subject, trying generic query
         searchUrl = `${GOOGLE_BOOKS_API_URL}?q=${encodeURIComponent(genre)}&maxResults=40&printType=books`;
         response = await fetchWithTimeout(searchUrl, { signal });
         data = await response.json();
       }
 
       if (!data.items || data.items.length === 0) {
-        console.log("[RecommendationService] Still no results found.");
+        // Debug: Still no results found
         return null;
       }
 
@@ -92,9 +89,7 @@ export const RecommendationService = {
       });
 
       if (candidates.length === 0) {
-        console.log(
-          "[RecommendationService] All found books are already in the library.",
-        );
+        // Debug: All found books are already in the library
         return null;
       }
 

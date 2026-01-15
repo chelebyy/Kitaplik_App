@@ -23,6 +23,10 @@ export interface UseBookDetailsReturn {
   updateNotes: (notes: string) => void;
   /** Sayfa ilerlemesini güncelle */
   updateProgress: (currentPage: number, pageCount: number) => void;
+  /** Kitap bilgilerini güncelle (başlık, yazar, tür, kapak) */
+  updateBookInfo: (
+    data: Partial<Pick<Book, "title" | "author" | "genre" | "coverUrl">>,
+  ) => void;
   /** Kitabı sil */
   deleteBook: () => void;
 }
@@ -52,6 +56,7 @@ export interface UseBookDetailsReturn {
 export function useBookDetails(bookId: string): UseBookDetailsReturn {
   const {
     getBookById,
+    updateBook,
     updateBookStatus,
     updateBookNotes,
     updateBookProgress,
@@ -137,12 +142,23 @@ export function useBookDetails(bookId: string): UseBookDetailsReturn {
     contextDeleteBook(bookId);
   }, [bookId, contextDeleteBook]);
 
+  /**
+   * Kitap bilgilerini güncelle (başlık, yazar, tür, kapak)
+   */
+  const updateBookInfo = useCallback(
+    (data: Partial<Pick<Book, "title" | "author" | "genre" | "coverUrl">>) => {
+      if (!bookId) return;
+      updateBook(bookId, data);
+    },
+    [bookId, updateBook],
+  );
+
   // Optimistic status ile kitap nesnesini oluştur
   const bookWithOptimisticStatus: Book | null = book
     ? {
-      ...book,
-      status: localStatus ?? book.status, // Local varsa onu, yoksa context'i kullan
-    }
+        ...book,
+        status: localStatus ?? book.status, // Local varsa onu, yoksa context'i kullan
+      }
     : null;
 
   return {
@@ -155,6 +171,7 @@ export function useBookDetails(bookId: string): UseBookDetailsReturn {
     updateStatus,
     updateNotes,
     updateProgress,
+    updateBookInfo,
     deleteBook,
   };
 }

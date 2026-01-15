@@ -37,6 +37,10 @@ interface BooksContextType {
   books: Book[];
   isLoading: boolean;
   addBook: (book: Omit<Book, "id" | "addedAt">) => boolean;
+  updateBook: (
+    id: string,
+    data: Partial<Pick<Book, "title" | "author" | "genre" | "coverUrl">>,
+  ) => void;
   updateBookStatus: (id: string, status: BookStatus) => void;
   updateBookNotes: (id: string, notes: string) => void;
   updateBookProgress: (
@@ -269,6 +273,24 @@ export function BooksProvider({
     );
   }, []);
 
+  // Kitap bilgileri güncelleme (başlık, yazar, tür, kapak) - useCallback ile memoize edildi
+  const updateBook = useCallback(
+    (
+      id: string,
+      data: Partial<Pick<Book, "title" | "author" | "genre" | "coverUrl">>,
+    ) => {
+      setBooks((prev) =>
+        prev.map((book) => {
+          if (book.id === id) {
+            return { ...book, ...data };
+          }
+          return book;
+        }),
+      );
+    },
+    [],
+  );
+
   // Kitap ilerleme güncelleme - useCallback ile memoize edildi
   const updateBookProgress = useCallback(
     (id: string, currentPage: number, pageCount: number) => {
@@ -342,10 +364,13 @@ export function BooksProvider({
     setBooks((prev) => prev.filter((book) => book.id !== id));
   }, []);
 
-  // ID'ye göre kitap getirme - useCallback ile memoize edildi (booksRef ile stabil hale getirildi)
-  const getBookById = useCallback((id: string) => {
-    return booksRef.current.find((book) => book.id === id);
-  }, []);
+  // ID'ye göre kitap getirme - books state'i kullanarak reaktif hale getirildi
+  const getBookById = useCallback(
+    (id: string) => {
+      return books.find((book) => book.id === id);
+    },
+    [books],
+  );
 
   // Tüm verileri temizle - useCallback ile memoize edildi
   const clearAllData = useCallback(async () => {
@@ -383,6 +408,7 @@ export function BooksProvider({
       books,
       isLoading,
       addBook,
+      updateBook,
       updateBookStatus,
       updateBookNotes,
       updateBookProgress,
@@ -395,6 +421,7 @@ export function BooksProvider({
       books,
       isLoading,
       addBook,
+      updateBook,
       updateBookStatus,
       updateBookNotes,
       updateBookProgress,

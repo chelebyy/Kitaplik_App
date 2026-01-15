@@ -44,4 +44,5 @@ Uygulama genelinde modern React Native performans standartları başarıyla uygu
 - **Durum:** Tamamlandı
 
 ---
-*Bu rapor otomatik çalışma ve manuel doğrulama adımları sonrası oluşturulmuştur.*
+
+_Bu rapor otomatik çalışma ve manuel doğrulama adımları sonrası oluşturulmuştur._

@@ -167,11 +167,11 @@ export const OpenLibraryService = {
         authors: openLibBook.authors?.map((a) => a.name),
         imageLinks: openLibBook.covers?.[0]
           ? {
-            thumbnail: OpenLibraryService.getCoverUrl(
-              openLibBook.covers[0],
-              "M",
-            ),
-          }
+              thumbnail: OpenLibraryService.getCoverUrl(
+                openLibBook.covers[0],
+                "M",
+              ),
+            }
           : undefined,
         categories: openLibBook.subjects?.slice(0, 1),
         pageCount: openLibBook.number_of_pages,

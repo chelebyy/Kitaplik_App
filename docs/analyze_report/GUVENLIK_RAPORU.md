@@ -4,12 +4,12 @@ Bu rapor, `npx rnsec scan` komutu ile gerçekleştirilen güvenlik taramasının
 
 ## 📊 Özet
 
-| Seviye | İlk Tarama | Düzeltme Sonrası | Durum |
-|--------|------------|------------------|-------|
-| 🔴 HIGH | 2 | 2 | ⚠️ Kabul Edilebilir |
-| 🟡 MEDIUM | 2 | 1 | ✅ İyileştirildi |
-| 🔵 LOW | 3 | 2 | ✅ İyileştirildi |
-| **Toplam** | **7** | **5** | **%29 azalma** |
+| Seviye     | İlk Tarama | Düzeltme Sonrası | Durum               |
+| ---------- | ---------- | ---------------- | ------------------- |
+| 🔴 HIGH    | 2          | 2                | ⚠️ Kabul Edilebilir |
+| 🟡 MEDIUM  | 2          | 1                | ✅ İyileştirildi    |
+| 🔵 LOW     | 3          | 2                | ✅ İyileştirildi    |
+| **Toplam** | **7**      | **5**            | **%29 azalma**      |
 
 ---
 

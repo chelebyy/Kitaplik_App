@@ -36,7 +36,7 @@
       "suggestion": "Review declared permissions and remove those not actively used. Request permissions at runtime only when needed."
     }
   ],
-  "scannedFiles": 78,
-  "duration": 748,
-  "timestamp": "2026-01-11T18:01:24.413Z"
+  "scannedFiles": 87,
+  "duration": 717,
+  "timestamp": "2026-01-14T22:50:03.860Z"
 }

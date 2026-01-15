@@ -1,0 +1,1365 @@
+﻿[
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\.expo\\types\\router.d.ts",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "severity": 1,
+        "message": "'T' is defined but never used.",
+        "line": 8,
+        "column": 31,
+        "nodeType": null,
+        "messageId": "unusedVar",
+        "endLine": 8,
+        "endColumn": 32,
+        "suppressions": [{ "kind": "directive", "justification": "" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\(tabs)\\__tests__\\settings.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\(tabs)\\_layout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\(tabs)\\books.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\(tabs)\\index.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\(tabs)\\settings.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\+not-found.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\_layout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\add-book.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\app\\book-detail.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\babel.config.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\AchievementCard.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "severity": 1,
+        "message": "'LucideIcon' is assigned a value but never used.",
+        "line": 7,
+        "column": 7,
+        "nodeType": null,
+        "messageId": "unusedVar",
+        "endLine": 7,
+        "endColumn": 17
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, { useMemo } from \"react\";\r\nimport { View, Text } from \"react-native\";\r\nimport { useTranslation } from \"react-i18next\";\r\nimport { LinearGradient } from \"expo-linear-gradient\";\r\nimport { useTheme } from \"../context/ThemeContext\";\r\nimport { Book } from \"../context/BooksContext\";\r\nconst LucideIcon = () => null; // Placeholder for type if needed, but not used in Style C\r\n\r\ninterface AchievementCardProps {\r\n    books: Book[];\r\n}\r\n\r\ntype BadgeLevel = {\r\n    id: string;\r\n    title: string;\r\n    description: string;\r\n    minBooks: number;\r\n    emoji: string;\r\n    colors: [string, string];\r\n    bgTint: [string, string];\r\n};\r\n\r\nconst LEVELS: BadgeLevel[] = [\r\n    {\r\n        id: \"lvl1\",\r\n        title: \"level_1_title\",\r\n        description: \"level_1_desc\",\r\n        minBooks: 0,\r\n        emoji: \"­şô£\", // Sat─▒r Avc─▒s─▒ - Par┼ş├Âmen\r\n        colors: [\"#94A3B8\", \"#64748B\"],\r\n        bgTint: [\"#F8FAFC\", \"#F1F5F9\"],\r\n    },\r\n    {\r\n        id: \"lvl2\",\r\n        title: \"level_2_title\",\r\n        description: \"level_2_desc\",\r\n        minBooks: 3,\r\n        emoji: \"Ô£Æ´©Å\", // Sayfa ├çeviren - T├╝y Kalem\r\n        colors: [\"#38BDF8\", \"#0EA5E9\"],\r\n        bgTint: [\"#F0F9FF\", \"#E0F2FE\"],\r\n    },\r\n    {\r\n        id: \"lvl3\",\r\n        title: \"level_3_title\",\r\n        description: \"level_3_desc\",\r\n        minBooks: 5,\r\n        emoji: \"­şğ¡\", // Okuma Merakl─▒s─▒ - Pusula\r\n        colors: [\"#22D3EE\", \"#0891B2\"],\r\n        bgTint: [\"#ECFEFF\", \"#CFFAFE\"],\r\n    },\r\n    {\r\n        id: \"lvl4\",\r\n        title: \"level_4_title\",\r\n        description: \"level_4_desc\",\r\n        minBooks: 10,\r\n        emoji: \"­şù║´©Å\", // Hikaye Yolcusu - Harita\r\n        colors: [\"#2DD4BF\", \"#0D9488\"],\r\n        bgTint: [\"#F0FDFA\", \"#CCFBF1\"],\r\n    },\r\n    {\r\n        id: \"lvl5\",\r\n        title: \"level_5_title\",\r\n        description: \"level_5_desc\",\r\n        minBooks: 15,\r\n        emoji: \"­şÅ«\", // ─░yi Okur - Fener\r\n        colors: [\"#34D399\", \"#059669\"],\r\n        bgTint: [\"#ECFDF5\", \"#D1FAE5\"],\r\n    },\r\n    {\r\n        id: \"lvl6\",\r\n        title: \"level_6_title\",\r\n        description: \"level_6_desc\",\r\n        minBooks: 25,\r\n        emoji: \"´┐¢´©Å\", // Kitap Dostu - Anahtar\r\n        colors: [\"#4ADE80\", \"#16A34A\"],\r\n        bgTint: [\"#F0FDF4\", \"#DCFCE7\"],\r\n    },\r\n    {\r\n        id: \"lvl7\",\r\n        title: \"level_7_title\",\r\n        description: \"level_7_desc\",\r\n        minBooks: 40,\r\n        emoji: \"´┐¢\", // Kitap Kurdu - B├╝y├╝ Kitaplar─▒\r\n        colors: [\"#A3E635\", \"#65A30D\"],\r\n        bgTint: [\"#F7FEE7\", \"#ECFCCB\"],\r\n    },\r\n    {\r\n        id: \"lvl8\",\r\n        title: \"level_8_title\",\r\n        description: \"level_8_desc\",\r\n        minBooks: 60,\r\n        emoji: \"­şö¡\", // S├Âzc├╝k Gezgini - D├╝rb├╝n\r\n        colors: [\"#FACC15\", \"#D97706\"],\r\n        bgTint: [\"#FEFCE8\", \"#FEF9C3\"],\r\n    },\r\n    {\r\n        id: \"lvl9\",\r\n        title: \"level_9_title\",\r\n        description: \"level_9_desc\",\r\n        minBooks: 80,\r\n        emoji: \"ÔÅ│\", // K├╝t├╝phane M├╝davimi - Kum Saati\r\n        colors: [\"#F59E0B\", \"#B45309\"],\r\n        bgTint: [\"#FFFBEB\", \"#FEF3C7\"],\r\n    },\r\n    {\r\n        id: \"lvl10\",\r\n        title: \"level_10_title\",\r\n        description: \"level_10_desc\",\r\n        minBooks: 100,\r\n        emoji: \"­şÄ®\", // Kelimelerin Efendisi - B├╝y├╝c├╝ ┼Şapkas─▒\r\n        colors: [\"#FB923C\", \"#C2410C\"],\r\n        bgTint: [\"#FFF7ED\", \"#FFEDD5\"],\r\n    },\r\n    {\r\n        id: \"lvl11\",\r\n        title: \"level_11_title\",\r\n        description: \"level_11_desc\",\r\n        minBooks: 150,\r\n        emoji: \"­şğ¬\", // Edebiyat Gurmesi - ─░ksir\r\n        colors: [\"#F87171\", \"#B91C1C\"],\r\n        bgTint: [\"#FEF2F2\", \"#FEE2E2\"],\r\n    },\r\n    {\r\n        id: \"lvl12\",\r\n        title: \"level_12_title\",\r\n        description: \"level_12_desc\",\r\n        minBooks: 250,\r\n        emoji: \"´┐¢\", // Bilge Okur - K├╝re\r\n        colors: [\"#F472B6\", \"#BE185D\"],\r\n        bgTint: [\"#FDF2F8\", \"#FCE7F3\"],\r\n    },\r\n    {\r\n        id: \"lvl13\",\r\n        title: \"level_13_title\",\r\n        description: \"level_13_desc\",\r\n        minBooks: 400,\r\n        emoji: \"­şøí´©Å\", // K├╝t├╝phane Muhaf─▒z─▒ - Kalkan\r\n        colors: [\"#C084FC\", \"#7E22CE\"],\r\n        bgTint: [\"#FAF5FF\", \"#F3E8FF\"],\r\n    },\r\n    {\r\n        id: \"lvl14\",\r\n        title: \"level_14_title\",\r\n        description: \"level_14_desc\",\r\n        minBooks: 500,\r\n        emoji: \"­şææ\", // Efsane - Ta├ğ\r\n        colors: [\"#A78BFA\", \"#6D28D9\"],\r\n        bgTint: [\"#F5F3FF\", \"#EDE9FE\"],\r\n    },\r\n];\r\n\r\nexport const AchievementCard: React.FC<AchievementCardProps> = ({ books }) => {\r\n    const { t } = useTranslation();\r\n    const { colors, isDarkMode } = useTheme();\r\n\r\n    // Okunan kitap say─▒s─▒\r\n    const readCount = useMemo(\r\n        () => books.filter((b) => b.status === \"Okundu\").length,\r\n        [books]\r\n    );\r\n\r\n    // Mevcut seviyeyi bul\r\n    const currentLevel = useMemo(() => {\r\n        // Tersten kontrol et, ┼şart─▒ sa─şlayan ilk seviyeyi (en y├╝kse─şi) al\r\n        return (\r\n            [...LEVELS].reverse().find((level) => readCount >= level.minBooks) ||\r\n            LEVELS[0]\r\n        );\r\n    }, [readCount]);\r\n\r\n    // Sonraki seviyeyi bul\r\n    const nextLevel = useMemo(() => {\r\n        const currentIndex = LEVELS.findIndex((l) => l.id === currentLevel.id);\r\n        return LEVELS[currentIndex + 1] || null;\r\n    }, [currentLevel]);\r\n\r\n    // ─░lerleme y├╝zdesi\r\n    const progress = useMemo(() => {\r\n        if (!nextLevel) return 100;\r\n        const currentMin = currentLevel.minBooks;\r\n        const nextMin = nextLevel.minBooks;\r\n        const diff = nextMin - currentMin;\r\n        const currentProgress = readCount - currentMin;\r\n        return Math.min(Math.round((currentProgress / diff) * 100), 100);\r\n    }, [readCount, currentLevel, nextLevel]);\r\n\r\n\r\n\r\n    return (\r\n        <View className=\"mx-5 mb-5\">\r\n\r\n            <LinearGradient\r\n                colors={isDarkMode ? [\"#1E293B\", \"#0F172A\"] : currentLevel.bgTint}\r\n                start={{ x: 0, y: 0 }}\r\n                end={{ x: 1, y: 1 }}\r\n                style={{\r\n                    borderRadius: 16,\r\n                    padding: 16,\r\n                    borderWidth: 1,\r\n                    borderColor: colors.border,\r\n                    flexDirection: \"row\",\r\n                    alignItems: \"center\",\r\n                }}\r\n            >\r\n                {/* Rozet ─░konu */}\r\n                <LinearGradient\r\n                    colors={currentLevel.colors}\r\n                    style={{\r\n                        width: 56,\r\n                        height: 56,\r\n                        borderRadius: 28,\r\n                        justifyContent: \"center\",\r\n                        alignItems: \"center\",\r\n                        marginRight: 16,\r\n                        shadowColor: currentLevel.colors[0],\r\n                        shadowOffset: { width: 0, height: 4 },\r\n                        shadowOpacity: 0.3,\r\n                        shadowRadius: 8,\r\n                        elevation: 4,\r\n                    }}\r\n                >\r\n                    <Text className=\"text-2xl\">{currentLevel.emoji}</Text>\r\n                </LinearGradient>\r\n\r\n                {/* Bilgiler */}\r\n                <View className=\"flex-1\">\r\n                    <View className=\"flex-row justify-between items-center mb-1\">\r\n                        <Text\r\n                            className=\"text-lg font-bold\"\r\n                            style={{\r\n                                color: colors.text,\r\n                                fontFamily: \"Inter_700Bold\",\r\n                            }}\r\n                        >\r\n                            {t(currentLevel.title as any)}\r\n                        </Text>\r\n                        <View\r\n                            className=\"px-2 py-0.5 rounded-full\"\r\n                            style={{\r\n                                backgroundColor: isDarkMode ? \"#334155\" : \"#F1F5F9\",\r\n                            }}\r\n                        >\r\n                            <Text\r\n                                className=\"text-[10px] font-bold\"\r\n                                style={{ color: colors.textSecondary }}\r\n                            >\r\n                                {t(\"books_count\", { count: readCount })}\r\n                            </Text>\r\n                        </View>\r\n                    </View>\r\n\r\n                    <Text\r\n                        className=\"text-xs mb-3\"\r\n                        style={{\r\n                            color: colors.textSecondary,\r\n                            fontFamily: \"Inter_400Regular\",\r\n                        }}\r\n                    >\r\n                        {t(currentLevel.description as any)}\r\n                    </Text>\r\n\r\n                    {/* ─░lerleme ├çubu─şu */}\r\n                    {nextLevel && (\r\n                        <View>\r\n                            <View className=\"flex-row justify-between mb-1\">\r\n                                <Text\r\n                                    className=\"text-[10px]\"\r\n                                    style={{ color: colors.placeholder }}\r\n                                >\r\n                                    {t(\"next_level\")}: {t(nextLevel.title as any)}\r\n                                </Text>\r\n                                <Text\r\n                                    className=\"text-[10px] font-medium\"\r\n                                    style={{ color: currentLevel.colors[0] }}\r\n                                >\r\n                                    %{progress}\r\n                                </Text>\r\n                            </View>\r\n                            <View\r\n                                className=\"h-1.5 rounded-full overflow-hidden\"\r\n                                style={{\r\n                                    backgroundColor: isDarkMode ? \"#334155\" : \"#E2E8F0\",\r\n                                }}\r\n                            >\r\n                                <View\r\n                                    style={{\r\n                                        width: `${progress}%`,\r\n                                        height: \"100%\",\r\n                                        backgroundColor: currentLevel.colors[0],\r\n                                        borderRadius: 99,\r\n                                    }}\r\n                                />\r\n                            </View>\r\n                        </View>\r\n                    )}\r\n\r\n                    {!nextLevel && (\r\n                        <Text\r\n                            className=\"text-xs font-medium\"\r\n                            style={{ color: currentLevel.colors[0] }}\r\n                        >\r\n                            {t(\"at_the_top\")}\r\n                        </Text>\r\n                    )}\r\n                </View>\r\n            </LinearGradient>\r\n        </View>\r\n    );\r\n};\r\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\AnimatedSplash.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\BarcodeScannerModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\BookCard.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\BookEditModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\BookNotes.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\BookSelectionModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\BookShelf.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\CollapsibleSection.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\CurrentlyReadingCard.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\FilterDropdown.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\GenrePickerModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\NotificationPermissionModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\PriceComparisonModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\ProfileModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\ReadingChallengeCard.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\ReadingGoalModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\RecommendationModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\SearchResultsList.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\__tests__\\BookCard.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\__tests__\\CollapsibleSection.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\components\\__tests__\\ProfileModal.test.skip.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\constants\\Colors.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\constants\\Notifications.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\AuthContext.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\BooksContext.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\CreditsContext.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\LanguageContext.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\NotificationContext.tsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has a missing dependency: 'loadSettingsAndCheckPermission'. Either include it or remove the dependency array.",
+        "line": 280,
+        "column": 6,
+        "nodeType": "ArrayExpression",
+        "endLine": 280,
+        "endColumn": 8,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [loadSettingsAndCheckPermission]",
+            "fix": {
+              "range": [8618, 8620],
+              "text": "[loadSettingsAndCheckPermission]"
+            }
+          }
+        ]
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React, {\r\n  createContext,\r\n  useContext,\r\n  useState,\r\n  useEffect,\r\n  useMemo,\r\n  useCallback,\r\n} from \"react\";\r\nimport * as Notifications from \"expo-notifications\";\r\nimport { Platform } from \"react-native\";\r\nimport { logError } from \"../utils/errorUtils\";\r\nimport { StorageService } from \"../services/storage\";\r\nimport {\r\n  scheduleDailyNotification,\r\n  scheduleWeeklyNotification,\r\n  scheduleInactiveUserNotification,\r\n  scheduleMagicRecommendationNotification,\r\n  scheduleYearEndNotification,\r\n  cancelNotification,\r\n  NOTIFICATION_IDS,\r\n} from \"../services/NotificationService\";\r\nimport {\r\n  DAILY_CREDIT_REMINDER_HOUR,\r\n  DAILY_CREDIT_REMINDER_MINUTE,\r\n  DEFAULT_INACTIVE_USER_DAYS,\r\n  DEFAULT_MAGIC_RECOMMENDATION_DAYS,\r\n  WEEKLY_SUMMARY_WEEKDAY,\r\n  WEEKLY_SUMMARY_HOUR,\r\n  WEEKLY_SUMMARY_MINUTE,\r\n  NOTIFICATION_SETTINGS_KEY,\r\n  INITIAL_PERMISSION_ASKED_KEY,\r\n} from \"../constants/Notifications\";\r\n\r\n// Bildirim ayarlar─▒ interface'i\r\nexport interface NotificationSettings {\r\n  dailyReadingReminder: boolean; // #1 G├╝nl├╝k okuma hat─▒rlatmas─▒\r\n  dailyReminderTime: string; // \"20:00\" format─▒nda\r\n  inactiveUserAlert: boolean; // #2 Pasif kullan─▒c─▒ uyar─▒s─▒\r\n  readingProgressAlert: boolean; // #3 Okuma ilerlemesi (%75+)\r\n  dailyCreditReminder: boolean; // #4 G├╝nl├╝k kredi hat─▒rlatmas─▒\r\n  weeklyToReadSummary: boolean; // #5 Haftal─▒k ├Âzet\r\n  bookCompletionCelebration: boolean; // #6 Kitap bitirme kutlamas─▒\r\n  yearEndSummary: boolean; // #7 Y─▒l sonu ├Âzeti\r\n  magicRecommendationAlert: boolean; // #8 Sihirli ├Âneri haz─▒r\r\n}\r\n\r\n// Varsay─▒lan ayarlar - kullan─▒c─▒ deneyimini optimize etmek i├ğin baz─▒lar─▒ kapal─▒\r\n// G├╝nde en fazla 1 bildirim (sadece okuma hat─▒rlatmas─▒)\r\nconst DEFAULT_SETTINGS: NotificationSettings = {\r\n  dailyReadingReminder: true, // Ana bildirim - g├╝nde 1 kez\r\n  dailyReminderTime: \"20:00\",\r\n  inactiveUserAlert: true, // 3 g├╝n sonra bir kez\r\n  readingProgressAlert: true, // Event-driven, nadir\r\n  dailyCreditReminder: false, // KAPALI - g├╝nl├╝k spam ├Ânleme\r\n  weeklyToReadSummary: false, // KAPALI - kullan─▒c─▒ isterse a├ğs─▒n\r\n  bookCompletionCelebration: true, // Event-driven, nadir\r\n  yearEndSummary: true, // Y─▒lda 1 kez\r\n  magicRecommendationAlert: false, // KAPALI - kullan─▒c─▒ isterse a├ğs─▒n\r\n};\r\n\r\ninterface NotificationContextType {\r\n  settings: NotificationSettings;\r\n  isLoading: boolean;\r\n  hasPermission: boolean;\r\n  showInfoModal: boolean;\r\n  updateSetting: <K extends keyof NotificationSettings>(\r\n    key: K,\r\n    value: NotificationSettings[K],\r\n  ) => Promise<void>;\r\n  requestPermission: () => Promise<boolean>;\r\n  handleModalDismiss: () => void;\r\n}\r\n\r\nconst NotificationContext = createContext<NotificationContextType | undefined>(\r\n  undefined,\r\n);\r\n\r\n// Bildirim davran─▒┼ş─▒n─▒ ayarla\r\nNotifications.setNotificationHandler({\r\n  handleNotification: async () => ({\r\n    shouldShowAlert: true,\r\n    shouldPlaySound: true,\r\n    shouldSetBadge: false,\r\n    shouldShowBanner: true,\r\n    shouldShowList: true,\r\n  }),\r\n});\r\n\r\n// Notification scheduler handler type\r\ntype NotificationScheduler = (value: boolean) => Promise<void>;\r\n\r\n// Daily reading reminder handlers\r\nconst enableDailyReadingReminder = async () => {\r\n  await scheduleDailyNotification(\r\n    NOTIFICATION_IDS.DAILY_READING_REMINDER,\r\n    { title: \"­şôÜ Okuma Vakti!\", body: \"Bug├╝n kitab─▒na bakt─▒n m─▒?\" },\r\n    20, // hour - from dailyReminderTime setting\r\n    0, // minute\r\n  );\r\n};\r\n\r\nconst disableDailyReadingReminder = async () => {\r\n  await cancelNotification(NOTIFICATION_IDS.DAILY_READING_REMINDER);\r\n};\r\n\r\nconst handleDailyReadingReminder: NotificationScheduler = async (value) => {\r\n  if (value) {\r\n    await enableDailyReadingReminder();\r\n  } else {\r\n    await disableDailyReadingReminder();\r\n  }\r\n};\r\n\r\n// Daily credit reminder handlers\r\nconst enableDailyCreditReminder = async () => {\r\n  await scheduleDailyNotification(\r\n    NOTIFICATION_IDS.DAILY_CREDIT_REMINDER,\r\n    {\r\n      title: \"­şÄü G├╝nl├╝k Kredin Haz─▒r!\",\r\n      body: \"Bug├╝n kredini almay─▒ unutma!\",\r\n    },\r\n    DAILY_CREDIT_REMINDER_HOUR,\r\n    DAILY_CREDIT_REMINDER_MINUTE,\r\n  );\r\n};\r\n\r\nconst disableDailyCreditReminder = async () => {\r\n  await cancelNotification(NOTIFICATION_IDS.DAILY_CREDIT_REMINDER);\r\n};\r\n\r\nconst handleDailyCreditReminder: NotificationScheduler = async (value) => {\r\n  if (value) {\r\n    await enableDailyCreditReminder();\r\n  } else {\r\n    await disableDailyCreditReminder();\r\n  }\r\n};\r\n\r\n// Weekly summary handlers\r\nconst enableWeeklyToReadSummary = async () => {\r\n  await scheduleWeeklyNotification(\r\n    NOTIFICATION_IDS.WEEKLY_SUMMARY,\r\n    {\r\n      title: \"­şôû Haftal─▒k ├ûzet\",\r\n      body: \"Bu hafta okuma listeni kontrol et!\",\r\n    },\r\n    WEEKLY_SUMMARY_WEEKDAY,\r\n    WEEKLY_SUMMARY_HOUR,\r\n    WEEKLY_SUMMARY_MINUTE,\r\n  );\r\n};\r\n\r\nconst disableWeeklyToReadSummary = async () => {\r\n  await cancelNotification(NOTIFICATION_IDS.WEEKLY_SUMMARY);\r\n};\r\n\r\nconst handleWeeklyToReadSummary: NotificationScheduler = async (value) => {\r\n  if (value) {\r\n    await enableWeeklyToReadSummary();\r\n  } else {\r\n    await disableWeeklyToReadSummary();\r\n  }\r\n};\r\n\r\n// Inactive user alert handlers\r\nconst enableInactiveUserAlert = async () => {\r\n  await scheduleInactiveUserNotification(\r\n    {\r\n      title: \"­şôÜ Seni ├ûzledik!\",\r\n      body: \"Bir s├╝redir kitaplar─▒na bakmad─▒n. Okumaya devam et!\",\r\n    },\r\n    DEFAULT_INACTIVE_USER_DAYS,\r\n  );\r\n};\r\n\r\nconst disableInactiveUserAlert = async () => {\r\n  await cancelNotification(NOTIFICATION_IDS.INACTIVE_USER);\r\n};\r\n\r\nconst handleInactiveUserAlert: NotificationScheduler = async (value) => {\r\n  if (value) {\r\n    await enableInactiveUserAlert();\r\n  } else {\r\n    await disableInactiveUserAlert();\r\n  }\r\n};\r\n\r\n// Year end summary handlers\r\nconst enableYearEndSummary = async () => {\r\n  await scheduleYearEndNotification({\r\n    title: \"­şôè Y─▒l Sonu ├ûzeti\",\r\n    body: \"Bu y─▒l ka├ğ kitap okudun? ├ûzeti g├Âr├╝nt├╝le!\",\r\n  });\r\n};\r\n\r\nconst disableYearEndSummary = async () => {\r\n  await cancelNotification(\"year-end-summary\");\r\n};\r\n\r\nconst handleYearEndSummary: NotificationScheduler = async (value) => {\r\n  if (value) {\r\n    await enableYearEndSummary();\r\n  } else {\r\n    await disableYearEndSummary();\r\n  }\r\n};\r\n\r\n// Magic recommendation alert handlers\r\nconst enableMagicRecommendationAlert = async () => {\r\n  let notificationContent = {\r\n    title: \"Ô£¿ Yeni Kitap Ke┼şfet!\",\r\n    body: \"K├╝t├╝phanene yeni bir kitap eklemeye ne dersin?\",\r\n    data: { type: \"magic-recommendation\" },\r\n  };\r\n\r\n  try {\r\n    const books = await StorageService.getItem<any[]>(\"books_data\");\r\n    if (books) {\r\n      const toReadCount = books.filter((b) => b.status === \"Okunacak\").length;\r\n\r\n      if (toReadCount > 0) {\r\n        notificationContent = {\r\n          title: \"­şôÜ Okunmay─▒ Bekleyen Kitaplar─▒n Var!\",\r\n          body: `K├╝t├╝phanende ${toReadCount} kitap seni bekliyor. Hadi okumaya ba┼şla!`,\r\n          data: { type: \"magic-recommendation\" },\r\n        };\r\n      }\r\n    }\r\n  } catch {\r\n    // Use default message on error\r\n  }\r\n\r\n  await scheduleMagicRecommendationNotification(\r\n    notificationContent,\r\n    DEFAULT_MAGIC_RECOMMENDATION_DAYS,\r\n    DEFAULT_MAGIC_RECOMMENDATION_DAYS,\r\n  );\r\n};\r\n\r\nconst disableMagicRecommendationAlert = async () => {\r\n  await cancelNotification(NOTIFICATION_IDS.MAGIC_RECOMMENDATION);\r\n};\r\n\r\nconst handleMagicRecommendationAlert: NotificationScheduler = async (value) => {\r\n  if (value) {\r\n    await enableMagicRecommendationAlert();\r\n  } else {\r\n    await disableMagicRecommendationAlert();\r\n  }\r\n};\r\n\r\n// Strategy map for notification handlers\r\nconst NOTIFICATION_HANDLERS: Record<\r\n  keyof NotificationSettings,\r\n  NotificationScheduler | undefined\r\n> = {\r\n  dailyReadingReminder: handleDailyReadingReminder,\r\n  dailyReminderTime: undefined, // Handled separately, re-schedules daily reminder\r\n  inactiveUserAlert: handleInactiveUserAlert,\r\n  readingProgressAlert: undefined, // Instant notification, no scheduling\r\n  dailyCreditReminder: handleDailyCreditReminder,\r\n  weeklyToReadSummary: handleWeeklyToReadSummary,\r\n  bookCompletionCelebration: undefined, // Instant notification\r\n  yearEndSummary: handleYearEndSummary,\r\n  magicRecommendationAlert: handleMagicRecommendationAlert,\r\n};\r\n\r\nexport function NotificationProvider({\r\n  children,\r\n}: Readonly<{ children: React.ReactNode }>) {\r\n  const [settings, setSettings] =\r\n    useState<NotificationSettings>(DEFAULT_SETTINGS);\r\n  const [isLoading, setIsLoading] = useState(true);\r\n  const [hasPermission, setHasPermission] = useState(false);\r\n  const [showInfoModal, setShowInfoModal] = useState(false);\r\n\r\n  // ─░lk y├╝klemede ayarlar─▒ ve izinleri kontrol et\r\n  useEffect(() => {\r\n    loadSettingsAndCheckPermission();\r\n  }, []);\r\n\r\n  const loadSettingsAndCheckPermission = async () => {\r\n    try {\r\n      // Ayarlar─▒ y├╝kle\r\n      const storedSettings = await StorageService.getItem<\r\n        Partial<NotificationSettings>\r\n      >(NOTIFICATION_SETTINGS_KEY);\r\n      let finalSettings = DEFAULT_SETTINGS;\r\n      if (storedSettings) {\r\n        finalSettings = { ...DEFAULT_SETTINGS, ...storedSettings };\r\n      }\r\n      setSettings(finalSettings);\r\n\r\n      // Web'de kontrol yapma\r\n      if (Platform.OS === \"web\") {\r\n        setIsLoading(false);\r\n        return;\r\n      }\r\n\r\n      // ─░lk a├ğ─▒l─▒┼ş kontrol├╝ - Bilgilendirme modal─▒ g├Âster\r\n      const wasAsked = await StorageService.getItem<boolean>(\r\n        INITIAL_PERMISSION_ASKED_KEY,\r\n      );\r\n      const { status } = await Notifications.getPermissionsAsync();\r\n      const permissionGranted = status === \"granted\";\r\n\r\n      setHasPermission(permissionGranted);\r\n\r\n      // ─░lk a├ğ─▒l─▒┼ş ve hen├╝z sorulmad─▒ysa -> Bilgilendirme modal─▒ g├Âster\r\n      if (!wasAsked && !permissionGranted) {\r\n        // Bayra─ş─▒ ┼şimdiden set et (tekrar g├Âsterme)\r\n        await StorageService.setItem(INITIAL_PERMISSION_ASKED_KEY, true);\r\n        // Modal─▒ g├Âster (kullan─▒c─▒ \"Anlad─▒m\" deyince native izin istenir)\r\n        setShowInfoModal(true);\r\n      } else if (permissionGranted) {\r\n        // ─░zin zaten varsa bildirimleri zamanla\r\n        await scheduleAllEnabledNotifications(finalSettings);\r\n      }\r\n    } catch (error) {\r\n      logError(\"NotificationContext.loadSettingsAndCheckPermission\", error);\r\n    } finally {\r\n      setIsLoading(false);\r\n    }\r\n  };\r\n\r\n  // Aktif bildirimleri toplu zamanlama (ilk y├╝kleme veya izin sonras─▒)\r\n  const scheduleAllEnabledNotifications = async (\r\n    currentSettings: NotificationSettings,\r\n  ) => {\r\n    if (Platform.OS === \"web\") return;\r\n\r\n    // Use handler map for each enabled notification\r\n    for (const [key, handler] of Object.entries(NOTIFICATION_HANDLERS)) {\r\n      if (\r\n        handler &&\r\n        currentSettings[key as keyof NotificationSettings] === true\r\n      ) {\r\n        await handler(true);\r\n      }\r\n    }\r\n  };\r\n\r\n  const saveSettings = async (newSettings: NotificationSettings) => {\r\n    try {\r\n      await StorageService.setItem(NOTIFICATION_SETTINGS_KEY, newSettings);\r\n    } catch (error) {\r\n      logError(\"NotificationContext.saveSettings\", error);\r\n    }\r\n  };\r\n\r\n  // ─░zin isteme fonksiyonu - kullan─▒c─▒ ayarlardan toggle a├ğt─▒─ş─▒nda ├ğa─şr─▒l─▒r\r\n  const requestPermission = useCallback(async (): Promise<boolean> => {\r\n    try {\r\n      if (Platform.OS === \"web\") {\r\n        return false;\r\n      }\r\n      const { status: existingStatus } =\r\n        await Notifications.getPermissionsAsync();\r\n      let finalStatus = existingStatus;\r\n\r\n      if (existingStatus !== \"granted\") {\r\n        const { status } = await Notifications.requestPermissionsAsync();\r\n        finalStatus = status;\r\n      }\r\n\r\n      const granted = finalStatus === \"granted\";\r\n      setHasPermission(granted);\r\n\r\n      // ─░zin verildiyse aktif bildirimleri zamanla ve ├Ânerilen ayarlar─▒ a├ğ\r\n      if (granted) {\r\n        const recommendedSettings: Partial<NotificationSettings> = {\r\n          bookCompletionCelebration: true,\r\n          dailyReadingReminder: true,\r\n          inactiveUserAlert: true,\r\n        };\r\n        const newSettings = { ...settings, ...recommendedSettings };\r\n        setSettings(newSettings);\r\n        await saveSettings(newSettings);\r\n        await scheduleAllEnabledNotifications(newSettings);\r\n      }\r\n\r\n      return granted;\r\n    } catch (error) {\r\n      logError(\"NotificationContext.requestPermission\", error);\r\n      return false;\r\n    }\r\n  }, [settings]);\r\n\r\n  // Modal kapat─▒l─▒nca native izin iste\r\n  const handleModalDismiss = useCallback(() => {\r\n    setShowInfoModal(false);\r\n    // Modal kapand─▒ktan hemen sonra native izni iste\r\n    requestPermission();\r\n  }, [requestPermission]);\r\n\r\n  // Bildirim zamanlamalar─▒n─▒ senkronize et (simplified using strategy map)\r\n  const syncNotificationSchedule = useCallback(\r\n    async (key: keyof NotificationSettings, value: boolean | string) => {\r\n      if (Platform.OS === \"web\") return;\r\n\r\n      const handler = NOTIFICATION_HANDLERS[key];\r\n      if (handler && typeof value === \"boolean\") {\r\n        await handler(value);\r\n      }\r\n    },\r\n    [],\r\n  );\r\n\r\n  // Tek bir ayar─▒ g├╝ncelle\r\n  const updateSetting = useCallback(\r\n    async <K extends keyof NotificationSettings>(\r\n      key: K,\r\n      value: NotificationSettings[K],\r\n    ) => {\r\n      // Boolean ayarlar i├ğin izin kontrol├╝\r\n      if (typeof value === \"boolean\" && value === true && !hasPermission) {\r\n        const granted = await requestPermission();\r\n        if (!granted) {\r\n          // ─░zin verilmediyse de─şi┼şiklik yapma\r\n          return;\r\n        }\r\n      }\r\n\r\n      setSettings((prev) => {\r\n        const newSettings = { ...prev, [key]: value };\r\n        // Async olarak kaydet\r\n        void saveSettings(newSettings);\r\n        // Bildirim zamanlamalar─▒n─▒ g├╝ncelle\r\n        void syncNotificationSchedule(key, value);\r\n        return newSettings;\r\n      });\r\n    },\r\n    [hasPermission, requestPermission, syncNotificationSchedule],\r\n  );\r\n\r\n  // Context value - useMemo ile memoize\r\n  const contextValue = useMemo<NotificationContextType>(\r\n    () => ({\r\n      settings,\r\n      isLoading,\r\n      hasPermission,\r\n      showInfoModal,\r\n      updateSetting,\r\n      requestPermission,\r\n      handleModalDismiss,\r\n    }),\r\n    [settings, isLoading, hasPermission, showInfoModal, updateSetting, requestPermission, handleModalDismiss],\r\n  );\r\n\r\n  return (\r\n    <NotificationContext.Provider value={contextValue}>\r\n      {children}\r\n    </NotificationContext.Provider>\r\n  );\r\n}\r\n\r\nexport function useNotifications() {\r\n  const context = useContext(NotificationContext);\r\n  if (!context) {\r\n    throw new Error(\r\n      \"useNotifications must be used within a NotificationProvider\",\r\n    );\r\n  }\r\n  return context;\r\n}\r\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\ThemeContext.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\__tests__\\BooksContext.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\__tests__\\CreditsContext.test.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "severity": 1,
+        "message": "'AsyncStorage' is defined but never used.",
+        "line": 5,
+        "column": 8,
+        "nodeType": null,
+        "messageId": "unusedVar",
+        "endLine": 5,
+        "endColumn": 20
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React from \"react\";\nimport { renderHook, act, waitFor } from \"@testing-library/react-native\";\nimport { CreditsProvider, useCredits } from \"../CreditsContext\";\nimport * as SecureStore from \"expo-secure-store\";\nimport AsyncStorage from \"@react-native-async-storage/async-storage\";\n\n// Mock expo-secure-store\njest.mock(\"expo-secure-store\", () => ({\n  getItemAsync: jest.fn(),\n  setItemAsync: jest.fn(),\n  deleteItemAsync: jest.fn(),\n}));\n\n// Mock AsyncStorage\njest.mock(\"@react-native-async-storage/async-storage\", () => ({\n  getItem: jest.fn(),\n  setItem: jest.fn(),\n}));\n\n// Mock Platform\njest.mock(\"react-native\", () => ({\n  Platform: { OS: \"android\" },\n}));\n\n// Mock errorUtils\njest.mock(\"../../utils/errorUtils\", () => ({\n  logError: jest.fn(),\n}));\n\nconst wrapper = ({ children }: { children: React.ReactNode }) => (\n  <CreditsProvider>{children}</CreditsProvider>\n);\n\ndescribe(\"CreditsContext\", () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n    // Varsay─▒lan mock de─şerleri\n    (SecureStore.getItemAsync as jest.Mock).mockResolvedValue(null);\n    (SecureStore.setItemAsync as jest.Mock).mockResolvedValue(undefined);\n  });\n\n  describe(\"claimDailyCredit\", () => {\n    it(\"should add 1 credit when claiming for the first time\", async () => {\n      // Arrange: Daha ├Ânce hi├ğ kredi al─▒nmam─▒┼ş\n      (SecureStore.getItemAsync as jest.Mock).mockImplementation(\n        (key: string) => {\n          if (key === \"user_credits_v2\") return Promise.resolve(\"5\");\n          if (key === \"last_daily_claim_date\") return Promise.resolve(null);\n          return Promise.resolve(null);\n        },\n      );\n\n      const { result } = renderHook(() => useCredits(), { wrapper });\n\n      // Wait for initial load\n      await waitFor(() => {\n        expect(result.current.isLoading).toBe(false);\n      });\n\n      // Act\n      let claimed: boolean = false;\n      await act(async () => {\n        claimed = await result.current.claimDailyCredit();\n      });\n\n      // Assert\n      expect(claimed).toBe(true);\n      expect(result.current.credits).toBe(6); // 5 + 1\n    });\n\n    it(\"should return false when claiming twice on the same day\", async () => {\n      // Arrange: Bug├╝n zaten al─▒nm─▒┼ş\n      const today = new Date().toISOString().split(\"T\")[0];\n      (SecureStore.getItemAsync as jest.Mock).mockImplementation(\n        (key: string) => {\n          if (key === \"user_credits_v2\") return Promise.resolve(\"10\");\n          if (key === \"last_daily_claim_date\") return Promise.resolve(today);\n          return Promise.resolve(null);\n        },\n      );\n\n      const { result } = renderHook(() => useCredits(), { wrapper });\n\n      await waitFor(() => {\n        expect(result.current.isLoading).toBe(false);\n      });\n\n      // Act\n      let claimed: boolean = true;\n      await act(async () => {\n        claimed = await result.current.claimDailyCredit();\n      });\n\n      // Assert\n      expect(claimed).toBe(false);\n      expect(result.current.credits).toBe(10); // De─şi┼şmemeli\n    });\n\n    it(\"should allow claiming on a new day\", async () => {\n      // Arrange: D├╝n al─▒nm─▒┼ş\n      const yesterday = new Date(Date.now() - 86400000)\n        .toISOString()\n        .split(\"T\")[0];\n      (SecureStore.getItemAsync as jest.Mock).mockImplementation(\n        (key: string) => {\n          if (key === \"user_credits_v2\") return Promise.resolve(\"3\");\n          if (key === \"last_daily_claim_date\")\n            return Promise.resolve(yesterday);\n          return Promise.resolve(null);\n        },\n      );\n\n      const { result } = renderHook(() => useCredits(), { wrapper });\n\n      await waitFor(() => {\n        expect(result.current.isLoading).toBe(false);\n      });\n\n      // Act\n      let claimed: boolean = false;\n      await act(async () => {\n        claimed = await result.current.claimDailyCredit();\n      });\n\n      // Assert\n      expect(claimed).toBe(true);\n      expect(result.current.credits).toBe(4); // 3 + 1\n    });\n  });\n\n  describe(\"hasDailyCreditAvailable\", () => {\n    it(\"should be true when never claimed before\", async () => {\n      (SecureStore.getItemAsync as jest.Mock).mockResolvedValue(null);\n\n      const { result } = renderHook(() => useCredits(), { wrapper });\n\n      await waitFor(() => {\n        expect(result.current.isLoading).toBe(false);\n      });\n\n      expect(result.current.hasDailyCreditAvailable).toBe(true);\n    });\n\n    it(\"should be false when claimed today\", async () => {\n      const today = new Date().toISOString().split(\"T\")[0];\n      (SecureStore.getItemAsync as jest.Mock).mockImplementation(\n        (key: string) => {\n          if (key === \"last_daily_claim_date\") return Promise.resolve(today);\n          return Promise.resolve(null);\n        },\n      );\n\n      const { result } = renderHook(() => useCredits(), { wrapper });\n\n      await waitFor(() => {\n        expect(result.current.isLoading).toBe(false);\n      });\n\n      expect(result.current.hasDailyCreditAvailable).toBe(false);\n    });\n  });\n});\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\context\\__tests__\\NotificationContext.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\debug_pdf_import.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\eslint.config.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\expo-env.d.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\__tests__\\useBackup.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\__tests__\\useDebounce.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\book\\__tests__\\useBookDetails.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\book\\__tests__\\useBookSearch.test.ts",
+    "messages": [
+      {
+        "ruleId": "import/first",
+        "severity": 1,
+        "message": "Import in body of module; reorder to top.",
+        "line": 18,
+        "column": 1,
+        "nodeType": "ImportDeclaration",
+        "endLine": 18,
+        "endColumn": 63,
+        "fix": {
+          "range": [0, 449],
+          "text": "/**\n * @fileoverview useBookSearch hook testleri\n * TDD RED faz─▒: Bu testler ba┼şlang─▒├ğta ba┼şar─▒s─▒z olmal─▒\n */\n\nimport { renderHook, act, waitFor } from \"@testing-library/react-native\";\n\n// Hook hen├╝z yok (RED)\nimport { useBookSearch } from \"../useBookSearch\";\n\nimport { SearchEngine } from \"../../../services/SearchEngine\";\n\n// SearchEngine mock\njest.mock(\"../../../services/SearchEngine\", () => ({\n  SearchEngine: {\n    search: jest.fn(),\n  },\n}));"
+        }
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 1,
+    "source": "/**\n * @fileoverview useBookSearch hook testleri\n * TDD RED faz─▒: Bu testler ba┼şlang─▒├ğta ba┼şar─▒s─▒z olmal─▒\n */\n\nimport { renderHook, act, waitFor } from \"@testing-library/react-native\";\n\n// Hook hen├╝z yok (RED)\nimport { useBookSearch } from \"../useBookSearch\";\n\n// SearchEngine mock\njest.mock(\"../../../services/SearchEngine\", () => ({\n  SearchEngine: {\n    search: jest.fn(),\n  },\n}));\n\nimport { SearchEngine } from \"../../../services/SearchEngine\";\n\nconst mockSearchEngine = SearchEngine as jest.Mocked<typeof SearchEngine>;\n\ndescribe(\"useBookSearch\", () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n    jest.useFakeTimers();\n  });\n\n  afterEach(() => {\n    jest.useRealTimers();\n  });\n\n  describe(\"initial state\", () => {\n    it(\"should return initial state correctly\", () => {\n      const { result } = renderHook(() => useBookSearch());\n\n      expect(result.current.query).toBe(\"\");\n      expect(result.current.results).toEqual([]);\n      expect(result.current.isLoading).toBe(false);\n      expect(result.current.isError).toBe(false);\n      expect(result.current.error).toBeNull();\n      expect(result.current.searchType).toBe(\"book\");\n    });\n  });\n\n  describe(\"query management\", () => {\n    it(\"should update query when setQuery is called\", () => {\n      const { result } = renderHook(() => useBookSearch());\n\n      act(() => {\n        result.current.setQuery(\"Harry Potter\");\n      });\n\n      expect(result.current.query).toBe(\"Harry Potter\");\n    });\n\n    it(\"should clear results when clear is called\", async () => {\n      mockSearchEngine.search.mockResolvedValue([\n        {\n          id: \"1\",\n          volumeInfo: {\n            title: \"Test Book\",\n            authors: [\"Test Author\"],\n          },\n        },\n      ]);\n\n      const { result } = renderHook(() => useBookSearch());\n\n      // Arama yap\n      act(() => {\n        result.current.setQuery(\"test\");\n      });\n\n      act(() => {\n        jest.advanceTimersByTime(300);\n      });\n\n      await waitFor(() => {\n        expect(result.current.results.length).toBeGreaterThan(0);\n      });\n\n      // Temizle\n      act(() => {\n        result.current.clear();\n      });\n\n      expect(result.current.query).toBe(\"\");\n      expect(result.current.results).toEqual([]);\n    });\n  });\n\n  describe(\"search behavior\", () => {\n    it(\"should debounce search calls\", async () => {\n      mockSearchEngine.search.mockResolvedValue([]);\n\n      const { result } = renderHook(() => useBookSearch());\n\n      // H─▒zl─▒ de─şi┼şiklikler\n      act(() => {\n        result.current.setQuery(\"H\");\n      });\n      act(() => {\n        result.current.setQuery(\"Ha\");\n      });\n      act(() => {\n        result.current.setQuery(\"Har\");\n      });\n      act(() => {\n        result.current.setQuery(\"Harry\");\n      });\n\n      // Debounce s├╝resi dolmadan API ├ğa─şr─▒lmamal─▒\n      expect(mockSearchEngine.search).not.toHaveBeenCalled();\n\n      // Debounce sonras─▒\n      act(() => {\n        jest.advanceTimersByTime(300);\n      });\n\n      await waitFor(() => {\n        expect(mockSearchEngine.search).toHaveBeenCalledTimes(1);\n        expect(mockSearchEngine.search).toHaveBeenCalledWith(\n          \"Harry\",\n          \"tr\",\n          \"book\",\n          expect.any(AbortSignal),\n        );\n      });\n    });\n\n    it(\"should set loading state during search\", async () => {\n      let resolveSearch: (value: unknown[]) => void;\n      mockSearchEngine.search.mockImplementation(\n        () =>\n          new Promise((resolve) => {\n            resolveSearch = resolve;\n          }),\n      );\n\n      const { result } = renderHook(() => useBookSearch());\n\n      act(() => {\n        result.current.setQuery(\"test\");\n      });\n\n      act(() => {\n        jest.advanceTimersByTime(300);\n      });\n\n      // Loading true olmal─▒\n      await waitFor(() => {\n        expect(result.current.isLoading).toBe(true);\n      });\n\n      // Search'├╝ resolve et\n      await act(async () => {\n        resolveSearch!([]);\n      });\n\n      // Loading false olmal─▒\n      expect(result.current.isLoading).toBe(false);\n    });\n\n    it(\"should update results on successful search\", async () => {\n      const mockResults = [\n        {\n          id: \"1\",\n          volumeInfo: {\n            title: \"Harry Potter\",\n            authors: [\"J.K. Rowling\"],\n          },\n        },\n      ];\n      mockSearchEngine.search.mockResolvedValue(mockResults);\n\n      const { result } = renderHook(() => useBookSearch());\n\n      act(() => {\n        result.current.setQuery(\"Harry\");\n      });\n\n      act(() => {\n        jest.advanceTimersByTime(300);\n      });\n\n      await waitFor(() => {\n        expect(result.current.results).toEqual(mockResults);\n      });\n    });\n\n    it(\"should handle search errors\", async () => {\n      const mockError = new Error(\"Network error\");\n      mockSearchEngine.search.mockRejectedValue(mockError);\n\n      const { result } = renderHook(() => useBookSearch());\n\n      act(() => {\n        result.current.setQuery(\"test\");\n      });\n\n      act(() => {\n        jest.advanceTimersByTime(300);\n      });\n\n      await waitFor(() => {\n        expect(result.current.isError).toBe(true);\n        expect(result.current.error).toBe(mockError);\n        expect(result.current.isLoading).toBe(false);\n      });\n    });\n  });\n\n  describe(\"search type\", () => {\n    it(\"should use search type in API call\", async () => {\n      mockSearchEngine.search.mockResolvedValue([]);\n\n      const { result } = renderHook(() => useBookSearch());\n\n      act(() => {\n        result.current.setSearchType(\"author\");\n      });\n\n      act(() => {\n        result.current.setQuery(\"Rowling\");\n      });\n\n      act(() => {\n        jest.advanceTimersByTime(300);\n      });\n\n      await waitFor(() => {\n        expect(mockSearchEngine.search).toHaveBeenCalledWith(\n          \"Rowling\",\n          \"tr\",\n          \"author\",\n          expect.any(AbortSignal),\n        );\n      });\n    });\n  });\n\n  describe(\"manual search\", () => {\n    it(\"should trigger immediate search when search() is called\", async () => {\n      mockSearchEngine.search.mockResolvedValue([]);\n\n      const { result } = renderHook(() => useBookSearch());\n\n      act(() => {\n        result.current.setQuery(\"Harry\");\n      });\n\n      // Manuel arama - debounce beklemeden\n      await act(async () => {\n        await result.current.search();\n      });\n\n      expect(mockSearchEngine.search).toHaveBeenCalledWith(\n        \"Harry\",\n        \"tr\",\n        \"book\",\n        undefined,\n      );\n    });\n  });\n\n  describe(\"empty query handling\", () => {\n    it(\"should not search when query is empty\", async () => {\n      const { result } = renderHook(() => useBookSearch());\n\n      act(() => {\n        result.current.setQuery(\"\");\n      });\n\n      act(() => {\n        jest.advanceTimersByTime(300);\n      });\n\n      expect(mockSearchEngine.search).not.toHaveBeenCalled();\n    });\n  });\n});\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\book\\__tests__\\useRecommendation.test.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "severity": 1,
+        "message": "'waitFor' is defined but never used.",
+        "line": 6,
+        "column": 27,
+        "nodeType": null,
+        "messageId": "unusedVar",
+        "endLine": 6,
+        "endColumn": 34
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "/**\n * @fileoverview useRecommendation hook testleri\n * TDD RED faz─▒\n */\n\nimport { renderHook, act, waitFor } from \"@testing-library/react-native\";\n\n// Hook hen├╝z yok (RED)\nimport { useRecommendation } from \"../useRecommendation\";\n\n// Mock services\nconst mockGetRandomFromLibrary = jest.fn();\nconst mockGetDiscoveryRecommendation = jest.fn();\nconst mockGetFavoriteGenre = jest.fn();\n\njest.mock(\"../../../services/RecommendationService\", () => ({\n  RecommendationService: {\n    getRandomFromLibrary: async (...args: unknown[]) =>\n      mockGetRandomFromLibrary(...args),\n    getDiscoveryRecommendation: (...args: unknown[]) =>\n      mockGetDiscoveryRecommendation(...args),\n    getFavoriteGenre: () => mockGetFavoriteGenre(),\n  },\n}));\n\n// BooksContext mock\nconst mockBooks = [\n  { id: \"1\", title: \"Book 1\", status: \"Okunacak\" },\n  { id: \"2\", title: \"Book 2\", status: \"Okunuyor\" },\n];\njest.mock(\"../../../context/BooksContext\", () => ({\n  useBooks: () => ({\n    books: mockBooks,\n  }),\n}));\n\nconst mockLibraryBook = {\n  id: \"lib-1\",\n  title: \"Library Book\",\n  author: \"Author 1\",\n  status: \"Okunacak\",\n  coverUrl: \"https://example.com/cover1.jpg\",\n  genre: \"Fiction\",\n};\n\nconst mockExternalBook = {\n  id: \"ext-1\",\n  title: \"External Book\",\n  author: \"Author 2\",\n  status: \"Okunacak\",\n  coverUrl: \"https://example.com/cover2.jpg\",\n  genre: \"Thriller\",\n};\n\ndescribe(\"useRecommendation\", () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n    mockGetFavoriteGenre.mockReturnValue(\"Fiction\");\n  });\n\n  describe(\"initial state\", () => {\n    it(\"should return null recommendation initially\", () => {\n      const { result } = renderHook(() => useRecommendation());\n\n      expect(result.current.recommendation).toBeNull();\n      expect(result.current.isLoading).toBe(false);\n      expect(result.current.isError).toBe(false);\n      expect(result.current.source).toBeNull();\n    });\n  });\n\n  describe(\"getRecommendation from library\", () => {\n    it(\"should return library book when available\", async () => {\n      mockGetRandomFromLibrary.mockReturnValue(mockLibraryBook);\n\n      const { result } = renderHook(() => useRecommendation());\n\n      await act(async () => {\n        await result.current.refresh();\n      });\n\n      expect(result.current.recommendation).toEqual(mockLibraryBook);\n      expect(result.current.source).toBe(\"library\");\n    });\n\n    it(\"should set isLoading true during fetch\", async () => {\n      mockGetRandomFromLibrary.mockReturnValue(mockLibraryBook);\n\n      const { result } = renderHook(() => useRecommendation());\n\n      expect(result.current.isLoading).toBe(false);\n\n      // refresh ├ğa─şr─▒l─▒nca loading true olmal─▒\n      const refreshPromise = act(async () => {\n        await result.current.refresh();\n      });\n\n      // ─░┼şlem bittikten sonra loading false\n      await refreshPromise;\n      expect(result.current.isLoading).toBe(false);\n    });\n  });\n\n  describe(\"getRecommendation from external API\", () => {\n    it(\"should fetch external book when library is empty\", async () => {\n      mockGetRandomFromLibrary.mockReturnValue(null);\n      mockGetDiscoveryRecommendation.mockResolvedValue(mockExternalBook);\n\n      const { result } = renderHook(() => useRecommendation());\n\n      await act(async () => {\n        await result.current.refresh();\n      });\n\n      expect(result.current.recommendation).toEqual(mockExternalBook);\n      expect(result.current.source).toBe(\"external\");\n    });\n\n    it(\"should use favorite genre for external search\", async () => {\n      mockGetRandomFromLibrary.mockReturnValue(null);\n      mockGetDiscoveryRecommendation.mockResolvedValue(mockExternalBook);\n\n      const { result } = renderHook(() => useRecommendation());\n\n      await act(async () => {\n        await result.current.refresh();\n      });\n\n      expect(mockGetDiscoveryRecommendation).toHaveBeenCalledWith(\n        \"Fiction\",\n        expect.any(Array),\n        expect.any(AbortSignal),\n      );\n    });\n  });\n\n  describe(\"error handling\", () => {\n    it(\"should set isError when API fails\", async () => {\n      mockGetRandomFromLibrary.mockReturnValue(null);\n      mockGetDiscoveryRecommendation.mockRejectedValue(\n        new Error(\"Network error\"),\n      );\n\n      const { result } = renderHook(() => useRecommendation());\n\n      await act(async () => {\n        await result.current.refresh();\n      });\n\n      expect(result.current.isError).toBe(true);\n      expect(result.current.recommendation).toBeNull();\n    });\n  });\n\n  describe(\"refresh\", () => {\n    it(\"should get new recommendation on refresh\", async () => {\n      mockGetRandomFromLibrary\n        .mockReturnValueOnce(mockLibraryBook)\n        .mockReturnValueOnce({\n          ...mockLibraryBook,\n          id: \"lib-2\",\n          title: \"Book 2\",\n        });\n\n      const { result } = renderHook(() => useRecommendation());\n\n      await act(async () => {\n        await result.current.refresh();\n      });\n\n      expect(result.current.recommendation?.title).toBe(\"Library Book\");\n\n      await act(async () => {\n        await result.current.refresh();\n      });\n\n      expect(result.current.recommendation?.title).toBe(\"Book 2\");\n    });\n  });\n});\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\book\\useBookDetails.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\book\\useBookSearch.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\book\\useRecommendation.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\useBackup.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\useDebounce.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\hooks\\useFrameworkReady.ts",
+    "messages": [
+      {
+        "ruleId": null,
+        "message": "Unused eslint-disable directive (no problems were reported from 'no-var').",
+        "line": 4,
+        "column": 3,
+        "severity": 1,
+        "nodeType": null,
+        "fix": { "range": [55, 89], "text": " " }
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 1,
+    "source": "import { useEffect } from \"react\";\n\ndeclare global {\n  // eslint-disable-next-line no-var\n  var frameworkReady: (() => void) | undefined;\n}\n\nexport function useFrameworkReady() {\n  useEffect(() => {\n    globalThis.frameworkReady?.();\n  }, []);\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\i18n\\i18n.ts",
+    "messages": [
+      {
+        "ruleId": "import/no-named-as-default-member",
+        "severity": 1,
+        "message": "Caution: `i18n` also has a named export `use`. Check if you meant to write `import {use} from 'i18next'` instead.",
+        "line": 19,
+        "column": 9,
+        "nodeType": "MemberExpression",
+        "endLine": 19,
+        "endColumn": 17
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import i18n from \"i18next\";\nimport { initReactI18next } from \"react-i18next\";\nimport * as Localization from \"expo-localization\";\nimport \"intl-pluralrules\";\n\nimport tr from \"./locales/tr.json\";\nimport en from \"./locales/en.json\";\n\nconst resources = {\n  tr: { translation: tr },\n  en: { translation: en },\n};\n\nconst initI18n = async () => {\n  // LanguageContext will handle loading saved language\n  // For now, we default to device locale or 'tr'\n  const deviceLanguage = Localization.getLocales()[0]?.languageCode ?? \"tr\";\n\n  await i18n.use(initReactI18next).init({\n    resources,\n    lng: deviceLanguage, // Default to device language initially\n    fallbackLng: \"tr\",\n    interpolation: {\n      escapeValue: false, // react handles escaping\n    },\n    react: {\n      useSuspense: false,\n    },\n  });\n};\n\ninitI18n();\n\nexport { default } from \"i18next\";\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\jest.setup.js",
+    "messages": [
+      {
+        "ruleId": null,
+        "nodeType": null,
+        "fatal": true,
+        "severity": 2,
+        "message": "Parsing error: Unexpected token :",
+        "line": 6,
+        "column": 21
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 1,
+    "fatalErrorCount": 1,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "// React Native Gesture Handler\nimport \"react-native-gesture-handler/jestSetup\";\n\n// Mock NativeWind\njest.mock(\"nativewind\", () => ({\n  styled: (Component: any) => Component,\n  useColorScheme: () => ({\n    colorScheme: \"light\",\n    setColorScheme: jest.fn(),\n  }),\n}));\n\n// Mock React Native Reanimated\njest.mock(\"react-native-reanimated\", function mockReanimated() {\n  const Reanimated = require(\"react-native-reanimated/mock\");\n  Reanimated.default.call = function noop() {};\n  return Reanimated;\n});\n\n// Mock Async Storage\njest.mock(\"@react-native-async-storage/async-storage\", () =>\n  require(\"@react-native-async-storage/async-storage/jest/async-storage-mock\"),\n);\n\n// Mock Expo Modules\njest.mock(\"expo-linking\", () => ({\n  createURL: jest.fn(),\n  openURL: jest.fn(),\n  canOpenURL: jest.fn(() => Promise.resolve(true)),\n}));\n\njest.mock(\"expo-router\", () => ({\n  useRouter: () => ({\n    push: jest.fn(),\n    replace: jest.fn(),\n    back: jest.fn(),\n  }),\n  usePathname: () => \"/\",\n  useLocalSearchParams: () => ({}),\n  Link: \"Link\",\n}));\n\n// Mock Localization\njest.mock(\"expo-localization\", () => ({\n  getLocales: () => [{ languageCode: \"tr\" }],\n  locale: \"tr-TR\",\n}));\n\n// Mock SecureStore\njest.mock(\"expo-secure-store\", () => ({\n  getItemAsync: jest.fn(),\n  setItemAsync: jest.fn(),\n  deleteItemAsync: jest.fn(),\n}));\n\n// Google Mobile Ads Mock\njest.mock(\"react-native-google-mobile-ads\", () => ({\n  TestIds: {\n    BANNER: \"ca-app-pub-3940256099942544/6300978111\",\n    INTERSTITIAL: \"ca-app-pub-3940256099942544/1033173712\",\n    REWARDED: \"ca-app-pub-3940256099942544/5224354917\",\n    REWARDED_INTERSTITIAL: \"ca-app-pub-3940256099942544/5354046379\",\n  },\n  BannerAd: \"BannerAd\",\n  BannerAdSize: {\n    BANNER: \"BANNER\",\n  },\n  InterstitialAd: {\n    createForAdRequest: jest.fn(() => ({\n      load: jest.fn(),\n      show: jest.fn(),\n      addAdEventListener: jest.fn(),\n    })),\n  },\n  RewardedAd: {\n    createForAdRequest: jest.fn(() => ({\n      load: jest.fn(),\n      show: jest.fn(),\n      addAdEventListener: jest.fn(),\n    })),\n  },\n  RewardedInterstitialAd: {\n    createForAdRequest: jest.fn(() => ({\n      load: jest.fn(),\n      show: jest.fn(),\n      addAdEventListener: jest.fn(),\n    })),\n  },\n  AdEventType: {\n    LOADED: \"loaded\",\n    ERROR: \"error\",\n    OPENED: \"opened\",\n    CLOSED: \"closed\",\n  },\n  RewardedAdEventType: {\n    LOADED: \"loaded\",\n    EARNED_REWARD: \"earned_reward\",\n  },\n}));\n\n/**\n * Sessizle┼ştirmeler\n * Test s─▒ras─▒nda gereksiz console loglar─▒n─▒ gizler\n */\nconst originalConsoleError = console.error;\nconsole.error = (...args) => {\n  if (typeof args[0] === \"string\" && /Warning:/.test(args[0])) return;\n  originalConsoleError(...args);\n};\n\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\metro.config.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\nativewind-env.d.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\scripts\\test-search-filter.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\BackupService.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\BookMergeService.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\GoogleBooksService.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\NotificationService.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\OpenLibraryService.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\PriceService.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\RecommendationService.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\SearchEngine.test.ts",
+    "messages": [
+      {
+        "ruleId": "unicode-bom",
+        "severity": 1,
+        "message": "Unexpected Unicode BOM (Byte Order Mark).",
+        "line": 1,
+        "column": 1,
+        "nodeType": "Program",
+        "messageId": "unexpected",
+        "fix": { "range": [-1, 0], "text": "" }
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 1,
+    "source": "´╗┐import { SearchEngine } from \"./SearchEngine\";\nimport { GoogleBooksService } from \"./GoogleBooksService\";\nimport { OpenLibraryService } from \"./OpenLibraryService\";\n\n// Mock dependencies\njest.mock(\"./GoogleBooksService\", () => ({\n  GoogleBooksService: {\n    searchByIsbn: jest.fn(),\n    searchBooks: jest.fn(),\n  },\n}));\n\njest.mock(\"./OpenLibraryService\", () => ({\n  OpenLibraryService: {\n    searchBooks: jest.fn(),\n    searchByIsbn: jest.fn(),\n    getCoverUrl: jest.fn(\n      (id: number, size: string) =>\n        `https://covers.openlibrary.org/b/id/${id}-${size}.jpg`,\n    ),\n    toGoogleBookFormat: jest.fn((book: any) => ({\n      id: book.key || \"ol-\" + Math.random(),\n      volumeInfo: {\n        title: book.title || \"Test Book\",\n        authors: book.authors?.map((a: any) => a.name) || [],\n        imageLinks: book.covers?.[0]\n          ? {\n              thumbnail: `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`,\n            }\n          : undefined,\n        categories: book.subjects?.slice(0, 1),\n        pageCount: book.number_of_pages,\n        // Preserve ISBN identifiers for matching\n        industryIdentifiers:\n          book.isbn_13?.map((isbn: string) => ({\n            type: \"ISBN_13\",\n            identifier: isbn,\n          })) ||\n          book.isbn_10?.map((isbn: string) => ({\n            type: \"ISBN_10\",\n            identifier: isbn,\n          })),\n      },\n    })),\n  },\n}));\n\n// Mock fetchWithTimeout for timeout tests\njest.mock(\"../utils/fetchWithTimeout\", () => ({\n  fetchWithTimeout: jest.fn(),\n}));\n\ndescribe(\"SearchEngine \", () => {\n  describe(\"isISBN Detection\", () => {\n    const validISBNs = [\n      \"9786053609421\", // ISBN-13\n      \"978-605-360-942-1\", // ISBN-13 with dashes\n      \"0140449132\", // ISBN-10\n      \"0-14-044913-2\", // ISBN-10 with dashes\n      \"0-14-044913-X\", // ISBN-10 with X\n    ];\n\n    const invalidInputs = [\n      \"Ahmet ├£mit\", // Plain text\n      \"12345\", // Short number\n      \"978605360942122\", // Too long\n      \"978-605-A60-942-1\", // Contains letters (except X at end)\n    ];\n\n    test.each(validISBNs)(\"should identify '%s' as ISBN\", (isbn) => {\n      expect(SearchEngine.isISBN(isbn)).toBe(true);\n    });\n\n    test.each(invalidInputs)(\"should reject '%s' as not ISBN\", (input) => {\n      expect(SearchEngine.isISBN(input)).toBe(false);\n    });\n  });\n\n  describe(\"search() Logic\", () => {\n    afterEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should sort results by relevance: Perfect > WrongLang > NoCover > Vague\", async () => {\n      const query = \"Nutuk\";\n      const lang = \"tr\";\n\n      const bookPerfect = {\n        id: \"1\",\n        volumeInfo: {\n          title: \"Nutuk\",\n          language: \"tr\",\n          imageLinks: { thumbnail: \"img\" },\n          industryIdentifiers: [{ type: \"ISBN_13\", identifier: \"9781\" }],\n        },\n      };\n\n      const bookWrongLang = {\n        id: \"2\",\n        volumeInfo: {\n          title: \"Nutuk\",\n          language: \"en\",\n          imageLinks: { thumbnail: \"img\" },\n          industryIdentifiers: [{ type: \"ISBN_13\", identifier: \"9782\" }],\n        },\n      };\n\n      const bookNoCover = {\n        id: \"3\",\n        volumeInfo: {\n          title: \"Nutuk\",\n          language: \"tr\",\n          industryIdentifiers: [{ type: \"ISBN_13\", identifier: \"9783\" }],\n        },\n      };\n\n      const bookVague = {\n        id: \"4\",\n        volumeInfo: {\n          title: \"Nutuk Analizi\",\n          language: \"tr\",\n          industryIdentifiers: [{ type: \"ISBN_13\", identifier: \"9784\" }],\n        },\n      };\n\n      (GoogleBooksService.searchBooks as jest.Mock).mockResolvedValue([\n        bookNoCover,\n        bookVague,\n      ]);\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([\n        bookWrongLang,\n        bookPerfect,\n      ]);\n\n      const results = await SearchEngine.search(query, lang, \"book\");\n\n      expect(results).toHaveLength(4);\n      expect(results[0].id).toBe(\"1\");\n      expect(results[1].id).toBe(\"2\");\n      expect(results[2].id).toBe(\"3\");\n      expect(results[3].id).toBe(\"4\");\n    });\n  });\n\n  describe(\"searchByIsbnEnriched()\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should return merged result when both sources have same ISBN\", async () => {\n      const googleBook = {\n        id: \"g1\",\n        volumeInfo: {\n          title: \"Test\",\n          industryIdentifiers: [\n            { type: \"ISBN_13\", identifier: \"9781234567890\" },\n          ],\n          imageLinks: undefined,\n        },\n      };\n      // OpenLibraryBookResult format (raw API response)\n      const olBookRaw = {\n        key: \"ol1\",\n        title: \"Test\",\n        isbn_13: [\"9781234567890\"],\n        covers: [12345], // This will generate a cover URL\n      };\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue(\n        googleBook,\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(\n        olBookRaw,\n      );\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results).toHaveLength(1);\n      expect(results[0].volumeInfo.imageLinks?.thumbnail).toBe(\n        \"https://covers.openlibrary.org/b/id/12345-M.jpg\",\n      );\n    });\n\n    test(\"should return empty array when no results\", async () => {\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results).toEqual([]);\n    });\n\n    test(\"should return Google book when OL fails\", async () => {\n      const googleBook = {\n        id: \"g1\",\n        volumeInfo: {\n          title: \"Test\",\n          industryIdentifiers: [\n            { type: \"ISBN_13\", identifier: \"9781234567890\" },\n          ],\n          imageLinks: { thumbnail: \"google-cover.jpg\" },\n        },\n      };\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue(\n        googleBook,\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results).toHaveLength(1);\n      expect(results[0].id).toBe(\"g1\");\n    });\n  });\n\n  describe(\"AbortSignal - Request Cancellation\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should abort search when signal is triggered\", async () => {\n      const abortController = new AbortController();\n      const { signal } = abortController;\n\n      // Mock delay'li response\n      (GoogleBooksService.searchBooks as jest.Mock).mockImplementation(\n        () =>\n          new Promise((resolve) => {\n            setTimeout(() => resolve([]), 100);\n          }),\n      );\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      // Abort immediately\n      abortController.abort();\n\n      const results = await SearchEngine.search(\"Nutuk\", \"tr\", \"book\", signal);\n\n      // Empty result because aborted\n      expect(results).toEqual([]);\n    });\n\n    test(\"should abort ISBN enriched search when signal is triggered\", async () => {\n      const abortController = new AbortController();\n      const { signal } = abortController;\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockImplementation(\n        () =>\n          new Promise((resolve) => {\n            setTimeout(() => resolve(null), 100);\n          }),\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      // Abort immediately\n      abortController.abort();\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9786053609421\",\n        \"tr\",\n        signal,\n      );\n\n      expect(results).toEqual([]);\n    });\n  });\n\n  describe(\"Timeout Scenarios\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should handle timeout from Google Books gracefully\", async () => {\n      (GoogleBooksService.searchBooks as jest.Mock).mockRejectedValue(\n        new Error(\"Request timeout\"),\n      );\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      const results = await SearchEngine.search(\"Test Query\", \"tr\", \"book\");\n\n      // Timeout durumunda bo┼ş result d├Ânmeli veya OL'den gelen sonu├ğlar\n      expect(results).toBeDefined();\n      expect(Array.isArray(results)).toBe(true);\n    });\n\n    test(\"should handle timeout from both services\", async () => {\n      (GoogleBooksService.searchBooks as jest.Mock).mockRejectedValue(\n        new Error(\"Request timeout\"),\n      );\n      (OpenLibraryService.searchBooks as jest.Mock).mockRejectedValue(\n        new Error(\"Request timeout\"),\n      );\n\n      const results = await SearchEngine.search(\"Test Query\", \"tr\", \"book\");\n\n      // Her iki servis de timeout olursa bo┼ş result\n      expect(results).toEqual([]);\n    });\n\n    test(\"should handle timeout in ISBN enriched search\", async () => {\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockRejectedValue(\n        new Error(\"Timeout\"),\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockRejectedValue(\n        new Error(\"Timeout\"),\n      );\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9786053609421\",\n        \"tr\",\n      );\n\n      expect(results).toEqual([]);\n    });\n  });\n\n  describe(\"Rate Limiting\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should handle Google Books rate limit error\", async () => {\n      const rateLimitError = new Error(\"429 Too Many Requests\");\n      (GoogleBooksService.searchBooks as jest.Mock).mockRejectedValue(\n        rateLimitError,\n      );\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([\n        {\n          id: \"ol1\",\n          volumeInfo: {\n            title: \"Nutuk\",\n            authors: [\"Mustafa Kemal Atat├╝rk\"],\n          },\n        },\n      ]);\n\n      const results = await SearchEngine.search(\"Nutuk\", \"tr\", \"book\");\n\n      // Error logged and empty array returned (Promise.all fails fast)\n      expect(results).toEqual([]);\n    });\n\n    test(\"should handle 403 Forbidden error gracefully\", async () => {\n      (GoogleBooksService.searchBooks as jest.Mock).mockRejectedValue(\n        new Error(\"403 Forbidden\"),\n      );\n      (OpenLibraryService.searchBooks as jest.Mock).mockRejectedValue(\n        new Error(\"403 Forbidden\"),\n      );\n\n      const results = await SearchEngine.search(\"Test\", \"tr\", \"book\");\n\n      expect(results).toEqual([]);\n    });\n\n    test(\"should handle network errors gracefully\", async () => {\n      (GoogleBooksService.searchBooks as jest.Mock).mockRejectedValue(\n        new Error(\"Network error\"),\n      );\n      (OpenLibraryService.searchBooks as jest.Mock).mockRejectedValue(\n        new Error(\"Network error\"),\n      );\n\n      const results = await SearchEngine.search(\"Test\", \"tr\", \"book\");\n\n      expect(results).toEqual([]);\n    });\n  });\n\n  describe(\"Unicode Query Handling\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should handle Turkish character search (┼ş, ─▒, ─ş)\", async () => {\n      const query = \"┼şi┼şe├ğ├╝k ┼şeyler\";\n\n      const googleResults = [\n        {\n          id: \"g1\",\n          volumeInfo: {\n            title: \"┼Şi┼şe├ğ├╝k ┼Şeyler\",\n            authors: [\"Test Yazar\"],\n            language: \"tr\",\n            imageLinks: { thumbnail: \"img\" },\n          },\n        },\n      ];\n\n      (GoogleBooksService.searchBooks as jest.Mock).mockResolvedValue(\n        googleResults,\n      );\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      const results = await SearchEngine.search(query, \"tr\", \"book\");\n\n      expect(results).toHaveLength(1);\n      expect(results[0].volumeInfo.title).toContain(\"┼Ş\");\n    });\n\n    test(\"should handle mixed language query\", async () => {\n      const query = \"Ahmet ├£mit\";\n\n      const googleResults = [\n        {\n          id: \"g1\",\n          volumeInfo: {\n            title: \"─░stanbul Hat─▒ras─▒\",\n            authors: [\"Ahmet ├£mit\"],\n            language: \"tr\",\n            imageLinks: { thumbnail: \"img\" },\n          },\n        },\n      ];\n\n      (GoogleBooksService.searchBooks as jest.Mock).mockResolvedValue(\n        googleResults,\n      );\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      const results = await SearchEngine.search(query, \"tr\", \"author\");\n\n      expect(results).toHaveLength(1);\n      expect(results[0].volumeInfo.authors).toContain(\"Ahmet ├£mit\");\n    });\n\n    test(\"should handle special characters in query\", async () => {\n      const query = \"Olas─▒l─▒ks─▒z\";\n\n      (GoogleBooksService.searchBooks as jest.Mock).mockResolvedValue([\n        {\n          id: \"g1\",\n          volumeInfo: {\n            title: \"Olas─▒l─▒ks─▒z\",\n            authors: [\"Adam Fawer\"],\n            language: \"tr\",\n          },\n        },\n      ]);\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      const results = await SearchEngine.search(query, \"tr\", \"book\");\n\n      expect(results).toHaveLength(1);\n    });\n  });\n\n  describe(\"Edge Cases\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should handle empty query\", async () => {\n      (GoogleBooksService.searchBooks as jest.Mock).mockResolvedValue([]);\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      const results = await SearchEngine.search(\"\", \"tr\", \"book\");\n\n      expect(results).toEqual([]);\n    });\n\n    test(\"should handle whitespace-only query\", async () => {\n      (GoogleBooksService.searchBooks as jest.Mock).mockResolvedValue([]);\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      const results = await SearchEngine.search(\"   \", \"tr\", \"book\");\n\n      expect(results).toEqual([]);\n    });\n\n    test(\"should handle very long query\", async () => {\n      const longQuery = \"a\".repeat(500);\n\n      (GoogleBooksService.searchBooks as jest.Mock).mockResolvedValue([]);\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      const results = await SearchEngine.search(longQuery, \"tr\", \"book\");\n\n      expect(results).toEqual([]);\n    });\n\n    test(\"should handle undefined language parameter\", async () => {\n      (GoogleBooksService.searchBooks as jest.Mock).mockResolvedValue([\n        {\n          id: \"g1\",\n          volumeInfo: {\n            title: \"Test\",\n            authors: [\"Author\"],\n          },\n        },\n      ]);\n      (OpenLibraryService.searchBooks as jest.Mock).mockResolvedValue([]);\n\n      // Test undefined language (has default value in function)\n      const results = await SearchEngine.search(\"Test\", undefined, \"book\");\n\n      expect(results).toBeDefined();\n    });\n  });\n\n  describe(\"searchByIsbnEnriched with Merge\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should merge data from both sources when ISBN matches\", async () => {\n      const googleBook = {\n        id: \"g1\",\n        volumeInfo: {\n          title: \"Merged Book\",\n          authors: [\"Google Author\"],\n          description: \"Google description\",\n          industryIdentifiers: [\n            { type: \"ISBN_13\", identifier: \"9781234567890\" },\n          ],\n          imageLinks: undefined, // Missing cover\n          pageCount: 300,\n        },\n      };\n\n      const olBookRaw = {\n        key: \"ol1\",\n        title: \"Merged Book\",\n        isbn_13: [\"9781234567890\"],\n        covers: [12345], // Has cover\n        number_of_pages: 320, // Different page count\n        subjects: [\"Fiction\", \"Literature\"],\n      };\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue(\n        googleBook,\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(\n        olBookRaw,\n      );\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results).toHaveLength(1);\n      expect(results[0].volumeInfo.title).toBe(\"Merged Book\");\n      // Should have cover from OpenLibrary\n      expect(results[0].volumeInfo.imageLinks?.thumbnail).toBe(\n        \"https://covers.openlibrary.org/b/id/12345-M.jpg\",\n      );\n    });\n\n    test(\"should prefer Google Books data when both sources have same field\", async () => {\n      const googleBook = {\n        id: \"g1\",\n        volumeInfo: {\n          title: \"Google Title\",\n          authors: [\"Google Author\"],\n          description: \"Google description\",\n          industryIdentifiers: [\n            { type: \"ISBN_13\", identifier: \"9781234567890\" },\n          ],\n          pageCount: 300,\n        },\n      };\n\n      const olBookRaw = {\n        key: \"ol1\",\n        title: \"OL Title\",\n        isbn_13: [\"9781234567890\"],\n        authors: [{ name: \"OL Author\" }],\n      };\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue(\n        googleBook,\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(\n        olBookRaw,\n      );\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results[0].volumeInfo.title).toBe(\"Google Title\");\n      expect(results[0].volumeInfo.authors).toEqual([\"Google Author\"]);\n    });\n\n    test(\"should use OpenLibrary cover when Google Books has no cover\", async () => {\n      const googleBook = {\n        id: \"g1\",\n        volumeInfo: {\n          title: \"Test\",\n          industryIdentifiers: [\n            { type: \"ISBN_13\", identifier: \"9781234567890\" },\n          ],\n          // No imageLinks\n        },\n      };\n\n      const olBookRaw = {\n        key: \"ol1\",\n        title: \"Test\",\n        isbn_13: [\"9781234567890\"],\n        covers: [99999],\n      };\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue(\n        googleBook,\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(\n        olBookRaw,\n      );\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results[0].volumeInfo.imageLinks?.thumbnail).toContain(\n        \"covers.openlibrary.org\",\n      );\n    });\n\n    test(\"should not modify Google Book when OpenLibrary returns null\", async () => {\n      const googleBook = {\n        id: \"g1\",\n        volumeInfo: {\n          title: \"Google Only Book\",\n          authors: [\"Author\"],\n          industryIdentifiers: [\n            { type: \"ISBN_13\", identifier: \"9781234567890\" },\n          ],\n          imageLinks: { thumbnail: \"google-cover.jpg\" },\n        },\n      };\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue(\n        googleBook,\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results).toHaveLength(1);\n      expect(results[0].volumeInfo.title).toBe(\"Google Only Book\");\n      expect(results[0].volumeInfo.imageLinks?.thumbnail).toBe(\n        \"google-cover.jpg\",\n      );\n    });\n  });\n\n  describe(\"Error Handling in Enriched Search\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should handle Google Books API error gracefully\", async () => {\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockRejectedValue(\n        new Error(\"Google API Error\"),\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results).toEqual([]);\n    });\n\n    test(\"should handle OpenLibrary API error gracefully\", async () => {\n      const googleBook = {\n        id: \"g1\",\n        volumeInfo: {\n          title: \"Test\",\n          industryIdentifiers: [\n            { type: \"ISBN_13\", identifier: \"9781234567890\" },\n          ],\n        },\n      };\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue(\n        googleBook,\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockRejectedValue(\n        new Error(\"OL API Error\"),\n      );\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      // Should still return Google Books result\n      expect(results).toHaveLength(1);\n      expect(results[0].id).toBe(\"g1\");\n    });\n\n    test(\"should handle both APIs throwing errors\", async () => {\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockRejectedValue(\n        new Error(\"Google Error\"),\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockRejectedValue(\n        new Error(\"OL Error\"),\n      );\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results).toEqual([]);\n    });\n\n    test(\"should handle malformed response from Google Books\", async () => {\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockResolvedValue({\n        id: \"g1\",\n        // Missing volumeInfo\n      });\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      // Should handle gracefully\n      expect(results).toBeDefined();\n    });\n  });\n\n  describe(\"AbortSignal Cancellation Enhancement\", () => {\n    beforeEach(() => {\n      jest.clearAllMocks();\n    });\n\n    test(\"should abort ISBN search immediately when signal aborted\", async () => {\n      const abortController = new AbortController();\n      const { signal } = abortController;\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockImplementation(\n        () =>\n          new Promise((resolve) => {\n            setTimeout(() => resolve(null), 1000);\n          }),\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      // Abort before calling\n      abortController.abort();\n\n      const results = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n        signal,\n      );\n\n      expect(results).toEqual([]);\n      expect(GoogleBooksService.searchByIsbn).toHaveBeenCalledWith(\n        \"9781234567890\",\n        \"tr\",\n        signal,\n      );\n    });\n\n    test(\"should abort during fetch in enriched search\", async () => {\n      const abortController = new AbortController();\n      const { signal } = abortController;\n\n      let resolveGoogle: (value: any) => void;\n      const googlePromise = new Promise((resolve) => {\n        resolveGoogle = resolve;\n      });\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockReturnValue(\n        googlePromise,\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      // Start the search\n      const resultsPromise = SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n        signal,\n      );\n\n      // Abort immediately\n      abortController.abort();\n\n      // Resolve Google after abort\n      resolveGoogle!(null);\n\n      const results = await resultsPromise;\n      expect(results).toEqual([]);\n    });\n\n    test(\"should not affect subsequent searches after abort\", async () => {\n      const abortController = new AbortController();\n\n      (GoogleBooksService.searchByIsbn as jest.Mock).mockImplementation(\n        (isbn, lang, signal) => {\n          if (signal?.aborted) {\n            return Promise.reject(new DOMException(\"Aborted\", \"AbortError\"));\n          }\n          return Promise.resolve({\n            id: \"g1\",\n            volumeInfo: {\n              title: \"Test\",\n              industryIdentifiers: [\n                { type: \"ISBN_13\", identifier: \"9781234567890\" },\n              ],\n            },\n          });\n        },\n      );\n      (OpenLibraryService.searchByIsbn as jest.Mock).mockResolvedValue(null);\n\n      // First search with abort\n      abortController.abort();\n      const results1 = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n        abortController.signal,\n      );\n\n      // Second search without abort\n      const results2 = await SearchEngine.searchByIsbnEnriched(\n        \"9781234567890\",\n        \"tr\",\n      );\n\n      expect(results1).toEqual([]);\n      expect(results2).toHaveLength(1);\n    });\n  });\n});\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\SearchEngine.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\__tests__\\BookMergeService.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\__tests__\\GoogleBooksService.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\__tests__\\NotificationService.test.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-require-imports",
+        "severity": 1,
+        "message": "A `require()` style import is forbidden.",
+        "line": 113,
+        "column": 28,
+        "nodeType": "CallExpression",
+        "messageId": "noRequireImports",
+        "endLine": 113,
+        "endColumn": 61
+      },
+      {
+        "ruleId": "@typescript-eslint/no-require-imports",
+        "severity": 1,
+        "message": "A `require()` style import is forbidden.",
+        "line": 383,
+        "column": 28,
+        "nodeType": "CallExpression",
+        "messageId": "noRequireImports",
+        "endLine": 383,
+        "endColumn": 61
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 2,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import * as Notifications from \"expo-notifications\";\nimport { Platform } from \"react-native\";\nimport {\n  NOTIFICATION_IDS,\n  scheduleDailyNotification,\n  scheduleWeeklyNotification,\n  sendInstantNotification,\n  sendBookCompletionNotification,\n  sendReadingProgressNotification,\n  cancelNotification,\n  cancelAllNotifications,\n  scheduleInactiveUserNotification,\n  scheduleMagicRecommendationNotification,\n  scheduleYearEndNotification,\n  parseTimeString,\n} from \"../NotificationService\";\n\n// expo-notifications mock\njest.mock(\"expo-notifications\", () => ({\n  scheduleNotificationAsync: jest.fn(),\n  cancelScheduledNotificationAsync: jest.fn(),\n  cancelAllScheduledNotificationsAsync: jest.fn(),\n  SchedulableTriggerInputTypes: {\n    DAILY: \"daily\",\n    WEEKLY: \"weekly\",\n    TIME_INTERVAL: \"timeInterval\",\n    YEARLY: \"yearly\",\n  },\n}));\n\n// Platform mock\njest.mock(\"react-native\", () => ({\n  Platform: {\n    OS: \"ios\",\n  },\n}));\n\n// logError mock\njest.mock(\"../../utils/errorUtils\", () => ({\n  logError: jest.fn(),\n}));\n\ndescribe(\"NotificationService\", () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n  });\n\n  describe(\"NOTIFICATION_IDS\", () => {\n    it(\"do─şru ID sabitlerine sahiptir\", () => {\n      expect(NOTIFICATION_IDS.DAILY_READING_REMINDER).toBe(\n        \"daily-reading-reminder\",\n      );\n      expect(NOTIFICATION_IDS.DAILY_CREDIT_REMINDER).toBe(\n        \"daily-credit-reminder\",\n      );\n      expect(NOTIFICATION_IDS.WEEKLY_SUMMARY).toBe(\"weekly-summary\");\n      expect(NOTIFICATION_IDS.MAGIC_RECOMMENDATION).toBe(\n        \"magic-recommendation\",\n      );\n      expect(NOTIFICATION_IDS.INACTIVE_USER).toBe(\"inactive-user\");\n    });\n  });\n\n  describe(\"scheduleDailyNotification\", () => {\n    it(\"g├╝nl├╝k bildirim zamanlar (iOS)\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"test-daily-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await scheduleDailyNotification(\n        \"test-id\",\n        { title: \"Test Ba┼şl─▒k\", body: \"Test ─░├ğerik\" },\n        20,\n        0,\n      );\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"Test Ba┼şl─▒k\",\n          body: \"Test ─░├ğerik\",\n          data: undefined,\n          sound: true,\n        },\n        trigger: {\n          type: \"daily\",\n          hour: 20,\n          minute: 0,\n        },\n        identifier: \"test-id\",\n      });\n    });\n\n    it(\"web platformda null d├Âner\", async () => {\n      (Platform.OS as string) = \"web\";\n\n      const result = await scheduleDailyNotification(\n        \"test-id\",\n        { title: \"Test\", body: \"Test\" },\n        20,\n        0,\n      );\n\n      expect(result).toBeNull();\n      expect(Notifications.scheduleNotificationAsync).not.toHaveBeenCalled();\n    });\n\n    it(\"hata durumunda null d├Âner ve loglar\", async () => {\n      (Platform.OS as string) = \"ios\";\n      const { logError } = require(\"../../utils/errorUtils\");\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockRejectedValueOnce(new Error(\"Notification error\"));\n\n      const result = await scheduleDailyNotification(\n        \"test-id\",\n        { title: \"Test\", body: \"Test\" },\n        20,\n        0,\n      );\n\n      expect(result).toBeNull();\n      expect(logError).toHaveBeenCalledWith(\n        \"NotificationService.scheduleDailyNotification\",\n        expect.any(Error),\n      );\n    });\n\n    it(\"├Ânce mevcut bildirimi iptal eder\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"test-daily-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      await scheduleDailyNotification(\n        \"test-id\",\n        { title: \"Test\", body: \"Test\" },\n        20,\n        0,\n      );\n\n      expect(\n        Notifications.cancelScheduledNotificationAsync,\n      ).toHaveBeenCalledWith(\"test-id\");\n    });\n  });\n\n  describe(\"scheduleWeeklyNotification\", () => {\n    it(\"haftal─▒k bildirim zamanlar\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"test-weekly-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await scheduleWeeklyNotification(\n        \"test-id\",\n        { title: \"Test Ba┼şl─▒k\", body: \"Test ─░├ğerik\" },\n        1, // Pazartesi\n        10,\n        30,\n      );\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"Test Ba┼şl─▒k\",\n          body: \"Test ─░├ğerik\",\n          data: undefined,\n          sound: true,\n        },\n        trigger: {\n          type: \"weekly\",\n          weekday: 1,\n          hour: 10,\n          minute: 30,\n        },\n        identifier: \"test-id\",\n      });\n    });\n\n    it(\"web platformda null d├Âner\", async () => {\n      (Platform.OS as string) = \"web\";\n\n      const result = await scheduleWeeklyNotification(\n        \"test-id\",\n        { title: \"Test\", body: \"Test\" },\n        1,\n        10,\n        0,\n      );\n\n      expect(result).toBeNull();\n    });\n  });\n\n  describe(\"sendInstantNotification\", () => {\n    it(\"anl─▒k bildirim g├Ânderir\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"test-instant-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await sendInstantNotification({\n        title: \"Anl─▒k Bildirim\",\n        body: \"Bu bir anl─▒k bildirim\",\n        data: { type: \"test\" },\n      });\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"Anl─▒k Bildirim\",\n          body: \"Bu bir anl─▒k bildirim\",\n          data: { type: \"test\" },\n          sound: true,\n        },\n        trigger: null,\n      });\n    });\n\n    it(\"data olmadan bildirim g├Ânderir\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"test-instant-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await sendInstantNotification({\n        title: \"Test\",\n        body: \"Test\",\n      });\n\n      expect(result).toBe(mockNotificationId);\n    });\n  });\n\n  describe(\"sendBookCompletionNotification\", () => {\n    it(\"kitap bitirme bildirimi g├Ânderir\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"completion-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await sendBookCompletionNotification(\"Sefiller\");\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"­şÄë Tebrikler!\",\n          body: '\"Sefiller\" kitab─▒n─▒ bitirdin!',\n          data: { type: \"book-completion\", bookTitle: \"Sefiller\" },\n          sound: true,\n        },\n        trigger: null,\n      });\n    });\n  });\n\n  describe(\"sendReadingProgressNotification\", () => {\n    it(\"%25 kilometre ta┼ş─▒ bildirimi g├Ânderir\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"progress-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await sendReadingProgressNotification(\"Test Kitap\", 25);\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"─░yi gidiyorsun! ­şôû\",\n          body: '\"Test Kitap\" kitab─▒n─▒n %25\\'ini tamamlad─▒n.',\n          data: {\n            type: \"reading-progress\",\n            bookTitle: \"Test Kitap\",\n            milestone: 25,\n          },\n          sound: true,\n        },\n        trigger: null,\n      });\n    });\n\n    it(\"%50 kilometre ta┼ş─▒ bildirimi g├Ânderir\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"progress-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await sendReadingProgressNotification(\"Test Kitap\", 50);\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"Yar─▒s─▒na geldin! ­şÄ»\",\n          body: '\"Test Kitap\" kitab─▒n─▒n yar─▒s─▒n─▒ bitirdin.',\n          data: {\n            type: \"reading-progress\",\n            bookTitle: \"Test Kitap\",\n            milestone: 50,\n          },\n          sound: true,\n        },\n        trigger: null,\n      });\n    });\n\n    it(\"%75 kilometre ta┼ş─▒ bildirimi g├Ânderir\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"progress-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await sendReadingProgressNotification(\"Test Kitap\", 75);\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"Bitmek ├╝zere! ­şöÑ\",\n          body: '\"Test Kitap\" kitab─▒n─▒n %75\\'ini tamamlad─▒n.',\n          data: {\n            type: \"reading-progress\",\n            bookTitle: \"Test Kitap\",\n            milestone: 75,\n          },\n          sound: true,\n        },\n        trigger: null,\n      });\n    });\n\n    it(\"desteklenmeyen kilometre ta┼ş─▒ i├ğin null d├Âner\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const result = await sendReadingProgressNotification(\"Test Kitap\", 10);\n\n      expect(result).toBeNull();\n      expect(Notifications.scheduleNotificationAsync).not.toHaveBeenCalled();\n    });\n  });\n\n  describe(\"cancelNotification\", () => {\n    it(\"bildirimi iptal eder\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      await cancelNotification(\"test-id\");\n\n      expect(\n        Notifications.cancelScheduledNotificationAsync,\n      ).toHaveBeenCalledWith(\"test-id\");\n    });\n\n    it(\"web platformda hi├ğbir ┼şey yapmaz\", async () => {\n      (Platform.OS as string) = \"web\";\n\n      await cancelNotification(\"test-id\");\n\n      expect(\n        Notifications.cancelScheduledNotificationAsync,\n      ).not.toHaveBeenCalled();\n    });\n\n    it(\"hata durumunda loglar\", async () => {\n      (Platform.OS as string) = \"ios\";\n      const { logError } = require(\"../../utils/errorUtils\");\n      (\n        Notifications.cancelScheduledNotificationAsync as jest.Mock\n      ).mockRejectedValueOnce(new Error(\"Cancel error\"));\n\n      await cancelNotification(\"test-id\");\n\n      expect(logError).toHaveBeenCalledWith(\n        \"NotificationService.cancelNotification\",\n        expect.any(Error),\n      );\n    });\n  });\n\n  describe(\"cancelAllNotifications\", () => {\n    it(\"t├╝m bildirimleri iptal eder\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      await cancelAllNotifications();\n\n      expect(\n        Notifications.cancelAllScheduledNotificationsAsync,\n      ).toHaveBeenCalled();\n    });\n\n    it(\"web platformda hi├ğbir ┼şey yapmaz\", async () => {\n      (Platform.OS as string) = \"web\";\n\n      await cancelAllNotifications();\n\n      expect(\n        Notifications.cancelAllScheduledNotificationsAsync,\n      ).not.toHaveBeenCalled();\n    });\n  });\n\n  describe(\"scheduleInactiveUserNotification\", () => {\n    it(\"pasif kullan─▒c─▒ bildirimi zamanlar (varsay─▒lan 3 g├╝n)\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"inactive-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await scheduleInactiveUserNotification({\n        title: \"Seni ├Âzledik!\",\n        body: \"Gel kitap okumaya devam et\",\n      });\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"Seni ├Âzledik!\",\n          body: \"Gel kitap okumaya devam et\",\n          data: undefined,\n          sound: true,\n        },\n        trigger: {\n          type: \"timeInterval\",\n          seconds: 3 * 24 * 60 * 60, // 3 g├╝n\n          repeats: false,\n        },\n        identifier: NOTIFICATION_IDS.INACTIVE_USER,\n      });\n    });\n\n    it(\"├Âzel g├╝n say─▒s─▒ ile zamanlar\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"inactive-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await scheduleInactiveUserNotification(\n        {\n          title: \"Test\",\n          body: \"Test\",\n        },\n        7,\n      );\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: expect.any(Object),\n        trigger: expect.objectContaining({\n          seconds: 7 * 24 * 60 * 60, // 7 g├╝n\n        }),\n        identifier: NOTIFICATION_IDS.INACTIVE_USER,\n      });\n    });\n  });\n\n  describe(\"scheduleMagicRecommendationNotification\", () => {\n    it(\"sihirli ├Âneri bildirimi zamanlar (varsay─▒lan 15 g├╝n)\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"magic-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await scheduleMagicRecommendationNotification({\n        title: \"Sihirli ├ûneri!\",\n        body: \"Yeni bir kitap ke┼şfetmeye haz─▒r m─▒s─▒n?\",\n      });\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"Sihirli ├ûneri!\",\n          body: \"Yeni bir kitap ke┼şfetmeye haz─▒r m─▒s─▒n?\",\n          data: undefined,\n          sound: true,\n        },\n        trigger: {\n          type: \"timeInterval\",\n          seconds: 15 * 24 * 60 * 60, // 15 g├╝n\n          repeats: true,\n        },\n        identifier: NOTIFICATION_IDS.MAGIC_RECOMMENDATION,\n      });\n    });\n\n    it(\"├Âzel aral─▒klarla zamanlar\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"magic-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await scheduleMagicRecommendationNotification(\n        {\n          title: \"Test\",\n          body: \"Test\",\n        },\n        30, // 30 g├╝n sonra ba┼şla\n        7, // 7 g├╝nde bir tekrarla\n      );\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: expect.any(Object),\n        trigger: expect.objectContaining({\n          seconds: 7 * 24 * 60 * 60, // 7 g├╝n aral─▒k\n          repeats: true,\n        }),\n        identifier: NOTIFICATION_IDS.MAGIC_RECOMMENDATION,\n      });\n    });\n  });\n\n  describe(\"scheduleYearEndNotification\", () => {\n    it(\"y─▒l sonu bildirimi zamanlar (1 Ocak)\", async () => {\n      (Platform.OS as string) = \"ios\";\n\n      const mockNotificationId = \"year-end-id\";\n      (\n        Notifications.scheduleNotificationAsync as jest.Mock\n      ).mockResolvedValueOnce(mockNotificationId);\n\n      const result = await scheduleYearEndNotification({\n        title: \"Y─▒l Sonu ├ûzeti\",\n        body: \"Y─▒l─▒n─▒ de─şerlendir\",\n      });\n\n      expect(result).toBe(mockNotificationId);\n      expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith({\n        content: {\n          title: \"Y─▒l Sonu ├ûzeti\",\n          body: \"Y─▒l─▒n─▒ de─şerlendir\",\n          data: undefined,\n          sound: true,\n        },\n        trigger: {\n          type: \"yearly\",\n          month: 1,\n          day: 1,\n          hour: 10,\n          minute: 0,\n        },\n        identifier: \"year-end-summary\",\n      });\n    });\n  });\n\n  describe(\"parseTimeString\", () => {\n    it(\"zaman stringini parse eder (saat:dakika)\", () => {\n      const result = parseTimeString(\"20:30\");\n      expect(result).toEqual({ hour: 20, minute: 30 });\n    });\n\n    it(\"gece yar─▒s─▒ saatlerini parse eder\", () => {\n      const result = parseTimeString(\"00:00\");\n      // 0 falsy de─şer oldu─şu i├ğin || 20 devreye girer\n      expect(result).toEqual({ hour: 20, minute: 0 });\n    });\n\n    it(\"ge├ğersiz saat i├ğin varsay─▒lan de─şer (20) kullan─▒r\", () => {\n      const result = parseTimeString(\"invalid:30\");\n      expect(result).toEqual({ hour: 20, minute: 30 });\n    });\n\n    it(\"ge├ğersiz dakika i├ğin varsay─▒lan de─şer (0) kullan─▒r\", () => {\n      const result = parseTimeString(\"10:invalid\");\n      expect(result).toEqual({ hour: 10, minute: 0 });\n    });\n\n    it(\"tamamen ge├ğersiz string i├ğin varsay─▒lan de─şerler kullan─▒r\", () => {\n      const result = parseTimeString(\"invalid\");\n      expect(result).toEqual({ hour: 20, minute: 0 });\n    });\n\n    it(\"eksik dakika i├ğin varsay─▒lan de─şer (0) kullan─▒r\", () => {\n      const result = parseTimeString(\"15:\");\n      expect(result).toEqual({ hour: 15, minute: 0 });\n    });\n  });\n});\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\__tests__\\RecommendationService.test.ts",
+    "messages": [
+      {
+        "ruleId": "import/first",
+        "severity": 1,
+        "message": "Import in body of module; reorder to top.",
+        "line": 23,
+        "column": 1,
+        "nodeType": "ImportDeclaration",
+        "endLine": 23,
+        "endColumn": 65,
+        "fix": { "range": [536, 536], "text": "" }
+      },
+      {
+        "ruleId": "import/first",
+        "severity": 1,
+        "message": "Import in body of module; reorder to top.",
+        "line": 24,
+        "column": 1,
+        "nodeType": "ImportDeclaration",
+        "endLine": 24,
+        "endColumn": 51,
+        "fix": { "range": [587, 587], "text": "" }
+      },
+      {
+        "ruleId": "import/first",
+        "severity": 1,
+        "message": "Import in body of module; reorder to top.",
+        "line": 25,
+        "column": 1,
+        "nodeType": "ImportDeclaration",
+        "endLine": 25,
+        "endColumn": 62,
+        "fix": {
+          "range": [0, 649],
+          "text": "/**\n * RecommendationService Test Suite\n */\n\nimport { RecommendationService } from \"../RecommendationService\";\nimport { Book } from \"../../context/BooksContext\";\n\nimport { fetchWithTimeout } from \"../../utils/fetchWithTimeout\";\nimport { logError } from \"../../utils/errorUtils\";\nimport { getSecureRandomInt } from \"../../utils/cryptoUtils\";\n\n// Mock fetchWithTimeout\njest.mock(\"../../utils/fetchWithTimeout\", () => ({\n  fetchWithTimeout: jest.fn(),\n}));\n\n// Mock logError\njest.mock(\"../../utils/errorUtils\", () => ({\n  logError: jest.fn(),\n}));\n\n// Mock cryptoUtils\njest.mock(\"../../utils/cryptoUtils\", () => ({\n  getSecureRandomInt: jest.fn(),\n}));"
+        }
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 3,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 3,
+    "source": "/**\n * RecommendationService Test Suite\n */\n\nimport { RecommendationService } from \"../RecommendationService\";\nimport { Book } from \"../../context/BooksContext\";\n\n// Mock fetchWithTimeout\njest.mock(\"../../utils/fetchWithTimeout\", () => ({\n  fetchWithTimeout: jest.fn(),\n}));\n\n// Mock logError\njest.mock(\"../../utils/errorUtils\", () => ({\n  logError: jest.fn(),\n}));\n\n// Mock cryptoUtils\njest.mock(\"../../utils/cryptoUtils\", () => ({\n  getSecureRandomInt: jest.fn(),\n}));\n\nimport { fetchWithTimeout } from \"../../utils/fetchWithTimeout\";\nimport { logError } from \"../../utils/errorUtils\";\nimport { getSecureRandomInt } from \"../../utils/cryptoUtils\";\n\nconst mockFetchWithTimeout = fetchWithTimeout as jest.MockedFunction<\n  typeof fetchWithTimeout\n>;\nconst mockLogError = logError as jest.MockedFunction<typeof logError>;\nconst mockGetSecureRandomInt = getSecureRandomInt as jest.MockedFunction<\n  typeof getSecureRandomInt\n>;\n\ndescribe(\"RecommendationService\", () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n  });\n\n  describe(\"getRandomFromLibrary\", () => {\n    it(\"should return null when library is empty\", async () => {\n      const result = await RecommendationService.getRandomFromLibrary([]);\n      expect(result).toBeNull();\n    });\n\n    it(\"should return null when no books have Okunacak status\", async () => {\n      const books: Book[] = [\n        {\n          id: \"1\",\n          title: \"Okunuyor Kitap\",\n          author: \"Author\",\n          status: \"Okunuyor\",\n          coverUrl: \"cover.jpg\",\n          addedAt: Date.now(),\n        },\n        {\n          id: \"2\",\n          title: \"Okunmu┼ş Kitap\",\n          author: \"Author\",\n          status: \"Okundu\",\n          coverUrl: \"cover.jpg\",\n          addedAt: Date.now(),\n        },\n      ];\n\n      const result = await RecommendationService.getRandomFromLibrary(books);\n      expect(result).toBeNull();\n    });\n\n    it(\"should return a book from Okunacak status\", async () => {\n      const books: Book[] = [\n        {\n          id: \"1\",\n          title: \"Okunacak Kitap 1\",\n          author: \"Author 1\",\n          status: \"Okunacak\",\n          coverUrl: \"cover1.jpg\",\n          addedAt: Date.now(),\n        },\n        {\n          id: \"2\",\n          title: \"Okunacak Kitap 2\",\n          author: \"Author 2\",\n          status: \"Okunacak\",\n          coverUrl: \"cover2.jpg\",\n          addedAt: Date.now(),\n        },\n      ];\n\n      mockGetSecureRandomInt.mockResolvedValue(0);\n\n      const result = await RecommendationService.getRandomFromLibrary(books);\n      expect(result).not.toBeNull();\n      expect(result?.status).toBe(\"Okunacak\");\n      expect([\"Okunacak Kitap 1\", \"Okunacak Kitap 2\"]).toContain(result?.title);\n    });\n\n    it(\"should filter only Okunacak books from mixed library\", async () => {\n      const books: Book[] = [\n        {\n          id: \"1\",\n          title: \"Okunacak Kitap\",\n          author: \"Author\",\n          status: \"Okunacak\",\n          coverUrl: \"cover.jpg\",\n          addedAt: Date.now(),\n        },\n        {\n          id: \"2\",\n          title: \"Okunuyor Kitap\",\n          author: \"Author\",\n          status: \"Okunuyor\",\n          coverUrl: \"cover.jpg\",\n          addedAt: Date.now(),\n        },\n        {\n          id: \"3\",\n          title: \"Okunmu┼ş Kitap\",\n          author: \"Author\",\n          status: \"Okundu\",\n          coverUrl: \"cover.jpg\",\n          addedAt: Date.now(),\n        },\n      ];\n\n      mockGetSecureRandomInt.mockResolvedValue(0);\n\n      const result = await RecommendationService.getRandomFromLibrary(books);\n      expect(result?.status).toBe(\"Okunacak\");\n      expect(result?.title).toBe(\"Okunacak Kitap\");\n    });\n  });\n\n  describe(\"getDiscoveryRecommendation\", () => {\n    const mockResponse = (items: any[]) =>\n      ({\n        ok: true,\n        json: async () => ({ items }),\n      }) as Response;\n\n    it(\"should fetch recommendation by genre\", async () => {\n      const mockBook = {\n        id: \"test-id\",\n        volumeInfo: {\n          title: \"Test Book\",\n          authors: [\"Test Author\"],\n          categories: [\"Fiction\"],\n          imageLinks: { thumbnail: \"test-cover.jpg\" },\n          description: \"Test description\",\n          pageCount: 300,\n        },\n      };\n\n      mockFetchWithTimeout.mockResolvedValue(mockResponse([mockBook]));\n      mockGetSecureRandomInt.mockResolvedValue(0);\n\n      const result =\n        await RecommendationService.getDiscoveryRecommendation(\"Fiction\");\n\n      expect(result).not.toBeNull();\n      expect(result?.title).toBe(\"Test Book\");\n      expect(result?.author).toBe(\"Test Author\");\n      expect(result?.genre).toBe(\"Fiction\");\n    });\n\n    it(\"should exclude titles already in library\", async () => {\n      const mockBook1 = {\n        id: \"1\",\n        volumeInfo: { title: \"Existing Book\", authors: [\"Author\"] },\n      };\n      const mockBook2 = {\n        id: \"2\",\n        volumeInfo: {\n          title: \"New Recommendation\",\n          authors: [\"Author\"],\n          categories: [\"Fiction\"],\n          imageLinks: { thumbnail: \"cover.jpg\" },\n        },\n      };\n\n      mockFetchWithTimeout.mockResolvedValue(\n        mockResponse([mockBook1, mockBook2]),\n      );\n      mockGetSecureRandomInt.mockResolvedValue(0);\n\n      const result = await RecommendationService.getDiscoveryRecommendation(\n        \"Fiction\",\n        [\"Existing Book\"],\n      );\n\n      expect(result?.title).toBe(\"New Recommendation\");\n    });\n\n    it(\"should handle API errors gracefully\", async () => {\n      mockFetchWithTimeout.mockRejectedValue(new Error(\"API Error\"));\n\n      const result =\n        await RecommendationService.getDiscoveryRecommendation(\"Fiction\");\n\n      expect(result).toBeNull();\n      expect(mockLogError).toHaveBeenCalled();\n    });\n\n    it(\"should return null when no results found\", async () => {\n      mockFetchWithTimeout.mockResolvedValue(mockResponse([]));\n\n      const result =\n        await RecommendationService.getDiscoveryRecommendation(\"Fiction\");\n\n      expect(result).toBeNull();\n    });\n\n    it(\"should try fallback without language restriction when first attempt fails\", async () => {\n      // First call returns empty\n      mockFetchWithTimeout\n        .mockResolvedValueOnce(mockResponse([]))\n        // Second call (without lang restriction) returns results\n        .mockResolvedValueOnce(\n          mockResponse([\n            {\n              id: \"test-id\",\n              volumeInfo: {\n                title: \"Test Book\",\n                authors: [\"Author\"],\n                categories: [\"Fiction\"],\n              },\n            },\n          ]),\n        );\n      mockGetSecureRandomInt.mockResolvedValue(0);\n\n      const result =\n        await RecommendationService.getDiscoveryRecommendation(\"Fiction\");\n\n      expect(mockFetchWithTimeout).toHaveBeenCalledTimes(2);\n      expect(result).not.toBeNull();\n    });\n\n    it(\"should handle AbortError without logging\", async () => {\n      const abortError = new Error(\"Aborted\");\n      abortError.name = \"AbortError\";\n      mockFetchWithTimeout.mockRejectedValue(abortError);\n\n      const result =\n        await RecommendationService.getDiscoveryRecommendation(\"Fiction\");\n\n      expect(result).toBeNull();\n      expect(mockLogError).not.toHaveBeenCalled();\n    });\n\n    it(\"should default to Roman genre when not provided\", async () => {\n      mockFetchWithTimeout.mockResolvedValue(\n        mockResponse([\n          {\n            id: \"test-id\",\n            volumeInfo: {\n              title: \"Test Book\",\n              authors: [\"Author\"],\n              categories: [\"Roman\"],\n            },\n          },\n        ]),\n      );\n      mockGetSecureRandomInt.mockResolvedValue(0);\n\n      await RecommendationService.getDiscoveryRecommendation();\n\n      expect(mockFetchWithTimeout).toHaveBeenCalledWith(\n        expect.stringContaining(\"subject:Roman\"),\n        expect.any(Object),\n      );\n    });\n  });\n\n  describe(\"getFavoriteGenre\", () => {\n    it(\"should return Roman when library is empty\", () => {\n      const result = RecommendationService.getFavoriteGenre([]);\n      expect(result).toBe(\"Roman\");\n    });\n\n    it(\"should return most common genre\", () => {\n      const books: Book[] = [\n        {\n          id: \"1\",\n          title: \"Book 1\",\n          author: \"Author\",\n          status: \"Okunacak\",\n          coverUrl: \"cover.jpg\",\n          genre: \"Fiction\",\n          addedAt: Date.now(),\n        },\n        {\n          id: \"2\",\n          title: \"Book 2\",\n          author: \"Author\",\n          status: \"Okunacak\",\n          coverUrl: \"cover.jpg\",\n          genre: \"Fiction\",\n          addedAt: Date.now(),\n        },\n        {\n          id: \"3\",\n          title: \"Book 3\",\n          author: \"Author\",\n          status: \"Okunacak\",\n          coverUrl: \"cover.jpg\",\n          genre: \"Science Fiction\",\n          addedAt: Date.now(),\n        },\n      ];\n\n      const result = RecommendationService.getFavoriteGenre(books);\n      expect(result).toBe(\"Fiction\");\n    });\n\n    it(\"should handle books without genre\", () => {\n      const books: Book[] = [\n        {\n          id: \"1\",\n          title: \"Book 1\",\n          author: \"Author\",\n          status: \"Okunacak\",\n          coverUrl: \"cover.jpg\",\n          genre: \"Fiction\",\n          addedAt: Date.now(),\n        },\n        {\n          id: \"2\",\n          title: \"Book 2\",\n          author: \"Author\",\n          status: \"Okunacak\",\n          coverUrl: \"cover.jpg\",\n          // No genre\n          addedAt: Date.now(),\n        },\n      ];\n\n      const result = RecommendationService.getFavoriteGenre(books);\n      expect(result).toBe(\"Fiction\");\n    });\n\n    it(\"should return first genre when there is a tie\", () => {\n      const books: Book[] = [\n        {\n          id: \"1\",\n          title: \"Book 1\",\n          author: \"Author\",\n          status: \"Okunacak\",\n          coverUrl: \"cover.jpg\",\n          genre: \"Fiction\",\n          addedAt: Date.now(),\n        },\n        {\n          id: \"2\",\n          title: \"Book 2\",\n          author: \"Author\",\n          status: \"Okunacak\",\n          coverUrl: \"cover.jpg\",\n          genre: \"Science Fiction\",\n          addedAt: Date.now(),\n        },\n      ];\n\n      const result = RecommendationService.getFavoriteGenre(books);\n      // Should return one of them (first in alphabetical order due to Object.entries)\n      expect([\"Fiction\", \"Science Fiction\"]).toContain(result);\n    });\n  });\n});\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\storage\\AsyncStorageAdapter.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\storage\\IStorageAdapter.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\storage\\StorageService.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\services\\storage\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\tailwind.config.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-all-sites.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-comparison-sites.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-html-analyze.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-isbn-vs-title.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-kitapyurdu-html.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-live-kitapyurdu.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-quick.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-regex.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-scraper-detailed.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\test-scraper.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\__tests__\\cn.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\__tests__\\email.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\__tests__\\errorUtils.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\__tests__\\fetchWithTimeout.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\__tests__\\isbnConverter.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\__tests__\\stringUtils.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\cn.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\cryptoUtils.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\email.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\errorUtils.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\fetchWithTimeout.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\genreTranslator.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\isbnConverter.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\utils\\stringUtils.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\muham\\OneDrive\\Belgeler\\Kitaplik\\Kitaplik_App\\web\\script.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  }
+]

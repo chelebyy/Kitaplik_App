@@ -6,7 +6,8 @@
  */
 
 import React, { useCallback } from "react";
-import { Modal, View, Text, Pressable, Image, StyleSheet } from "react-native";
+import { Modal, View, Text, Pressable } from "react-native";
+import { Image } from "expo-image";
 import { FlashList } from "@shopify/flash-list";
 import { useTranslation } from "react-i18next";
 import { X, Check, Calendar } from "lucide-react-native";
@@ -81,8 +82,8 @@ export default function BookSelectionModal({
             <Image
               source={{ uri: coverUrl }}
               className="w-full h-full"
-              resizeMode="cover"
-              accessibilityIgnoresInvertColors
+              contentFit="cover"
+              cachePolicy="memory-disk"
             />
           </View>
 
@@ -146,7 +147,7 @@ export default function BookSelectionModal({
       onRequestClose={onClose}
       accessibilityViewIsModal
     >
-      <View style={styles.overlay}>
+      <View className="flex-1 bg-black/50 justify-end">
         <View className="flex-1 bg-white dark:bg-slate-900 rounded-t-3xl max-h-[80%] w-full">
           {/* Header */}
           <View className="flex-row items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-slate-700">
@@ -174,7 +175,7 @@ export default function BookSelectionModal({
             data={books}
             renderItem={renderBookItem}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
             showsVerticalScrollIndicator={false}
             testID="book-selection-list"
             // @ts-expect-error - FlashList v2 type definitions missing estimatedItemSize
@@ -185,15 +186,3 @@ export default function BookSelectionModal({
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
-  },
-  listContent: {
-    padding: 16,
-    paddingBottom: 32,
-  },
-});

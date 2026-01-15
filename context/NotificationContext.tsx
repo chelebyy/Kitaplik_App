@@ -62,11 +62,13 @@ interface NotificationContextType {
   settings: NotificationSettings;
   isLoading: boolean;
   hasPermission: boolean;
+  showInfoModal: boolean;
   updateSetting: <K extends keyof NotificationSettings>(
     key: K,
     value: NotificationSettings[K],
   ) => Promise<void>;
   requestPermission: () => Promise<boolean>;
+  handleModalDismiss: () => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
@@ -270,6 +272,7 @@ export function NotificationProvider({
     useState<NotificationSettings>(DEFAULT_SETTINGS);
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   // İlk yüklemede ayarları ve izinleri kontrol et
   useEffect(() => {
@@ -294,7 +297,7 @@ export function NotificationProvider({
         return;
       }
 
-      // İlk açılış kontrolü ve native permission iste
+      // İlk açılış kontrolü - Bilgilendirme modalı göster
       const wasAsked = await StorageService.getItem<boolean>(
         INITIAL_PERMISSION_ASKED_KEY,
       );
@@ -303,31 +306,12 @@ export function NotificationProvider({
 
       setHasPermission(permissionGranted);
 
-      // İlk açılış ve henüz sorulmadıysa
+      // İlk açılış ve henüz sorulmadıysa -> Bilgilendirme modalı göster
       if (!wasAsked && !permissionGranted) {
-        // Bayrağı hemen set et
+        // Bayrağı şimdiden set et (tekrar gösterme)
         await StorageService.setItem(INITIAL_PERMISSION_ASKED_KEY, true);
-
-        // Biraz gecikmeli native permission iste (splash sonrası)
-        setTimeout(async () => {
-          const { status: newStatus } =
-            await Notifications.requestPermissionsAsync();
-          const granted = newStatus === "granted";
-          setHasPermission(granted);
-
-          // İzin verildiyse önerilen bildirimleri aç
-          if (granted) {
-            const recommendedSettings: Partial<NotificationSettings> = {
-              bookCompletionCelebration: true,
-              dailyReadingReminder: true,
-              inactiveUserAlert: true,
-            };
-            const newSettings = { ...finalSettings, ...recommendedSettings };
-            setSettings(newSettings);
-            await saveSettings(newSettings);
-            await scheduleAllEnabledNotifications(newSettings);
-          }
-        }, 1000);
+        // Modalı göster (kullanıcı "Anladım" deyince native izin istenir)
+        setShowInfoModal(true);
       } else if (permissionGranted) {
         // İzin zaten varsa bildirimleri zamanla
         await scheduleAllEnabledNotifications(finalSettings);
@@ -382,9 +366,17 @@ export function NotificationProvider({
       const granted = finalStatus === "granted";
       setHasPermission(granted);
 
-      // İzin verildiyse aktif bildirimleri zamanla
+      // İzin verildiyse aktif bildirimleri zamanla ve önerilen ayarları aç
       if (granted) {
-        await scheduleAllEnabledNotifications(settings);
+        const recommendedSettings: Partial<NotificationSettings> = {
+          bookCompletionCelebration: true,
+          dailyReadingReminder: true,
+          inactiveUserAlert: true,
+        };
+        const newSettings = { ...settings, ...recommendedSettings };
+        setSettings(newSettings);
+        await saveSettings(newSettings);
+        await scheduleAllEnabledNotifications(newSettings);
       }
 
       return granted;
@@ -393,6 +385,13 @@ export function NotificationProvider({
       return false;
     }
   }, [settings]);
+
+  // Modal kapatılınca native izin iste
+  const handleModalDismiss = useCallback(() => {
+    setShowInfoModal(false);
+    // Modal kapandıktan hemen sonra native izni iste
+    requestPermission();
+  }, [requestPermission]);
 
   // Bildirim zamanlamalarını senkronize et (simplified using strategy map)
   const syncNotificationSchedule = useCallback(
@@ -440,10 +439,20 @@ export function NotificationProvider({
       settings,
       isLoading,
       hasPermission,
+      showInfoModal,
       updateSetting,
       requestPermission,
+      handleModalDismiss,
     }),
-    [settings, isLoading, hasPermission, updateSetting, requestPermission],
+    [
+      settings,
+      isLoading,
+      hasPermission,
+      showInfoModal,
+      updateSetting,
+      requestPermission,
+      handleModalDismiss,
+    ],
   );
 
   return (

@@ -1,20 +1,15 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StatusBar } from "react-native";
-import { Bell } from "lucide-react-native";
+import { Bell, Settings } from "lucide-react-native";
 import { useTheme } from "../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 
 interface Props {
   readonly visible: boolean;
-  readonly onAllow: () => void;
-  readonly onDeny: () => void;
+  readonly onContinue: () => void;
 }
 
-export function NotificationPermissionModal({
-  visible,
-  onAllow,
-  onDeny,
-}: Props) {
+export function NotificationPermissionModal({ visible, onContinue }: Props) {
   const { colors, isDarkMode } = useTheme();
   const { t } = useTranslation();
 
@@ -61,7 +56,7 @@ export function NotificationPermissionModal({
 
           {/* Description */}
           <Text
-            className="text-base text-center mb-6 leading-6"
+            className="text-base text-center mb-4 leading-6"
             style={{
               fontFamily: "Inter_400Regular",
               color: colors.textSecondary,
@@ -70,53 +65,40 @@ export function NotificationPermissionModal({
             {t("notification_permission_description")}
           </Text>
 
-          {/* Buttons */}
-          <View className="gap-3">
-            <TouchableOpacity
-              className="w-full py-4 rounded-2xl items-center"
-              style={{ backgroundColor: colors.primary }}
-              onPress={onAllow}
-              activeOpacity={0.8}
+          {/* Settings hint with icon */}
+          <View
+            className="flex-row items-center justify-center mb-6 px-3 py-2 rounded-xl"
+            style={{ backgroundColor: colors.inputBackground }}
+          >
+            <Settings size={16} color={colors.textSecondary} strokeWidth={2} />
+            <Text
+              className="text-xs ml-2"
+              style={{
+                fontFamily: "Inter_400Regular",
+                color: colors.textSecondary,
+              }}
             >
-              <Text
-                className="text-base font-semibold"
-                style={{
-                  fontFamily: "Inter_600SemiBold",
-                  color: "#FFFFFF",
-                }}
-              >
-                {t("notification_permission_allow")}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="w-full py-4 rounded-2xl items-center"
-              style={{ backgroundColor: colors.inputBackground }}
-              onPress={onDeny}
-              activeOpacity={0.8}
-            >
-              <Text
-                className="text-base font-semibold"
-                style={{
-                  fontFamily: "Inter_600SemiBold",
-                  color: colors.textSecondary,
-                }}
-              >
-                {t("notification_permission_deny")}
-              </Text>
-            </TouchableOpacity>
+              {t("notification_permission_note")}
+            </Text>
           </View>
 
-          {/* Note */}
-          <Text
-            className="text-xs text-center mt-5"
-            style={{
-              fontFamily: "Inter_400Regular",
-              color: colors.textSecondary + "80",
-            }}
+          {/* Single Continue Button */}
+          <TouchableOpacity
+            className="w-full py-4 rounded-2xl items-center"
+            style={{ backgroundColor: colors.primary }}
+            onPress={onContinue}
+            activeOpacity={0.8}
           >
-            {t("notification_permission_note")}
-          </Text>
+            <Text
+              className="text-base font-semibold"
+              style={{
+                fontFamily: "Inter_600SemiBold",
+                color: "#FFFFFF",
+              }}
+            >
+              {t("notification_permission_allow")}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>

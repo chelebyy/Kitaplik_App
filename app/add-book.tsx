@@ -23,6 +23,7 @@ import {
   Search,
   PenTool,
   ScanLine,
+  ChevronDown,
 } from "lucide-react-native";
 import { useTheme } from "../context/ThemeContext";
 import { useBooks, BookStatus, Book } from "../context/BooksContext";
@@ -30,11 +31,13 @@ import * as ImagePicker from "expo-image-picker";
 import BarcodeScannerModal from "../components/BarcodeScannerModal";
 import BookSelectionModal from "../components/BookSelectionModal";
 import SearchResultsList from "../components/SearchResultsList";
+import GenrePickerModal from "../components/GenrePickerModal";
 import { GoogleBookResult } from "../services/GoogleBooksService";
 import { SearchEngine } from "../services/SearchEngine";
 import { useBookSearch } from "../hooks/book/useBookSearch";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
+import { GenreType, translateGenre } from "../utils/genreTranslator";
 
 type InputMode = "manual" | "search";
 
@@ -56,7 +59,9 @@ const extractBookData = (book: GoogleBookResult) => {
   if (image) {
     image = image.replace("http://", "https://");
   }
-  const genre = book.volumeInfo.categories?.[0] || "Genel";
+  // API'den gelen İngilizce türü Türkçe'ye çevir
+  const rawGenre = book.volumeInfo.categories?.[0];
+  const genre = translateGenre(rawGenre);
   const pageCount = book.volumeInfo.pageCount || 0;
   return { title, author, image, genre, pageCount };
 };
@@ -91,9 +96,7 @@ const handleAddFromSearch = (
 };
 
 // Show success alert
-const showBookSuccessAlert = (
-  t: ReturnType<typeof useTranslation>["t"],
-) => {
+const showBookSuccessAlert = (t: ReturnType<typeof useTranslation>["t"]) => {
   Alert.alert(t("add_book_success"), t("add_book_success_msg"));
 };
 
@@ -118,10 +121,11 @@ export default function AddBookScreen() {
   const [status, setStatus] = useState<BookStatus>("Okunacak");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [genre, setGenre] = useState("");
+  const [genre, setGenre] = useState<GenreType | "">("");
   const [pageCount, setPageCount] = useState("");
   const [currentPage, setCurrentPage] = useState("");
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const [isGenrePickerVisible, setGenrePickerVisible] = useState(false);
 
   // Search State - useBookSearch hook kullanılıyor
   const {
@@ -320,7 +324,7 @@ export default function AddBookScreen() {
       title,
       author,
       status,
-      genre: genre || "Genel",
+      genre: genre || "Diğer",
       coverUrl:
         coverUrl ||
         "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400&h=600",
@@ -577,19 +581,24 @@ export default function AddBookScreen() {
           >
             {t("add_book_genre")}
           </Text>
-          <TextInput
-            className="border rounded-xl px-4 h-[50px] font-regular text-base"
+          <TouchableOpacity
+            onPress={() => setGenrePickerVisible(true)}
+            className="border rounded-xl px-4 h-[50px] flex-row items-center justify-between"
             style={{
               backgroundColor: colors.inputBackground,
               borderColor: colors.border,
-              color: colors.text,
-              fontFamily: "Inter_400Regular",
             }}
-            placeholder={t("add_book_genre_placeholder")}
-            placeholderTextColor={colors.placeholder}
-            value={genre}
-            onChangeText={setGenre}
-          />
+          >
+            <Text
+              style={{
+                color: genre ? colors.text : colors.textSecondary,
+                fontFamily: "Inter_400Regular",
+              }}
+            >
+              {genre || t("select_genre")}
+            </Text>
+            <ChevronDown size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
         </View>
 
         <View className="flex-1 mb-6">
@@ -716,12 +725,12 @@ export default function AddBookScreen() {
             style={
               mode === "manual"
                 ? {
-                  backgroundColor: colors.card,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 2,
-                  elevation: 2,
-                }
+                    backgroundColor: colors.card,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowRadius: 2,
+                    elevation: 2,
+                  }
                 : {}
             }
             onPress={() => setMode("manual")}
@@ -746,12 +755,12 @@ export default function AddBookScreen() {
             style={
               mode === "search"
                 ? {
-                  backgroundColor: colors.card,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 2,
-                  elevation: 2,
-                }
+                    backgroundColor: colors.card,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowRadius: 2,
+                    elevation: 2,
+                  }
                 : {}
             }
             onPress={() => setMode("search")}
@@ -855,6 +864,14 @@ export default function AddBookScreen() {
           </Text>
         </View>
       )}
+
+      {/* Genre Picker Modal */}
+      <GenrePickerModal
+        visible={isGenrePickerVisible}
+        selectedGenre={genre || "Diğer"}
+        onSelect={setGenre}
+        onClose={() => setGenrePickerVisible(false)}
+      />
     </SafeAreaView>
   );
 }

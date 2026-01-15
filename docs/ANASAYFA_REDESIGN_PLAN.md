@@ -46,10 +46,10 @@ Ana sayfayı kitap listesinden **Dashboard**'a dönüştürmek ve durum filtrele
 
 ## Değişiklik Özeti
 
-| Sayfa | Kaldırılacak | Eklenecek |
-|-------|--------------|-----------|
-| **Ana Sayfa** | FlashList, arama, filtre butonları (işlevsel) | Dashboard layout, BookShelf, CurrentlyReadingCard |
-| **Kitaplarım** | - | Durum sekmeleri (Tümü/Okundu/Okunuyor/Okunacak) |
+| Sayfa          | Kaldırılacak                                  | Eklenecek                                         |
+| -------------- | --------------------------------------------- | ------------------------------------------------- |
+| **Ana Sayfa**  | FlashList, arama, filtre butonları (işlevsel) | Dashboard layout, BookShelf, CurrentlyReadingCard |
+| **Kitaplarım** | -                                             | Durum sekmeleri (Tümü/Okundu/Okunuyor/Okunacak)   |
 
 ---
 
@@ -71,10 +71,10 @@ Ana sayfayı kitap listesinden **Dashboard**'a dönüştürmek ve durum filtrele
 
 ## Mevcut Dosyalar
 
-| Dosya | Mevcut Satır | Değişiklik |
-|-------|--------------|------------|
-| `app/(tabs)/index.tsx` | 403 | Önemli ölçüde yeniden yazılacak |
-| `app/(tabs)/books.tsx` | 310 | Durum filtresi eklenecek |
+| Dosya                  | Mevcut Satır | Değişiklik                      |
+| ---------------------- | ------------ | ------------------------------- |
+| `app/(tabs)/index.tsx` | 403          | Önemli ölçüde yeniden yazılacak |
+| `app/(tabs)/books.tsx` | 310          | Durum filtresi eklenecek        |
 
 ---
 
@@ -91,13 +91,13 @@ Ana sayfayı kitap listesinden **Dashboard**'a dönüştürmek ve durum filtrele
 
 ## İmplementasyon Sırası
 
-| # | Görev | Süre |
-|---|-------|------|
-| 1 | `books.tsx` - Durum filtresi ekle | 30 dk |
-| 2 | `CurrentlyReadingCard` oluştur | 20 dk |
-| 3 | `BookShelf` oluştur | 30 dk |
-| 4 | `index.tsx` - Dashboard dönüşümü | 45 dk |
-| 5 | Manuel test | 15 dk |
+| #   | Görev                             | Süre  |
+| --- | --------------------------------- | ----- |
+| 1   | `books.tsx` - Durum filtresi ekle | 30 dk |
+| 2   | `CurrentlyReadingCard` oluştur    | 20 dk |
+| 3   | `BookShelf` oluştur               | 30 dk |
+| 4   | `index.tsx` - Dashboard dönüşümü  | 45 dk |
+| 5   | Manuel test                       | 15 dk |
 
 **Toplam:** ~2.5 saat
 
@@ -105,11 +105,11 @@ Ana sayfayı kitap listesinden **Dashboard**'a dönüştürmek ve durum filtrele
 
 ## Riskler
 
-| Risk | Önlem |
-|------|-------|
+| Risk                             | Önlem                              |
+| -------------------------------- | ---------------------------------- |
 | İstatistik kartları tıklanabilir | Sadece görüntüleme, tıklama kaldır |
-| Animasyon performansı | Basit CSS ile başla |
-| i18n eksik key'ler | Locale dosyalarını güncelle |
+| Animasyon performansı            | Basit CSS ile başla                |
+| i18n eksik key'ler               | Locale dosyalarını güncelle        |
 
 ---
 

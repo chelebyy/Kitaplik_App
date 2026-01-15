@@ -8,7 +8,7 @@ Ana Sayfayı karmaşadan kurtarmak için "kütüphane yönetimi" özelliklerini 
 
 ## 🏗️ 1. Aşama: Yeni "Kitaplarım" Sayfası
 
-*Tüm "Koleksiyon Yönetimi" tek bir güçlü ekranda.*
+_Tüm "Koleksiyon Yönetimi" tek bir güçlü ekranda._
 
 ### 🔹 Yapılacak Değişiklikler
 
@@ -21,39 +21,42 @@ Ana Sayfayı karmaşadan kurtarmak için "kütüphane yönetimi" özelliklerini 
 1. **Üst Başlık:** "Kütüphanem"
 2. **Sekmeler (Segmented Control):** [ Tümü | Okunuyor | Okunacak | Okundu ]
 3. **Alt Araç Çubuğu:**
-    - Açılır Menü: Tür (Roman, Tarih vb.)
-    - Arama Çubuğu
-    - Sıralama Butonu (A-Z, Puan vb.)
+   - Açılır Menü: Tür (Roman, Tarih vb.)
+   - Arama Çubuğu
+   - Sıralama Butonu (A-Z, Puan vb.)
 
 ---
 
 ## 🚀 2. Aşama: Yeni Ana Sayfa (Dashboard)
 
-*Okuma hayatınız için bir "Komuta Merkezi". Daha az yönetim, daha çok motivasyon.*
+_Okuma hayatınız için bir "Komuta Merkezi". Daha az yönetim, daha çok motivasyon._
 
 Ana listeden boşalan yere şunları ekleyebiliriz:
 
 ### 🌟 1. "Şu An Okunuyor" Vitrini (Öncelik #1)
 
 Eğer durumu **"Okunuyor"** olan bir kitabınız varsa, burada büyük ve şık bir kart olarak görünecek.
+
 - **Görsel:** Büyük kapak resmi, mevcut ilerleme durumu ve bir "Devam Et" butonu.
 - **Neden:** En önemli olana anında erişim.
 
 ### 📊 2. Okuma İstatistikleri (Oyunlaştırma)
 
 Sizi motive edecek basit veriler.
+
 - **Bu Yıl:** "2026'da 12 Kitap Okundu"
 - **Toplam:** "Kütüphanede 145 Kitap"
 - **Hedef:** Yıllık hedefinize ne kadar kaldığı.
 
 ### ⏱️ 3. Son Aktiviteler / Hızlı Erişim
 
-* **Son Eklenenler:** Kütüphaneye eklediğiniz son 5 kitabın yatay listesi.
-- **Hızlı İşlemler:** Barkod tarama veya kitap ekleme için kısayollar.
+- **Son Eklenenler:** Kütüphaneye eklediğiniz son 5 kitabın yatay listesi.
+
+* **Hızlı İşlemler:** Barkod tarama veya kitap ekleme için kısayollar.
 
 ### 💡 4. Günlük İlham (Opsiyonel)
 
-* Kitaplarınızdan rastgele bir alıntı veya "Biliyor muydunuz?" köşesi.
+- Kitaplarınızdan rastgele bir alıntı veya "Biliyor muydunuz?" köşesi.
 
 ---
 

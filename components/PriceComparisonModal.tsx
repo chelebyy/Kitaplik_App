@@ -20,6 +20,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useTheme } from "../context/ThemeContext";
 import { PriceService, StoreLink } from "../services/PriceService";
 import { cn } from "../utils/cn";
+import { logError } from "../utils/errorUtils";
 
 interface PriceComparisonModalProps {
   visible: boolean;
@@ -74,13 +75,12 @@ export default function PriceComparisonModal({
         controlsColor: colors.primary,
         presentationStyle: WebBrowser.WebBrowserPresentationStyle.FULL_SCREEN,
       });
-    } catch (error) {
+    } catch {
       // WebBrowser hata verirse harici tarayıcıda aç
-      console.log("WebBrowser hatası, harici tarayıcı açılıyor:", error);
       try {
         await Linking.openURL(url);
       } catch (linkError) {
-        console.error("Link açılamadı:", linkError);
+        logError("PriceComparisonModal.openLink", linkError);
       }
     }
   };

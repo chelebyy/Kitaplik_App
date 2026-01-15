@@ -26,6 +26,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
 import { BookCard } from "../../components/BookCard";
+import { getGenreTranslationKey } from "../../utils/genreTranslator";
 
 type SortOption = "title_asc" | "title_desc" | "author_asc" | "rating_desc";
 
@@ -41,6 +42,7 @@ export default function BooksScreen() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState(t("all_genres"));
+  const [selectedAuthor, setSelectedAuthor] = useState(t("all_authors"));
   const [sortBy, setSortBy] = useState<SortOption>("title_asc");
   const [activeStatus, setActiveStatus] = useState("Tümü");
 
@@ -56,15 +58,24 @@ export default function BooksScreen() {
   // Reset filter when language changes
   useEffect(() => {
     setSelectedGenre(t("all_genres"));
+    setSelectedAuthor(t("all_authors"));
   }, [i18n.language, t]);
 
   // Grid hesaplamaları
   const COLUMN_WIDTH = (width - 48 - 16) / 2;
 
-  // Dinamik Filtre Listesi
-  const filters = useMemo(() => {
-    const genres = new Set(books.map((b) => b.genre || t("general")));
-    return [t("all_genres"), ...Array.from(genres)];
+  // Dinamik Tür Listesi (Mevcut kitaplardan) - Translated
+  const genreFilters = useMemo(() => {
+    const uniqueGenres = new Set(
+      books.map((b) => t(getGenreTranslationKey(b.genre || "Diğer"))),
+    );
+    return [t("all_genres"), ...Array.from(uniqueGenres).sort((a, b) => a.localeCompare(b, "tr"))];
+  }, [books, t]);
+
+  // Dinamik Yazar Filtre Listesi
+  const authorFilters = useMemo(() => {
+    const authors = new Set(books.map((b) => b.author));
+    return [t("all_authors"), ...Array.from(authors).sort((a, b) => a.localeCompare(b, "tr"))];
   }, [books, t]);
 
   // Filtreleme ve Sıralama Mantığı
@@ -75,16 +86,24 @@ export default function BooksScreen() {
         activeStatus === "Tümü" || book.status === activeStatus;
 
       // 2. Tür Filtresi
-      const bookGenre = book.genre || t("general");
+      // Kitabın türünü çevir ve seçili olan (zaten çevrilmiş) değerle kıyasla
+      const bookGenreTranslated = t(
+        getGenreTranslationKey(book.genre || "Diğer"),
+      );
       const matchesGenre =
-        selectedGenre === t("all_genres") || bookGenre === selectedGenre;
+        selectedGenre === t("all_genres") ||
+        bookGenreTranslated === selectedGenre;
 
-      // 3. Arama Filtresi
+      // 3. Yazar Filtresi
+      const matchesAuthor =
+        selectedAuthor === t("all_authors") || book.author === selectedAuthor;
+
+      // 4. Arama Filtresi
       const matchesSearch =
         book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         book.author.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchesStatus && matchesGenre && matchesSearch;
+      return matchesStatus && matchesGenre && matchesAuthor && matchesSearch;
     });
 
     // 3. Sıralama
@@ -102,7 +121,15 @@ export default function BooksScreen() {
     });
 
     return result;
-  }, [books, activeStatus, selectedGenre, searchQuery, sortBy, t]);
+  }, [
+    books,
+    activeStatus,
+    selectedGenre,
+    selectedAuthor,
+    searchQuery,
+    sortBy,
+    t,
+  ]);
 
   const handleBookPress = React.useCallback(
     (id: string) => {
@@ -115,7 +142,11 @@ export default function BooksScreen() {
     ({ item }: { item: Book }) => {
       return (
         <View style={{ width: viewMode === "grid" ? COLUMN_WIDTH : "100%" }}>
-          <BookCard book={item} variant={viewMode} onPressId={handleBookPress} />
+          <BookCard
+            book={item}
+            variant={viewMode}
+            onPressId={handleBookPress}
+          />
         </View>
       );
     },
@@ -229,7 +260,9 @@ export default function BooksScreen() {
         {/* Durum Sekmeleri (Ana sayfa ile aynı tasarım) */}
         <View className="px-6 mb-4 shadow-sm">
           <LinearGradient
-            colors={isDarkMode ? ["#1E293B", "#27221F"] : ["#FFFFFF", "#FFF7ED"]}
+            colors={
+              isDarkMode ? ["#1E293B", "#27221F"] : ["#FFFFFF", "#FFF7ED"]
+            }
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{
@@ -242,8 +275,16 @@ export default function BooksScreen() {
             <View className="flex-row justify-between">
               {[
                 { key: "Tümü", label: t("all_books"), count: stats.totalBooks },
-                { key: "Okunuyor", label: t("reading"), count: stats.readingBooks },
-                { key: "Okunacak", label: t("to_read"), count: stats.toReadBooks },
+                {
+                  key: "Okunuyor",
+                  label: t("reading"),
+                  count: stats.readingBooks,
+                },
+                {
+                  key: "Okunacak",
+                  label: t("to_read"),
+                  count: stats.toReadBooks,
+                },
                 { key: "Okundu", label: t("read"), count: stats.readBooks },
               ].map((item) => (
                 <TouchableOpacity
@@ -259,7 +300,8 @@ export default function BooksScreen() {
                     className="text-[11px] mb-1.5 text-center"
                     style={{
                       color: "#667085",
-                      fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+                      fontFamily:
+                        Platform.OS === "ios" ? "Courier" : "monospace",
                     }}
                   >
                     {item.label}
@@ -277,10 +319,16 @@ export default function BooksScreen() {
         </View>
 
         {/* Minimal Dropdown Filtre Alanı */}
-        <View className="mb-5 px-6 flex-row justify-between items-center">
+        <View className="mb-5 px-6 flex-row justify-between items-center gap-2">
+          <FilterDropdown
+            label={t("filter_author")}
+            items={authorFilters}
+            selectedValue={selectedAuthor}
+            onValueChange={setSelectedAuthor}
+          />
           <FilterDropdown
             label={t("filter_genre")}
-            items={filters}
+            items={genreFilters}
             selectedValue={selectedGenre}
             onValueChange={setSelectedGenre}
           />
