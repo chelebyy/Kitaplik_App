@@ -1,5 +1,5 @@
 import { Book } from "../context/BooksContext";
-import { fetchWithTimeout } from "../utils/fetchWithTimeout";
+import { fetchWithRetry, RetryPresets } from "../utils/fetchWithRetry";
 import { logError } from "../utils/errorUtils";
 import { getSecureRandomInt } from "../utils/cryptoUtils";
 
@@ -53,14 +53,22 @@ export const RecommendationService = {
 
       // 1. Try specific genre with Turkish language restriction
       let searchUrl = `${GOOGLE_BOOKS_API_URL}?q=subject:${encodeURIComponent(genre)}&langRestrict=tr&orderBy=relevance&maxResults=40&printType=books`;
-      let response = await fetchWithTimeout(searchUrl, { signal });
+      let response = await fetchWithRetry(
+        searchUrl,
+        { signal },
+        RetryPresets.standard,
+      );
       let data = await response.json();
 
       // 2. Fallback: Try without language restriction
       if (!data.items || data.items.length === 0) {
         // Debug: No results with TR filter, trying global
         searchUrl = `${GOOGLE_BOOKS_API_URL}?q=subject:${encodeURIComponent(genre)}&orderBy=relevance&maxResults=40&printType=books`;
-        response = await fetchWithTimeout(searchUrl, { signal });
+        response = await fetchWithRetry(
+          searchUrl,
+          { signal },
+          RetryPresets.standard,
+        );
         data = await response.json();
       }
 
@@ -68,7 +76,11 @@ export const RecommendationService = {
       if (!data.items || data.items.length === 0) {
         // Debug: No results with subject, trying generic query
         searchUrl = `${GOOGLE_BOOKS_API_URL}?q=${encodeURIComponent(genre)}&maxResults=40&printType=books`;
-        response = await fetchWithTimeout(searchUrl, { signal });
+        response = await fetchWithRetry(
+          searchUrl,
+          { signal },
+          RetryPresets.standard,
+        );
         data = await response.json();
       }
 

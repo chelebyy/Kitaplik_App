@@ -1,8 +1,51 @@
 {
   "findings": [
     {
+      "ruleId": "SENSITIVE_DATA_IN_ERROR_MESSAGES",
+      "description": "Error object logged directly - may contain sensitive data or stack traces",
+      "severity": "MEDIUM",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/services/CrashlyticsService.ts",
+      "line": 64,
+      "snippet": "      await setCrashlyticsCollectionEnabled(crashlytics, true);\n    } catch (error) {\n      console.error(\"[CrashlyticsService.initialize]\", error);\n    }\n  },",
+      "suggestion": "Log only safe error properties (message, code). Sanitize error messages before displaying to users. Never expose stack traces in production."
+    },
+    {
+      "ruleId": "SENSITIVE_DATA_IN_ERROR_MESSAGES",
+      "description": "Error object logged directly - may contain sensitive data or stack traces",
+      "severity": "MEDIUM",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/services/CrashlyticsService.ts",
+      "line": 79,
+      "snippet": "      await setAttribute(crashlytics, \"book_count\", String(count));\n    } catch (error) {\n      console.error(\"[CrashlyticsService.setBookCount]\", error);\n    }\n  },",
+      "suggestion": "Log only safe error properties (message, code). Sanitize error messages before displaying to users. Never expose stack traces in production."
+    },
+    {
+      "ruleId": "SENSITIVE_DATA_IN_ERROR_MESSAGES",
+      "description": "Error object logged directly - may contain sensitive data or stack traces",
+      "severity": "MEDIUM",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/services/CrashlyticsService.ts",
+      "line": 94,
+      "snippet": "      await setAttribute(crashlytics, \"last_operation\", type);\n    } catch (error) {\n      console.error(\"[CrashlyticsService.setLastOperation]\", error);\n    }\n  },",
+      "suggestion": "Log only safe error properties (message, code). Sanitize error messages before displaying to users. Never expose stack traces in production."
+    },
+    {
+      "ruleId": "SENSITIVE_DATA_IN_ERROR_MESSAGES",
+      "description": "Error object logged directly - may contain sensitive data or stack traces",
+      "severity": "MEDIUM",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/services/CrashlyticsService.ts",
+      "line": 128,
+      "snippet": "      log(crashlytics, message);\n    } catch (error) {\n      console.error(\"[CrashlyticsService.log]\", error);\n    }\n  },",
+      "suggestion": "Log only safe error properties (message, code). Sanitize error messages before displaying to users. Never expose stack traces in production."
+    },
+    {
       "ruleId": "EXPO_INSECURE_PERMISSIONS",
       "description": "Dangerous permission detected: android.permission.CAMERA",
+      "severity": "LOW",
+      "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/app.json",
+      "suggestion": "Only request necessary permissions and explain usage to users"
+    },
+    {
+      "ruleId": "EXPO_INSECURE_PERMISSIONS",
+      "description": "Dangerous permission detected: android.permission.RECORD_AUDIO",
       "severity": "LOW",
       "filePath": "C:/Users/muham/OneDrive/Belgeler/Kitaplik/Kitaplik_App/app.json",
       "suggestion": "Only request necessary permissions and explain usage to users"
@@ -36,7 +79,7 @@
       "suggestion": "Review declared permissions and remove those not actively used. Request permissions at runtime only when needed."
     }
   ],
-  "scannedFiles": 87,
-  "duration": 717,
-  "timestamp": "2026-01-14T22:50:03.860Z"
+  "scannedFiles": 111,
+  "duration": 978,
+  "timestamp": "2026-01-17T15:27:49.156Z"
 }

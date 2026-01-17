@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Offline-first Expo/React Native mobile application for personal book collection management with barcode scanning, intelligent search across multiple APIs, AI-powered recommendations, and a credit/gamification system.
 
-**App Name:** Ayraç | **Slug:** ayrac | **Package:** com.kitaplik.app
+**App Name:** Ayraç | **Slug:** ayrac | **Package:** com.ayrac.app
 
 ## Quick Reference - Where to Look
 
@@ -34,6 +34,8 @@ npm run build:web        # Export for web platform
 # Quality & Testing
 npm run lint             # Run ESLint
 npm test                 # Run Jest tests
+npm test -- --coverage   # With coverage
+npm test -- book/SearchEngine.test.ts  # Run specific test file
 npm run sonar:scan       # Run SonarQube analysis
 
 # Type Checking (IMPORTANT: Run after changes)
@@ -68,12 +70,13 @@ constants/            # App constants (colors, themes)
 
 ### Key Technologies
 
-- **Expo SDK 54** (Managed Workflow)
-- **React Native 0.81.5** with **React 19.1.0** (React Compiler enabled)
+- **Expo SDK 54** (Managed Workflow) with **New Architecture Enabled**
+- **React Native 0.81.5** with **React 19.1.0** (React Compiler enabled via `babel-plugin-react-compiler`)
 - **TypeScript 5.9.3** (strict mode)
-- **Expo Router 6** (file-based routing)
+- **Expo Router 6** (file-based routing with typedRoutes experiment)
 - **NativeWind 4.2.1** (Tailwind CSS for React Native)
 - **Lucide React Native** for icons
+- **Hermes JS Engine** for improved performance
 
 ### State Management
 
@@ -110,7 +113,7 @@ Three-stage splash system:
 - **Starting Balance:** 10 credits
 - **Daily Credit:** +1 credit on app open (auto-claimed)
 - **Usage:** -1 credit per "Magic Recommendation"
-- **Rewards:** +5 credits per ad watched
+- **Rewards:** +5 credits per ad watched (AdMob rewarded ads)
 
 ## Code Conventions
 
@@ -129,7 +132,7 @@ Three-stage splash system:
 - **Context Pattern:** Each context exports Provider and custom hook
 - **Styling:** Use `className` (Tailwind). Avoid `StyleSheet.create`.
 - **Theme:** Use `useTheme()` hook for dynamic colors
-- **Memoization:** Use `React.memo` for expensive components
+- **Memoization:** React Compiler enabled - manual `useMemo`/`useCallback` rarely needed
 
 ### Anti-Patterns to Avoid
 
@@ -169,6 +172,7 @@ interface Props {
 | **PriceService**          | Turkish bookstore price comparison links                                       |
 | **StorageService**        | Abstraction over AsyncStorage                                                  |
 | **NotificationService**   | Push notification management                                                   |
+| **CrashlyticsService**    | Firebase Crashlytics integration                                               |
 
 ### SearchEngine Usage Examples
 

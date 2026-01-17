@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Platform,
 } from "react-native";
 import { Image } from "expo-image";
 import {
@@ -33,6 +34,9 @@ import {
   AdEventType,
 } from "react-native-google-mobile-ads";
 import { logError } from "../utils/errorUtils";
+
+// Ads are native-only
+const isNative = Platform.OS !== "web";
 
 const adUnitId = __DEV__
   ? TestIds.REWARDED_INTERSTITIAL
@@ -346,18 +350,20 @@ export default function RecommendationModal({
   const [error, setError] = useState<string | null>(null);
   const [adLoaded, setAdLoaded] = useState(false);
 
-  // Ad instance'ı ref ile sakla - memory leak önleme
+  // Ad instance'ı ref ile sakla - memory leak önleme (native-only)
   const adInstanceRef = useRef<RewardedInterstitialAd | null>(null);
   const unsubscribeLoadedRef = useRef<(() => void) | null>(null);
   const unsubscribeEarnedRef = useRef<(() => void) | null>(null);
   const unsubscribeErrorRef = useRef<(() => void) | null>(null);
-
   // excludedTitles'ı useMemo ile optimize et - O(n) -> O(1) lookup
   const excludedTitlesSet = useMemo(() => {
     return new Set(books.map((b) => b.title));
   }, [books]);
 
   React.useEffect(() => {
+    // Ads are native-only
+    if (!isNative) return;
+
     // Yeni ad instance oluştur
     const adInstance = RewardedInterstitialAd.createForAdRequest(adUnitId, {
       keywords: ["fashion", "clothing"],
@@ -393,16 +399,17 @@ export default function RecommendationModal({
 
     // Cleanup function - tüm event listener'ları temizle
     return () => {
+      if (!isNative) return;
       unsubscribeLoaded();
       unsubscribeEarned();
       unsubscribeError();
       adInstanceRef.current = null;
     };
-  }, [addCredits]);
+  }, [addCredits, isNative]);
 
   const handleEarnCredit = () => {
     const adInstance = adInstanceRef.current;
-    if (!adInstance) {
+    if (!adInstance || !isNative) {
       Alert.alert(
         t("attention", { defaultValue: "Dikkat" }),
         t("ad_not_ready", {

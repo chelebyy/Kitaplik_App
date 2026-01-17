@@ -3,7 +3,7 @@ import "react-native-gesture-handler/jestSetup";
 
 // Mock NativeWind
 jest.mock("nativewind", () => ({
-  styled: (Component: any) => Component,
+  styled: (Component) => Component,
   useColorScheme: () => ({
     colorScheme: "light",
     setColorScheme: jest.fn(),
@@ -98,6 +98,45 @@ jest.mock("react-native-google-mobile-ads", () => ({
   },
 }));
 
+// Firebase Mock
+jest.mock("@react-native-firebase/app", () => ({
+  firebase: {
+    app: jest.fn(),
+  },
+}));
+
+jest.mock("@react-native-firebase/crashlytics", () => ({
+  getCrashlytics: jest.fn(() => ({
+    setUserId: jest.fn(),
+    setCrashlyticsCollectionEnabled: jest.fn(),
+    recordError: jest.fn(),
+    log: jest.fn(),
+  })),
+}));
+
+jest.mock("@react-native-firebase/analytics", () => ({
+  getAnalytics: jest.fn(() => ({
+    logEvent: jest.fn(),
+    setAnalyticsCollectionEnabled: jest.fn(),
+  })),
+}));
+
+jest.mock("@react-native-firebase/perf", () => ({
+  getPerformance: jest.fn(() => ({
+    newTrace: jest.fn(() => ({
+      start: jest.fn(),
+      stop: jest.fn(),
+    })),
+    newHttpMetric: jest.fn(() => ({
+      start: jest.fn(),
+      stop: jest.fn(),
+      setRequestMethod: jest.fn(),
+      setRequestResponse: jest.fn(),
+      setHttpResponseCode: jest.fn(),
+    })),
+  })),
+}));
+
 /**
  * Sessizleştirmeler
  * Test sırasında gereksiz console loglarını gizler
@@ -107,4 +146,3 @@ console.error = (...args) => {
   if (typeof args[0] === "string" && /Warning:/.test(args[0])) return;
   originalConsoleError(...args);
 };
-

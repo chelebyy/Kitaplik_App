@@ -1,0 +1,41 @@
+# Update Reading Progress E2E Test Flow
+appId: com.ayrac.app
+---
+- launchApp
+
+# Wait for app to load
+- waitForAnimationToEnd
+
+# Navigate to books tab (second tab from left)
+- tapOn:
+    point: "50%,92%"
+
+# Wait for books list to load
+- waitForAnimationToEnd
+
+# Check if there are any books
+# If not, this test will fail - ensure there's at least one book in the test data
+- assertVisible:
+    id: "book-card"
+
+# Tap on the first book card to view details
+- tapOn:
+    id: "book-card"
+
+# Wait for book detail screen to load
+- waitForAnimationToEnd
+
+# Update current page - tap on page input field
+- tapOn:
+    point: "50%,35%"
+- eraseText: 5
+- inputText: "150"
+
+# Wait for progress to update
+- waitForAnimationToEnd
+
+# Navigate back to books list (back button at top left)
+- tapOn:
+    point: "10%,10%"
+- waitForAnimationToEnd
+# The progress update should be persisted and visible in the book card

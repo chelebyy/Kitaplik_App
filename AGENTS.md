@@ -1,107 +1,264 @@
-# PROJECT KNOWLEDGE BASE
+# AGENTS.md - AI Agent Instructions
 
-**Generated:** 2025-01-06
-**Project:** Ayraç (Kitaplık App)
-**Stack:** Expo/React Native, TypeScript, Firebase, Google Books API
+**Project:** Ayraç (Kitaplık App)  
+**Stack:** Expo 54 / React Native 0.81 / TypeScript 5.9 / NativeWind 4  
+**Architecture:** Offline-first with AsyncStorage, Google Books API, Firebase Analytics
 
-## OVERVIEW
-
-Expo Router tabanlı kişisel kitap koleksiyonu yönetim uygulaması. Barkod tarama, öneri sistemi, kredi sistemi ve çoklu dil desteği.
-
-## STRUCTURE
-
-```
-./
-├── app/              # Expo Router sayfaları (9 .tsx)
-├── components/       # Yeniden kullanılabilir UI bileşenleri (9 .tsx/.ts)
-├── context/          # React Context - State management (6 .tsx)
-├── services/         # API servisleri ve iş mantığı (8 .ts)
-├── utils/            # Pure utility fonksiyonlar (6 .ts)
-├── i18n/             # Çoklu dil desteği (TR/EN)
-├── hooks/            # Custom React hooks
-├── constants/        # Renkler, sabitler
-├── assets/           # Görseller, ikonlar
-└── GEMINIDOCS/       # Mimari ve teknik analiz dokümantasyonu
-```
-
-## WHERE TO LOOK
-
-| Task                      | Location      | Notes                                               |
-| ------------------------- | ------------- | --------------------------------------------------- |
-| **Sayfalar / Navigasyon** | `app/`        | Expo Router, (tabs) grup yapısı                     |
-| **UI Bileşenleri**        | `components/` | Modal'lar, kartlar, tarayıcı                        |
-| **State Management**      | `context/`    | Auth, Books, Theme, Language, Credits, Notification |
-| **API Entegrasyonu**      | `services/`   | GoogleBooks, OpenLibrary, Backup, Recommendation    |
-| **Utility Fonksiyonlar**  | `utils/`      | ISBN dönüştürme, string işlemleri, error handling   |
-| **Çeviri**                | `i18n/`       | react-i18next, tr/en locale'ler                     |
-| **Yapılandırma**          | `./`          | package.json, app.json, tsconfig.json               |
-
-## CODE MAP
-
-**Key Types:**
-
-- `Book` (BooksContext) - Kitap veri modeli
-- `BookStatus` - "Okunacak" | "Okunuyor" | "Okundu"
-- `GoogleBookResult` (GoogleBooksService) - API response
-
-**Key Contexts:**
-
-- `BooksContext` - Kitap CRUD operasyonları
-- `AuthContext` - Yerel kimlik doğrulama (offline-first)
-- `ThemeContext` - Dark/light mod
-- `LanguageContext` - TR/EN dil değişimi
-- `CreditsContext` - Kredi sistemi (öneriler için)
-- `NotificationContext` - Bildirim yönetimi
-
-**Key Services:**
-
-- `GoogleBooksService` - Google Books API entegrasyonu
-- `OpenLibraryService` - Fallback arama servisi
-- `RecommendationService` - AI destekli öneriler
-- `BackupService` - Veri yedekleme/geri yükleme
-- `PriceService` - Fiyat karşılaştırma mağazaları
-
-## CONVENTIONS
-
-- **Türkçe dil desteği:** UI elementleri (butonlar, menüler) dil değişince güncellenir ama kitap adları/yazarlar orijinal dilde kalır
-- **Path alias:** `@/*` → root dizin (tsconfig.json)
-- **Test naming:** `__tests__` klasörleri, `*.test.ts/x` dosyaları
-- **Context pattern:** Her Context kendi provider'ını ve hook'unu export eder
-- **Component naming:** PascalCase, descriptive names (BookCard, BarcodeScannerModal)
-- **Service pattern:** Object-based exports, async/await functions
-
-## ANTI-PATTERNS (THIS PROJECT)
-
-- **Firebase Auth DEPRECATED:** Yerel kimlik doğrulama kullan (AuthContext + AsyncStorage)
-- **Kitleme operasyonları:** AsyncStorage operasyonları await ile handle edilmeli
-- **Large components:** 500+ satır dosyalar refactoring adayı (add-book.tsx: 885, settings.tsx: 824)
-- **Console.log:** Production build'de kaldır (babel-plugin-transform-remove-console konfigürasyonu var ama dikkatli kullan)
-
-## UNIQUE STYLES
-
-- **Splash screen sequence:** Native splash → AnimatedSplash → App (3 aşamalı)
-- **Günlük kredi:** Uygulama açılışında otomatik +1 kredi claim
-- **Barkod arama stratejisi:** Google Books (intitle/inauthor) → General search → OpenLibrary fallback
-- **Kredi sistemi:** Başlangıç 10 kredi, öneri başına -1, reklam başına +5
-- **Multi-modal book entry:** Barkod tarama, Google Books arama, manuel giriş
+---
 
 ## COMMANDS
 
 ```bash
-npm run dev          # Expo geliştirme sunucusu (EXPO_NO_TELEMETRY=1)
-npm run lint         # ESLint kontrolü
-npm run build:web    # Web export
-npm test             # Jest test çalıştırma
-npm run android      # Android build
-npm run ios          # iOS build
-npx tsc --noEmit     # TypeScript tip kontrolü (değişiklik sonrası)
+# Development
+npm run dev              # Start Expo dev server
+npm run android          # Build & run Android
+npm run ios              # Build & run iOS
+npm run build:web        # Export for web
+
+# Quality
+npm run lint             # ESLint (expo lint)
+npx tsc --noEmit         # Type check
+
+# Testing
+npm test                 # Run all tests (Jest)
+npm test -- --watch      # Watch mode
+npm test -- <pattern>    # Single test: npm test -- useBookSearch
+npm test -- --testPathPattern="services/__tests__/GoogleBooksService"  # Specific file
+npm test -- --coverage   # Coverage report
 ```
 
-## NOTES
+---
 
-- **App name:** Ayraç (slug: ayrac, package: com.kitaplik.app)
-- **Offline-first:** Tüm veriler AsyncStorage'da, network yoksa da çalışır
-- **Firebase:** Analytics, Crashlytics, Performance monitoring (kullanıcı verisi DEĞİL)
-- **Google Books API rate limit:** Çok hızlı aramalar için throttling gerekli
-- **Kitap adları dil değişince DEĞİŞMELİ:** Veritabanında orijinal dilde saklanır
-- **Barkod bulunamayan kitaplar:** Manuel giriş sekmesiyle ekle (bazı kitaplar dijital veritabanlarında yok)
+## PROJECT STRUCTURE
+
+```
+app/              # Expo Router pages (file-based routing)
+├── (tabs)/       # Bottom tab navigation (index, books, settings)
+├── add-book.tsx  # Modal: barcode/search/manual entry
+└── book-detail.tsx
+components/       # Reusable UI (BookCard, Modals, etc.)
+context/          # React Context providers (BooksContext, ThemeContext, etc.)
+services/         # API clients & business logic (GoogleBooksService, etc.)
+hooks/            # Custom hooks (useDebounce, useBookSearch, etc.)
+utils/            # Pure helper functions (isbnConverter, errorUtils, cn)
+i18n/             # Localization (TR/EN via react-i18next)
+```
+
+---
+
+## CODE STYLE
+
+### Imports (Order)
+
+```typescript
+// 1. React & React Native
+import React, { useState, useMemo, useCallback } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+
+// 2. Expo modules
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+
+// 3. Third-party libraries
+import { useTranslation } from "react-i18next";
+
+// 4. Internal: context, hooks, services, utils
+import { useTheme } from "@/context/ThemeContext";
+import { useBooks } from "@/context/BooksContext";
+import { logError } from "@/utils/errorUtils";
+
+// 5. Components & types
+import { BookCard } from "@/components/BookCard";
+import type { Book } from "@/context/BooksContext";
+```
+
+### Naming Conventions
+
+| Type             | Convention                       | Example                                   |
+| ---------------- | -------------------------------- | ----------------------------------------- |
+| Components       | PascalCase                       | `BookCard.tsx`, `RecommendationModal.tsx` |
+| Hooks            | camelCase with `use` prefix      | `useBookSearch.ts`, `useDebounce.ts`      |
+| Services         | PascalCase with `Service` suffix | `GoogleBooksService.ts`                   |
+| Utils            | camelCase                        | `isbnConverter.ts`, `errorUtils.ts`       |
+| Contexts         | PascalCase with `Context` suffix | `BooksContext.tsx`                        |
+| Types/Interfaces | PascalCase                       | `Book`, `BookStatus`, `GoogleBookResult`  |
+| Constants        | SCREAMING_SNAKE_CASE             | `BOOKS_STORAGE_KEY`, `BASE_URL`           |
+
+### TypeScript
+
+- **Strict mode enabled** (`tsconfig.json`)
+- Use `@/` path alias for imports (configured in tsconfig)
+- Define explicit interfaces for props, return types, context values
+- Avoid `any` - use `unknown` and type guards when needed
+- Export types alongside implementations
+
+### Styling
+
+- **NativeWind (Tailwind)** for styling: `className="flex-row items-center px-4"`
+- Use `cn()` utility for conditional classes: `cn("text-sm", isDarkMode && "text-white")`
+- Theme colors via `useTheme()`: `style={{ color: colors.text }}`
+- Icons: `lucide-react-native` (e.g., `<Sun size={20} color={colors.text} />`)
+
+---
+
+## ERROR HANDLING
+
+```typescript
+// Always use logError() for consistent error tracking
+import { logError } from "@/utils/errorUtils";
+
+try {
+  const result = await fetchData();
+} catch (error) {
+  logError("ComponentName.methodName", error);
+  // Handle gracefully - show user-friendly message
+}
+```
+
+- `logError()` logs full error in dev, sanitized in production + Crashlytics
+- Never silently swallow errors in catch blocks
+- AbortError is expected (request cancellation) - handle separately:
+  ```typescript
+  if (error instanceof Error && error.name !== "AbortError") {
+    logError("Context", error);
+  }
+  ```
+
+---
+
+## STATE MANAGEMENT
+
+### Context Pattern
+
+```typescript
+// Provider exports: BooksProvider (component) + useBooks (hook)
+// NEVER export raw Context - always use custom hook
+export function useBooks() {
+  const context = useContext(BooksContext);
+  if (!context) {
+    throw new Error("useBooks must be used within BooksProvider");
+  }
+  return context;
+}
+```
+
+### Storage Access
+
+- **NEVER** call AsyncStorage directly in components
+- Always use Context actions: `addBook()`, `updateBook()`, `deleteBook()`
+- Storage keys are constants: `BOOKS_STORAGE_KEY`
+
+---
+
+## SERVICE PATTERN
+
+```typescript
+// Object-based exports with async methods
+export const GoogleBooksService = {
+  searchBooks: async (
+    query: string,
+    lang: string = "tr",
+  ): Promise<GoogleBookResult[]> => {
+    // Implementation
+  },
+  searchByIsbn: async (isbn: string): Promise<GoogleBookResult | null> => {
+    // Implementation
+  },
+};
+```
+
+- Use `fetchWithRetry()` for network requests (handles timeout, retries)
+- Support `AbortSignal` for request cancellation
+- Fallback strategy: Google Books → Open Library
+
+---
+
+## TESTING
+
+### Test Location
+
+Tests live in `__tests__/` folders next to source files:
+
+```
+hooks/book/__tests__/useBookSearch.test.ts
+services/__tests__/GoogleBooksService.test.ts
+context/__tests__/BooksContext.test.tsx
+```
+
+### Test Structure
+
+```typescript
+import { renderHook, act, waitFor } from "@testing-library/react-native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+describe("useBookSearch", () => {
+  let queryClient: QueryClient;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false, gcTime: 0 } },
+    });
+  });
+
+  it("should return initial state correctly", () => {
+    // Arrange, Act, Assert
+  });
+});
+```
+
+### Mocking
+
+- Mocks configured in `jest.setup.js`
+- AsyncStorage, expo-router, reanimated pre-mocked
+- Mock services with `jest.mock()` at top of test file
+
+---
+
+## ANTI-PATTERNS (AVOID THESE)
+
+| Don't                           | Do Instead                                |
+| ------------------------------- | ----------------------------------------- |
+| Call AsyncStorage in components | Use Context hooks (`useBooks`, `useAuth`) |
+| Write components > 500 lines    | Extract sub-components                    |
+| Use Firebase Auth               | Use `AuthContext` (local auth)            |
+| Suppress errors silently        | Always `logError()` and handle            |
+| Use `any` type                  | Use `unknown` + type guards               |
+| Hardcode API URLs               | Use constants (`BASE_URL`)                |
+| Block UI without loading state  | Show loading indicator                    |
+
+---
+
+## UNIQUE PATTERNS
+
+- **Splash Sequence:** Native → AnimatedSplash → App
+- **Book ID:** Google Books ID or timestamp (manual entry)
+- **Credits System:** +5 daily login, -1 per AI recommendation
+- **Language:** UI translates (TR/EN), book titles stay original
+- **Search Strategy:** intitle/inauthor → general → OpenLibrary fallback
+- **ISBN Handling:** Auto-convert ISBN-10 ↔ ISBN-13
+
+---
+
+## QUICK REFERENCE
+
+### Key Contexts
+
+- `useBooks()` - Book CRUD, library state
+- `useAuth()` - User authentication (offline)
+- `useTheme()` - colors, isDarkMode, toggleTheme
+- `useCredits()` - AI recommendation credits
+
+### Key Services
+
+- `GoogleBooksService` - Primary book search
+- `OpenLibraryService` - Fallback search
+- `RecommendationService` - AI suggestions
+- `BackupService` - Data export/import
+
+### Key Utilities
+
+- `cn()` - className merging (clsx + tailwind-merge)
+- `logError()` - Safe error logging
+- `fetchWithRetry()` - Network requests with retry
+- `normalizeISBN()`, `convertISBN10ToISBN13()` - ISBN utils

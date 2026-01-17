@@ -1,4 +1,4 @@
-import { fetchWithTimeout } from "../utils/fetchWithTimeout";
+import { fetchWithRetry, RetryPresets } from "../utils/fetchWithRetry";
 import { logError } from "../utils/errorUtils";
 import {
   convertISBN10ToISBN13,
@@ -198,9 +198,10 @@ async function tryISBNSearch(
   signal?: AbortSignal,
 ): Promise<GoogleBookResult | null> {
   try {
-    const response = await fetchWithTimeout(
+    const response = await fetchWithRetry(
       `${BASE_URL}?q=isbn:${isbn}&hl=${lang}&langRestrict=${lang}`,
       { signal },
+      RetryPresets.standard,
     );
     const data = await response.json();
 
@@ -237,7 +238,11 @@ async function searchWithPrefix(
     // maxResults=40 to get more candidates for filtering
     const url = `${BASE_URL}?q=${encodedQuery}&langRestrict=${lang}&maxResults=40&printType=books`;
 
-    const response = await fetchWithTimeout(url, { signal });
+    const response = await fetchWithRetry(
+      url,
+      { signal },
+      RetryPresets.standard,
+    );
     const data = await response.json();
 
     if (data.items && data.items.length > 0) {

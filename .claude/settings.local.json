@@ -23,7 +23,9 @@
       "Bash(node:*)",
       "Bash(npx eslint:*)",
       "Bash(timeout:*)",
-      "mcp__serena__check_onboarding_performed"
+      "mcp__serena__check_onboarding_performed",
+      "Bash(copy:*)",
+      "Bash(npx jest:*)"
     ]
   }
 }

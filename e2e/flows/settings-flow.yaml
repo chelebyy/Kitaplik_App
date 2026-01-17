@@ -1,0 +1,39 @@
+# Settings Flow E2E Test
+appId: com.ayrac.app
+---
+- launchApp
+
+# Wait for app to load
+- waitForAnimationToEnd
+
+# Navigate to settings tab (rightmost tab)
+- tapOn:
+    point: "90%,92%"
+
+# Wait for settings screen to load
+- waitForAnimationToEnd
+
+# Test dark mode toggle (first setting option)
+- tapOn:
+    point: "50%,25%"
+- waitForAnimationToEnd
+
+# Toggle back to light mode (same location)
+- tapOn:
+    point: "50%,25%"
+- waitForAnimationToEnd
+
+# Test language change (second setting option)
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Toggle language back (same location)
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Navigate back to home (back button at top left)
+- tapOn:
+    point: "10%,10%"
+- waitForAnimationToEnd

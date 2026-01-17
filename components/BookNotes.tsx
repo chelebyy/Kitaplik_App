@@ -51,8 +51,8 @@ export const BookNotes = ({ notes, onNotesChange }: BookNotesProps) => {
             )}
             accessibilityLabel={
               copied
-                ? t("copied") || "Kopyalandı"
-                : t("copy") || "Notları kopyala"
+                ? t("notes_copied")
+                : t("notes_copy")
             }
             accessibilityRole="button"
           >
@@ -63,7 +63,7 @@ export const BookNotes = ({ notes, onNotesChange }: BookNotesProps) => {
                   className="text-xs font-semibold"
                   style={{ color: colors.fabBlue || "#22c55e" }}
                 >
-                  Kopyalandı
+                  {t("notes_copied")}
                 </Text>
               </>
             ) : (
@@ -73,7 +73,7 @@ export const BookNotes = ({ notes, onNotesChange }: BookNotesProps) => {
                   className="text-xs font-semibold"
                   style={{ color: colors.textSecondary || "#64748b" }}
                 >
-                  Kopyala
+                  {t("notes_copy")}
                 </Text>
               </>
             )}

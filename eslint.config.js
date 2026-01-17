@@ -7,4 +7,20 @@ module.exports = defineConfig([
   {
     ignores: ["dist/*", "coverage/*"],
   },
+  {
+    // Jest test files and setup
+    files: ["**/*.test.ts", "**/*.test.tsx", "jest.setup.js"],
+    languageOptions: {
+      globals: {
+        jest: "readonly",
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+      },
+    },
+  },
 ]);

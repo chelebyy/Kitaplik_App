@@ -1,0 +1,46 @@
+# Barcode Scan and Add Book E2E Test Flow
+appId: com.ayrac.app
+---
+- launchApp
+
+# Wait for app to load
+- waitForAnimationToEnd
+
+# Navigate to add book screen (tap on + button at bottom right)
+- tapOn:
+    point: "90%,90%"
+
+# Wait for add book screen to load
+- waitForAnimationToEnd
+
+# Tap on barcode scan button (third tab from left)
+- tapOn:
+    point: "65%,12%"
+
+# Handle camera permission if required (simulator may skip this)
+- runFlow:
+    when:
+      visible: "Camera permission"
+    commands:
+      - tapOn:
+          point: "50%,55%"
+
+# Wait for camera scanner to load
+- waitForAnimationToEnd
+
+# Note: In a real test environment, you would need to:
+# 1. Mock a barcode in the camera feed (simulator limitation)
+# 2. Use a physical device with a real book
+# 3. Or inject a mock barcode via test harness
+
+# For now, we'll close the scanner to verify UI flow
+# Tap on close button (top right or back button)
+- tapOn:
+    point: "10%,10%"
+
+# Wait for screen to transition
+- waitForAnimationToEnd
+# Test note: To properly test barcode scanning:
+# - Use a physical device
+# - Point camera at a real book with ISBN barcode
+# - Or implement mock barcode injection in test environment

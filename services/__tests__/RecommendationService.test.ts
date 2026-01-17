@@ -5,9 +5,15 @@
 import { RecommendationService } from "../RecommendationService";
 import { Book } from "../../context/BooksContext";
 
-// Mock fetchWithTimeout
-jest.mock("../../utils/fetchWithTimeout", () => ({
-  fetchWithTimeout: jest.fn(),
+// Mock fetchWithRetry
+jest.mock("../../utils/fetchWithRetry", () => ({
+  fetchWithRetry: jest.fn(),
+  RetryPresets: {
+    standard: { maxRetries: 3 },
+    aggressive: { maxRetries: 5 },
+    minimal: { maxRetries: 1 },
+    none: { maxRetries: 0 },
+  },
 }));
 
 // Mock logError
@@ -20,12 +26,12 @@ jest.mock("../../utils/cryptoUtils", () => ({
   getSecureRandomInt: jest.fn(),
 }));
 
-import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
+import { fetchWithRetry } from "../../utils/fetchWithRetry";
 import { logError } from "../../utils/errorUtils";
 import { getSecureRandomInt } from "../../utils/cryptoUtils";
 
-const mockFetchWithTimeout = fetchWithTimeout as jest.MockedFunction<
-  typeof fetchWithTimeout
+const mockFetchWithRetry = fetchWithRetry as jest.MockedFunction<
+  typeof fetchWithRetry
 >;
 const mockLogError = logError as jest.MockedFunction<typeof logError>;
 const mockGetSecureRandomInt = getSecureRandomInt as jest.MockedFunction<
@@ -151,7 +157,7 @@ describe("RecommendationService", () => {
         },
       };
 
-      mockFetchWithTimeout.mockResolvedValue(mockResponse([mockBook]));
+      mockFetchWithRetry.mockResolvedValue(mockResponse([mockBook]));
       mockGetSecureRandomInt.mockResolvedValue(0);
 
       const result =
@@ -178,7 +184,7 @@ describe("RecommendationService", () => {
         },
       };
 
-      mockFetchWithTimeout.mockResolvedValue(
+      mockFetchWithRetry.mockResolvedValue(
         mockResponse([mockBook1, mockBook2]),
       );
       mockGetSecureRandomInt.mockResolvedValue(0);
@@ -192,7 +198,7 @@ describe("RecommendationService", () => {
     });
 
     it("should handle API errors gracefully", async () => {
-      mockFetchWithTimeout.mockRejectedValue(new Error("API Error"));
+      mockFetchWithRetry.mockRejectedValue(new Error("API Error"));
 
       const result =
         await RecommendationService.getDiscoveryRecommendation("Fiction");
@@ -202,7 +208,7 @@ describe("RecommendationService", () => {
     });
 
     it("should return null when no results found", async () => {
-      mockFetchWithTimeout.mockResolvedValue(mockResponse([]));
+      mockFetchWithRetry.mockResolvedValue(mockResponse([]));
 
       const result =
         await RecommendationService.getDiscoveryRecommendation("Fiction");
@@ -212,7 +218,7 @@ describe("RecommendationService", () => {
 
     it("should try fallback without language restriction when first attempt fails", async () => {
       // First call returns empty
-      mockFetchWithTimeout
+      mockFetchWithRetry
         .mockResolvedValueOnce(mockResponse([]))
         // Second call (without lang restriction) returns results
         .mockResolvedValueOnce(
@@ -232,14 +238,14 @@ describe("RecommendationService", () => {
       const result =
         await RecommendationService.getDiscoveryRecommendation("Fiction");
 
-      expect(mockFetchWithTimeout).toHaveBeenCalledTimes(2);
+      expect(mockFetchWithRetry).toHaveBeenCalledTimes(2);
       expect(result).not.toBeNull();
     });
 
     it("should handle AbortError without logging", async () => {
       const abortError = new Error("Aborted");
       abortError.name = "AbortError";
-      mockFetchWithTimeout.mockRejectedValue(abortError);
+      mockFetchWithRetry.mockRejectedValue(abortError);
 
       const result =
         await RecommendationService.getDiscoveryRecommendation("Fiction");
@@ -249,7 +255,7 @@ describe("RecommendationService", () => {
     });
 
     it("should default to Roman genre when not provided", async () => {
-      mockFetchWithTimeout.mockResolvedValue(
+      mockFetchWithRetry.mockResolvedValue(
         mockResponse([
           {
             id: "test-id",
@@ -265,8 +271,9 @@ describe("RecommendationService", () => {
 
       await RecommendationService.getDiscoveryRecommendation();
 
-      expect(mockFetchWithTimeout).toHaveBeenCalledWith(
+      expect(mockFetchWithRetry).toHaveBeenCalledWith(
         expect.stringContaining("subject:Roman"),
+        expect.any(Object),
         expect.any(Object),
       );
     });

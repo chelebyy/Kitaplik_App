@@ -3,7 +3,7 @@
  * TDD RED fazı
  */
 
-import { renderHook, act, waitFor } from "@testing-library/react-native";
+import { renderHook, act } from "@testing-library/react-native";
 
 // Hook henüz yok (RED)
 import { useRecommendation } from "../useRecommendation";

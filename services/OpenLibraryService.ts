@@ -1,4 +1,4 @@
-import { fetchWithTimeout } from "../utils/fetchWithTimeout";
+import { fetchWithRetry, RetryPresets } from "../utils/fetchWithRetry";
 import { logError } from "../utils/errorUtils";
 
 export interface OpenLibraryBookResult {
@@ -62,7 +62,11 @@ export const OpenLibraryService = {
         url = `${BASE_URL}/search.json?author=${encodedQuery}&limit=20`;
       }
 
-      const response = await fetchWithTimeout(url, { signal }, 15000);
+      const response = await fetchWithRetry(
+        url,
+        { signal },
+        RetryPresets.standard,
+      );
       if (!response.ok) return [];
 
       const data: OpenLibrarySearchResponse = await response.json();
@@ -95,10 +99,10 @@ export const OpenLibraryService = {
   ): Promise<OpenLibraryBookResult | null> => {
     try {
       // Open Library ISBN endpoint
-      const response = await fetchWithTimeout(
+      const response = await fetchWithRetry(
         `${BASE_URL}/isbn/${isbn}.json`,
         { signal },
-        10000, // 10 second timeout
+        RetryPresets.standard,
       );
 
       if (!response.ok) {

@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { Alert } from "react-native";
 import { logError } from "../utils/errorUtils";
+import CrashlyticsService from "../services/CrashlyticsService";
 import i18n from "../i18n/i18n";
 import {
   sendBookCompletionNotification,
@@ -144,7 +145,7 @@ export function BooksProvider({
         }
       } catch (error) {
         logError("BooksContext.loadBooks", error);
-        Alert.alert("Hata", "Kitaplar yüklenirken bir sorun oluştu.");
+        Alert.alert(i18n.t("profile_error_title"), i18n.t("books_load_error"));
       } finally {
         setIsLoading(false);
       }
@@ -178,25 +179,22 @@ export function BooksProvider({
       const normalizedTitle = (newBookData.title || "").trim().toLowerCase();
       const normalizedAuthor = (newBookData.author || "").trim().toLowerCase();
 
-      // Ref'ten güncel kitap listesini al (duplicate kontrol için)
-      const currentBooks = booksRef.current;
-
       // Duplicate kontrolü
-      const isDuplicate = currentBooks.some(
+      const isDuplicate = booksRef.current.some(
         (book) =>
-          book.title.trim().toLowerCase() === normalizedTitle &&
-          book.author.trim().toLowerCase() === normalizedAuthor,
+          book.title.toLowerCase().trim() === normalizedTitle &&
+          book.author.toLowerCase().trim() === normalizedAuthor,
       );
 
       if (isDuplicate) {
         Alert.alert(
-          i18n.t("duplicate_book_title"),
-          i18n.t("duplicate_book_message"),
+          i18n.t("add_book_duplicate_title"),
+          i18n.t("add_book_duplicate_msg"),
         );
         return false;
       }
 
-      // Kitap ekle
+      // Yeni kitap oluştur
       const newBook: Book = {
         id: Date.now().toString(),
         addedAt: Date.now(),
@@ -204,7 +202,13 @@ export function BooksProvider({
       };
 
       // State güncelle (ref useEffect ile otomatik güncellenecek)
-      setBooks((prev) => [newBook, ...prev]);
+      setBooks((prev) => {
+        // Crashlytics: Kitap sayısını ve son işlemi güncelle
+        void CrashlyticsService.setBookCount(prev.length + 1);
+        void CrashlyticsService.setLastOperation("add");
+
+        return [newBook, ...prev];
+      });
 
       return true;
     },
@@ -279,14 +283,17 @@ export function BooksProvider({
       id: string,
       data: Partial<Pick<Book, "title" | "author" | "genre" | "coverUrl">>,
     ) => {
-      setBooks((prev) =>
-        prev.map((book) => {
+      setBooks((prev) => {
+        // Crashlytics: Son işlemi güncelle
+        void CrashlyticsService.setLastOperation("edit");
+
+        return prev.map((book) => {
           if (book.id === id) {
             return { ...book, ...data };
           }
           return book;
-        }),
-      );
+        });
+      });
     },
     [],
   );
@@ -361,7 +368,13 @@ export function BooksProvider({
 
   // Kitap silme - useCallback ile memoize edildi
   const deleteBook = useCallback((id: string) => {
-    setBooks((prev) => prev.filter((book) => book.id !== id));
+    setBooks((prev) => {
+      // Crashlytics: Son işlemi ve kitap sayısını güncelle
+      void CrashlyticsService.setLastOperation("delete");
+      void CrashlyticsService.setBookCount(prev.length - 1);
+
+      return prev.filter((book) => book.id !== id);
+    });
   }, []);
 
   // ID'ye göre kitap getirme - books state'i kullanarak reaktif hale getirildi
@@ -378,12 +391,12 @@ export function BooksProvider({
       await StorageService.removeItem(BOOKS_STORAGE_KEY);
       setBooks(INITIAL_BOOKS);
       Alert.alert(
-        "Başarılı",
-        "Tüm veriler sıfırlandı ve varsayılan kitaplar yüklendi.",
+        i18n.t("success_title"),
+        i18n.t("data_reset_success"),
       );
     } catch (error) {
       logError("BooksContext.clearAllData", error);
-      Alert.alert("Hata", "Veriler sıfırlanırken bir sorun oluştu.");
+      Alert.alert(i18n.t("profile_error_title"), i18n.t("data_reset_error"));
     }
   }, []);
 
@@ -393,12 +406,12 @@ export function BooksProvider({
       setBooks(restoredBooks);
       // useEffect will handle saving to AsyncStorage
       Alert.alert(
-        "Başarılı",
-        `${restoredBooks.length} kitap başarıyla geri yüklendi.`,
+        i18n.t("success_title"),
+        i18n.t("books_restore_success", { count: restoredBooks.length }),
       );
     } catch (error) {
       logError("BooksContext.restoreBooks", error);
-      Alert.alert("Hata", "Veriler yüklenirken bir sorun oluştu.");
+      Alert.alert(i18n.t("profile_error_title"), i18n.t("data_restore_error"));
     }
   }, []);
 

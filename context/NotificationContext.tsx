@@ -10,6 +10,7 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { logError } from "../utils/errorUtils";
 import { StorageService } from "../services/storage";
+import i18n from "../i18n/i18n";
 import {
   scheduleDailyNotification,
   scheduleWeeklyNotification,
@@ -93,7 +94,10 @@ type NotificationScheduler = (value: boolean) => Promise<void>;
 const enableDailyReadingReminder = async () => {
   await scheduleDailyNotification(
     NOTIFICATION_IDS.DAILY_READING_REMINDER,
-    { title: "📚 Okuma Vakti!", body: "Bugün kitabına baktın mı?" },
+    {
+      title: i18n.t("notification_daily_reading_title"),
+      body: i18n.t("notification_daily_reading_body"),
+    },
     20, // hour - from dailyReminderTime setting
     0, // minute
   );
@@ -116,8 +120,8 @@ const enableDailyCreditReminder = async () => {
   await scheduleDailyNotification(
     NOTIFICATION_IDS.DAILY_CREDIT_REMINDER,
     {
-      title: "🎁 Günlük Kredin Hazır!",
-      body: "Bugün kredini almayı unutma!",
+      title: i18n.t("notification_daily_credit_title"),
+      body: i18n.t("notification_daily_credit_body"),
     },
     DAILY_CREDIT_REMINDER_HOUR,
     DAILY_CREDIT_REMINDER_MINUTE,
@@ -141,8 +145,8 @@ const enableWeeklyToReadSummary = async () => {
   await scheduleWeeklyNotification(
     NOTIFICATION_IDS.WEEKLY_SUMMARY,
     {
-      title: "📖 Haftalık Özet",
-      body: "Bu hafta okuma listeni kontrol et!",
+      title: i18n.t("notification_weekly_summary_title"),
+      body: i18n.t("notification_weekly_summary_body"),
     },
     WEEKLY_SUMMARY_WEEKDAY,
     WEEKLY_SUMMARY_HOUR,
@@ -166,8 +170,8 @@ const handleWeeklyToReadSummary: NotificationScheduler = async (value) => {
 const enableInactiveUserAlert = async () => {
   await scheduleInactiveUserNotification(
     {
-      title: "📚 Seni Özledik!",
-      body: "Bir süredir kitaplarına bakmadın. Okumaya devam et!",
+      title: i18n.t("notification_inactive_user_title"),
+      body: i18n.t("notification_inactive_user_body"),
     },
     DEFAULT_INACTIVE_USER_DAYS,
   );
@@ -188,8 +192,8 @@ const handleInactiveUserAlert: NotificationScheduler = async (value) => {
 // Year end summary handlers
 const enableYearEndSummary = async () => {
   await scheduleYearEndNotification({
-    title: "📊 Yıl Sonu Özeti",
-    body: "Bu yıl kaç kitap okudun? Özeti görüntüle!",
+    title: i18n.t("notification_year_end_title"),
+    body: i18n.t("notification_year_end_body"),
   });
 };
 
@@ -208,8 +212,8 @@ const handleYearEndSummary: NotificationScheduler = async (value) => {
 // Magic recommendation alert handlers
 const enableMagicRecommendationAlert = async () => {
   let notificationContent = {
-    title: "✨ Yeni Kitap Keşfet!",
-    body: "Kütüphanene yeni bir kitap eklemeye ne dersin?",
+    title: i18n.t("notification_magic_recommendation_default_title"),
+    body: i18n.t("notification_magic_recommendation_default_body"),
     data: { type: "magic-recommendation" },
   };
 
@@ -220,8 +224,10 @@ const enableMagicRecommendationAlert = async () => {
 
       if (toReadCount > 0) {
         notificationContent = {
-          title: "📚 Okunmayı Bekleyen Kitapların Var!",
-          body: `Kütüphanende ${toReadCount} kitap seni bekliyor. Hadi okumaya başla!`,
+          title: i18n.t("notification_magic_recommendation_has_books_title"),
+          body: i18n.t("notification_magic_recommendation_has_books_body", {
+            count: toReadCount,
+          }),
           data: { type: "magic-recommendation" },
         };
       }

@@ -14,6 +14,7 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider, useTheme } from "../context/ThemeContext";
 import { BooksProvider, useBooks } from "../context/BooksContext";
 import { AuthProvider, useAuth } from "../context/AuthContext";
@@ -28,6 +29,19 @@ import { useEffect, useState, useCallback } from "react";
 import { View } from "react-native";
 import { AnimatedSplash } from "../components/AnimatedSplash";
 import { getAnalytics, logEvent } from "@react-native-firebase/analytics";
+import CrashlyticsService from "../services/CrashlyticsService";
+
+// React Query client configuration
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 dakika fresh
+      gcTime: 30 * 60 * 1000, // 30 dakika cache (eski cacheTime)
+      retry: false, // fetchWithRetry kullanıyoruz
+      refetchOnWindowFocus: false, // Mobilde gereksiz
+    },
+  },
+});
 
 cssInterop(Image, {
   className: "style",
@@ -60,6 +74,18 @@ function RootLayoutContent({ fontsLoaded }: { readonly fontsLoaded: boolean }) {
       }
     };
     trackAppOpen();
+  }, []);
+
+  // Firebase Crashlytics: Initialize on app start
+  useEffect(() => {
+    const initCrashlytics = async () => {
+      try {
+        await CrashlyticsService.initialize();
+      } catch {
+        // Crashlytics is non-critical, silently ignore failures
+      }
+    };
+    initCrashlytics();
   }, []);
 
   // Günlük giriş kredisi: Uygulama açılışında otomatik talep et
@@ -137,18 +163,20 @@ export default function RootLayout() {
   });
 
   return (
-    <LanguageProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <BooksProvider>
-            <CreditsProvider>
-              <NotificationProvider>
-                <RootLayoutContent fontsLoaded={fontsLoaded} />
-              </NotificationProvider>
-            </CreditsProvider>
-          </BooksProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </LanguageProvider>
+    <QueryClientProvider client={queryClient}>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <BooksProvider>
+              <CreditsProvider>
+                <NotificationProvider>
+                  <RootLayoutContent fontsLoaded={fontsLoaded} />
+                </NotificationProvider>
+              </CreditsProvider>
+            </BooksProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </LanguageProvider>
+    </QueryClientProvider>
   );
 }

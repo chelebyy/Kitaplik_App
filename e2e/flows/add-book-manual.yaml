@@ -1,0 +1,47 @@
+# Manual Book Addition E2E Test Flow
+appId: com.ayrac.app
+---
+- launchApp:
+    stopApp: true
+
+# Wait for app to load
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+      id: "add-book-fab"
+    timeout: 10000
+
+# Navigate to add book screen
+- tapOn:
+    id: "add-book-fab"
+
+# Wait for add book screen to load
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+      id: "book-title-input"
+    timeout: 5000
+
+# Fill Title
+- tapOn:
+    id: "book-title-input"
+- inputText: "Test E2E Kitabi"
+- hideKeyboard
+
+# Fill Author
+- tapOn:
+    id: "book-author-input"
+- inputText: "Test Yazari"
+- hideKeyboard
+
+# Scroll down to ensure save button is visible (if needed)
+- swipe:
+    direction: UP
+    duration: 500
+
+# Tap Save
+- tapOn:
+    id: "save-book-button"
+
+# Wait for result (back to home)
+- waitForAnimationToEnd

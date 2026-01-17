@@ -20,7 +20,7 @@
 
 > **Legend:** `file.ts <- A.tsx, B.tsx` = This file is **imported by** A.tsx and B.tsx.
 > Directories with `[N files: ...]` are summarized to reduce size.
-> [STATS] Showing 519 files. 15 dirs summarized, 8 dirs excluded (node_modules, etc.)
+> [STATS] Showing 560 files. 17 dirs summarized, 8 dirs excluded (node_modules, etc.)
 
 
 ```
@@ -363,6 +363,7 @@
 .claude/
   agents/
     react-performance-debugger.md
+  settings.json
   settings.local.json
   skills/
     api-routes/
@@ -468,6 +469,7 @@
     cache/
       production/
         images/ [70 files: 70 .png]
+.github/ [1 files: 1 .yml]
 .opencode/
   .gitignore
   package.json
@@ -536,13 +538,14 @@
   plans/
     api-merge-smart-enrichment.md
 GEMINIDOCS/
-  HOMEPAGE_REDESIGN_IDEAS.md
   INDEX.md
   STRUCTURE.md
 android/
   .gitignore
   .gradle/
     8.14.3/
+      gc.properties
+    9.0.0/
       gc.properties
     buildOutputCleanup/
       cache.properties
@@ -597,6 +600,26 @@ android/
                       react-native-worklets/
                         react-native-workletsConfig.cmake
                         react-native-workletsConfigVersion.cmake
+            x86/
+              prefab/
+                lib/
+                  i686-linux-android/
+                    cmake/
+                      ReactAndroid/
+                        ReactAndroidConfig.cmake
+                        ReactAndroidConfigVersion.cmake
+                      fbjni/
+                        fbjniConfig.cmake
+                        fbjniConfigVersion.cmake
+                      hermes-engine/
+                        hermes-engineConfig.cmake
+                        hermes-engineConfigVersion.cmake
+                      react-native-reanimated/
+                        react-native-reanimatedConfig.cmake
+                        react-native-reanimatedConfigVersion.cmake
+                      react-native-worklets/
+                        react-native-workletsConfig.cmake
+                        react-native-workletsConfigVersion.cmake
             x86_64/
               prefab/
                 lib/
@@ -617,12 +640,15 @@ android/
                       react-native-worklets/
                         react-native-workletsConfig.cmake
                         react-native-workletsConfigVersion.cmake
+          x86/ [163 files: 90 .o, 30 .json, 15 .cmake]
           x86_64/ [164 files: 90 .o, 30 .json, 15 .cmake]
       tools/
         debug/
           arm64-v8a/
             compile_commands.json
           armeabi-v7a/
+            compile_commands.json
+          x86/
             compile_commands.json
           x86_64/
             compile_commands.json
@@ -679,15 +705,22 @@ app/
   _layout.tsx
   add-book.tsx
   book-detail.tsx
-assets/ [29 files: 24 .png, 4 .json, 1 .storyboard]
-codeql/
-  Kitaplik_Analiz.sarif
+assets/ [30 files: 25 .png, 4 .json, 1 .storyboard]
 codeql-custom-queries-javascript/
   codeql-pack.lock.yml
   codeql-pack.yml
 components/
   AGENTS.md
   AchievementCard.tsx ← index.tsx
+  AddBook/
+    AddBookHeader.tsx ← index.ts
+    AddBookTabBar.tsx ← index.ts
+    CoverUploader.tsx ← index.ts, ManualTab.tsx
+    ManualFormFields.tsx ← index.ts, ManualTab.tsx
+    ManualTab.tsx ← index.ts
+    SearchTab.tsx ← index.ts
+    StatusSelector.tsx ← index.ts, ManualTab.tsx
+    index.ts ← add-book.tsx, book-detail.tsx, _layout.tsx +33 more
   AnimatedSplash.tsx ← _layout.tsx
   BarcodeScannerModal.tsx ← add-book.tsx
   BookCard.tsx ← BookCard.test.tsx, books.tsx
@@ -695,7 +728,7 @@ components/
   BookNotes.tsx ← book-detail.tsx
   BookSelectionModal.tsx ← add-book.tsx
   BookShelf.tsx ← index.tsx
-  CollapsibleSection.tsx ← CollapsibleSection.test.tsx, settings.tsx
+  CollapsibleSection.tsx ← NotificationSection.tsx, CollapsibleSection.test.tsx
   CurrentlyReadingCard.tsx ← index.tsx
   FilterDropdown.tsx ← books.tsx
   GenrePickerModal.tsx ← add-book.tsx, BookEditModal.tsx
@@ -705,7 +738,15 @@ components/
   ReadingChallengeCard.tsx ← index.tsx
   ReadingGoalModal.tsx ← ReadingChallengeCard.tsx
   RecommendationModal.tsx ← index.tsx
-  SearchResultsList.tsx ← add-book.tsx
+  SearchResultsList.tsx ← SearchTab.tsx
+  Settings/
+    AboutModal.tsx ← index.ts
+    AppearanceSection.tsx ← index.ts
+    DataManagementSection.tsx ← index.ts
+    LegalSection.tsx ← index.ts
+    NotificationSection.tsx ← index.ts
+    SupportSection.tsx ← index.ts
+    index.ts ← add-book.tsx, book-detail.tsx, _layout.tsx +33 more
   __tests__/ [3 files: 3 .tsx]
 conductor/
   code_styleguides/
@@ -734,56 +775,74 @@ constants/
 context/
   AGENTS.md
   AuthContext.tsx ← _layout.tsx, ProfileModal.tsx, books.tsx +1 more
-  BooksContext.tsx ← add-book.tsx, book-detail.tsx, _layout.tsx +18 more
+  BooksContext.tsx ← add-book.tsx, book-detail.tsx, _layout.tsx +24 more
   CreditsContext.tsx ← _layout.tsx, RecommendationModal.tsx, CreditsContext.test.tsx
-  LanguageContext.tsx ← _layout.tsx, settings.tsx
-  NotificationContext.tsx ← _layout.tsx, NotificationContext.test.tsx, settings.tsx
-  ThemeContext.tsx ← add-book.tsx, book-detail.tsx, _layout.tsx +20 more
+  LanguageContext.tsx ← _layout.tsx, AppearanceSection.tsx
+  NotificationContext.tsx ← _layout.tsx, NotificationContext.test.tsx, NotificationSection.tsx
+  ThemeContext.tsx ← add-book.tsx, book-detail.tsx, _layout.tsx +33 more
   __tests__/ [3 files: 3 .tsx]
-docs/ [11 files: 11 .md]
+docs/ [3 files: 3 .md]
+e2e/
+  .maestro/
+    config.yaml
+  README.md
+  flows/
+    add-book-barcode.yaml
+    add-book-manual.yaml
+    add-book-search.yaml
+    settings-flow.yaml
+    update-progress.yaml
 hooks/
-  __tests__/ [2 files: 2 .ts]
+  AGENTS.md
+  __tests__/ [3 files: 3 .ts]
   book/
-    __tests__/ [3 files: 3 .ts]
+    __tests__/ [7 files: 6 .ts, 1 .tsx]
+    useAddBookForm.ts ← add-book.tsx, useAddBookForm.test.ts
     useBookDetails.ts ← book-detail.tsx, useBookDetails.test.ts
-    useBookSearch.ts ← add-book.tsx, useBookSearch.test.ts
+    useBookSearch.ts ← useBookSearch.test.ts
+    useBookSearchQuery.ts ← add-book.tsx, useBookSearch.ts, useBookSearchQuery.cache.test.ts +1 more
+    useIsbnSearchQuery.ts ← add-book.tsx, useIsbnSearchQuery.test.tsx
     useRecommendation.ts ← useRecommendation.test.ts
   useBackup.ts ← useBackup.test.ts
-  useDebounce.ts ← useBookSearch.ts, useDebounce.test.ts
+  useDebounce.ts ← useBookSearchQuery.ts, useDebounce.test.ts
   useFrameworkReady.ts ← _layout.tsx
+  useSettingsActions.ts ← useSettingsActions.test.ts, settings.tsx
 i18n/ [3 files: 2 .json, 1 .ts]
 kapak/
   code.html
 scripts/
+  process_notification_icon.py
   repro_standalone.ts
   test-search-filter.ts
   test_genre_repro.ts
   test_improved_genre.ts
 services/
   AGENTS.md
-  BackupService.ts ← useBackup.ts, settings.tsx
+  BackupService.ts ← useBackup.ts, useSettingsActions.ts, useSettingsActions.test.ts
   BookMergeService.ts ← SearchEngine.ts, BookMergeService.test.ts
-  GoogleBooksService.ts ← add-book.tsx, SearchResultsList.tsx, BookMergeService.ts +5 more
+  CrashlyticsService.ts ← _layout.tsx, BooksContext.tsx, errorUtils.ts
+  GoogleBooksService.ts ← add-book.tsx, SearchResultsList.tsx, BookMergeService.ts +6 more
   NotificationService.ts ← BooksContext.tsx, NotificationContext.tsx, NotificationService.test.ts
   OpenLibraryService.ts ← GoogleBooksService.ts, SearchEngine.test.ts, SearchEngine.ts
   PriceService.ts ← PriceComparisonModal.tsx
   RecommendationService.ts ← RecommendationModal.tsx, RecommendationService.test.ts, useRecommendation.ts
-  SearchEngine.ts ← add-book.tsx, SearchEngine.test.ts, useBookSearch.ts +1 more
+  SearchEngine.ts ← SearchEngine.test.ts, useBookSearchQuery.ts, useIsbnSearchQuery.ts +4 more
   __tests__/ [4 files: 4 .ts]
   storage/
     AsyncStorageAdapter.ts ← index.ts, StorageService.ts
     IStorageAdapter.ts ← AsyncStorageAdapter.ts, index.ts, StorageService.ts
     StorageService.ts ← index.ts
-    index.ts ← add-book.tsx, book-detail.tsx, _layout.tsx +20 more
+    index.ts ← add-book.tsx, book-detail.tsx, _layout.tsx +33 more
 utils/
   AGENTS.md
-  __tests__/ [6 files: 6 .ts]
+  __tests__/ [7 files: 7 .ts]
   cn.ts ← BookCard.tsx, BookNotes.tsx, FilterDropdown.tsx +4 more
   cryptoUtils.ts ← RecommendationService.ts, RecommendationService.test.ts
   email.ts ← email.test.ts, settings.tsx
-  errorUtils.ts ← PriceComparisonModal.tsx, RecommendationModal.tsx, AuthContext.tsx +15 more
-  fetchWithTimeout.ts ← GoogleBooksService.ts, OpenLibraryService.ts, RecommendationService.ts +3 more
-  genreTranslator.ts ← add-book.tsx, book-detail.tsx, BookEditModal.tsx +3 more
+  errorUtils.ts ← PriceComparisonModal.tsx, RecommendationModal.tsx, AuthContext.tsx +16 more
+  fetchWithRetry.ts ← GoogleBooksService.ts, OpenLibraryService.ts, RecommendationService.ts +2 more
+  fetchWithTimeout.ts ← fetchWithRetry.ts, fetchWithRetry.test.ts, fetchWithTimeout.test.ts +1 more
+  genreTranslator.ts ← add-book.tsx, book-detail.tsx, BookEditModal.tsx +6 more
   isbnConverter.ts ← BookMergeService.ts, GoogleBooksService.ts, isbnConverter.test.ts
   stringUtils.ts ← BookMergeService.ts, GoogleBooksService.ts, SearchEngine.ts +1 more
 web/
@@ -801,7 +860,7 @@ web/
 
 ## File Dependencies
 
-> Scanned 133 files
+> Scanned 161 files
 
 ### High-Impact Files
 
@@ -809,11 +868,11 @@ web/
 
 | File | Imported by |
 |------|-------------|
-| `context/ThemeContext` | 23 files |
-| `context/BooksContext` | 21 files |
-| `utils/errorUtils` | 18 files |
-| `services/GoogleBooksService` | 8 files |
-| `utils/cn` | 7 files |
+| `context/ThemeContext` | 36 files |
+| `context/BooksContext` | 27 files |
+| `utils/errorUtils` | 19 files |
+| `services/GoogleBooksService` | 9 files |
+| `utils/genreTranslator` | 9 files |
 
 
 ---

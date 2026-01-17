@@ -2,7 +2,6 @@ import React from "react";
 import { renderHook, act, waitFor } from "@testing-library/react-native";
 import { CreditsProvider, useCredits } from "../CreditsContext";
 import * as SecureStore from "expo-secure-store";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Mock expo-secure-store
 jest.mock("expo-secure-store", () => ({

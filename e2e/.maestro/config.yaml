@@ -1,0 +1,23 @@
+# Maestro E2E Test Configuration
+appId: com.kitaplik.app
+
+# Test environment variables
+env:
+  CI: "true"
+  TEST_MODE: "e2e"
+
+# Test execution settings
+continuous: false
+output: .maestro/test-output
+
+# Device configuration (optional - defaults to first available device)
+# device:
+#   platform: android
+#   osVersion: latest
+
+# Timeout settings
+launchTimeout: 60000
+executionTimeout: 300000
+
+# Reporting
+reportFormat: pretty

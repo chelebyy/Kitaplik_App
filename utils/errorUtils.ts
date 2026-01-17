@@ -3,6 +3,8 @@
  * Stack trace'leri ve hassas bilgileri production'da gizler.
  */
 
+import CrashlyticsService from "../services/CrashlyticsService";
+
 /**
  * Hata nesnesinden güvenli mesaj çıkarır.
  * Stack trace'leri ve hassas bilgileri gizler.
@@ -30,6 +32,7 @@ export function getErrorCode(error: unknown): string | undefined {
 /**
  * Production-safe hata loglama.
  * Development modunda tam hata, production'da sadece mesaj loglanır.
+ * Production'da Crashlytics'e de raporlar.
  */
 export function logError(context: string, error: unknown): void {
   if (__DEV__) {
@@ -42,5 +45,9 @@ export function logError(context: string, error: unknown): void {
     // S4624: İç içe template literal yerine prefix hesaplaması kullanıldı
     const codePrefix = code ? `(${code}) ` : "";
     console.error(`[${context}] ${codePrefix}${message}`);
+
+    // Production: Crashlytics'e raporla
+    const errorObj = error instanceof Error ? error : new Error(message);
+    CrashlyticsService.recordError(errorObj, context);
   }
 }

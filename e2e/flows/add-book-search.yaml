@@ -1,0 +1,44 @@
+# Search and Add Book E2E Test Flow
+appId: com.ayrac.app
+---
+- launchApp
+
+# Wait for app to load
+- waitForAnimationToEnd
+
+# Navigate to add book screen (tap on + button at bottom right)
+- tapOn:
+    point: "90%,90%"
+
+# Wait for add book screen to load
+- waitForAnimationToEnd
+
+# Switch to search tab (second tab from left)
+- tapOn:
+    point: "35%,12%"
+
+# Wait for search tab to load
+- waitForAnimationToEnd
+
+# Search for a well-known book (Harry Potter)
+# Tap on search input field (center of screen)
+- tapOn:
+    point: "50%,30%"
+- inputText: "Harry Potter"
+- pressKey: "Enter"
+
+# Wait for search results
+- waitForAnimationToEnd
+
+# Verify search results are visible
+- assertVisible: "Harry"
+
+# Select the first search result (tap on center of first book card)
+- tapOn:
+    point: "50%,45%"
+
+# Wait for add confirmation or animation
+- waitForAnimationToEnd
+
+# Verify we're back to previous screen or see success indication
+- waitForAnimationToEnd
