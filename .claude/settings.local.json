@@ -25,7 +25,9 @@
       "Bash(timeout:*)",
       "mcp__serena__check_onboarding_performed",
       "Bash(copy:*)",
-      "Bash(npx jest:*)"
+      "Bash(npx jest:*)",
+      "Bash(npx expo install:*)",
+      "Bash(npx expo prebuild:*)"
     ]
   }
 }

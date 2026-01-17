@@ -1,5 +1,5 @@
 import { fetchWithRetry, RetryPresets } from "../utils/fetchWithRetry";
-import { logError } from "../utils/errorUtils";
+import { logErrorWithCrashlytics } from "../utils/errorUtils";
 
 export interface OpenLibraryBookResult {
   key: string;
@@ -81,7 +81,7 @@ export const OpenLibraryService = {
     } catch (error) {
       // AbortError hariç hataları logla
       if (error instanceof Error && error.name !== "AbortError") {
-        logError("OpenLibraryService.searchBooks", error);
+        await logErrorWithCrashlytics("OpenLibraryService.searchBooks", error);
       }
       return [];
     }
@@ -114,7 +114,7 @@ export const OpenLibraryService = {
     } catch (error) {
       // AbortError beklenen davranış, loglama
       if (error instanceof Error && error.name !== "AbortError") {
-        logError("OpenLibraryService.searchByIsbn", error);
+        await logErrorWithCrashlytics("OpenLibraryService.searchByIsbn", error);
       }
       return null;
     }

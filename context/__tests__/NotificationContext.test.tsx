@@ -1,12 +1,14 @@
 import React from "react";
 import { renderHook, act, waitFor } from "@testing-library/react-native";
 import { NotificationProvider, useNotifications } from "../NotificationContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Mock AsyncStorage
-jest.mock("@react-native-async-storage/async-storage", () => ({
-  getItem: jest.fn(),
-  setItem: jest.fn(),
+// Mock StorageService
+jest.mock("../../services/storage/StorageService", () => ({
+  __esModule: true,
+  default: {
+    getItem: jest.fn(),
+    setItem: jest.fn(),
+  },
 }));
 
 // Mock expo-notifications

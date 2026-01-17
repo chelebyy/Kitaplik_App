@@ -7,7 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import * as SecureStore from "expo-secure-store";
-import { logError } from "../utils/errorUtils";
+import { logErrorWithCrashlytics } from "../utils/errorUtils";
 
 // Simple local user interface
 export interface User {
@@ -45,7 +45,7 @@ export function AuthProvider({
         setUser(JSON.parse(savedUser));
       }
     } catch (error) {
-      logError("AuthContext.loadUser", error);
+      await logErrorWithCrashlytics("AuthContext.loadUser", error);
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +67,7 @@ export function AuthProvider({
       await SecureStore.setItemAsync(USER_STORAGE_KEY, JSON.stringify(newUser));
       setUser(newUser);
     } catch (error) {
-      logError("AuthContext.signIn", error);
+      await logErrorWithCrashlytics("AuthContext.signIn", error);
     }
   }, []);
 
@@ -77,7 +77,7 @@ export function AuthProvider({
       await SecureStore.deleteItemAsync(USER_STORAGE_KEY);
       setUser(null);
     } catch (error) {
-      logError("AuthContext.signOut", error);
+      await logErrorWithCrashlytics("AuthContext.signOut", error);
     }
   }, []);
 

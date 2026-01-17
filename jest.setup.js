@@ -17,10 +17,21 @@ jest.mock("react-native-reanimated", function mockReanimated() {
   return Reanimated;
 });
 
-// Mock Async Storage
-jest.mock("@react-native-async-storage/async-storage", () =>
-  require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
-);
+// MMKV Mock
+jest.mock('react-native-mmkv', () => {
+  const mockStorage = new Map();
+
+  return {
+    createMMKV: jest.fn(() => ({
+      getString: jest.fn((key) => mockStorage.get(key)),
+      set: jest.fn((key, value) => mockStorage.set(key, value)),
+      remove: jest.fn((key) => mockStorage.delete(key)),
+      getAllKeys: jest.fn(() => Array.from(mockStorage.keys())),
+      getBoolean: jest.fn((key) => mockStorage.get(key)),
+      clearAll: jest.fn(() => mockStorage.clear()),
+    })),
+  };
+});
 
 // Mock Expo Modules
 jest.mock("expo-linking", () => ({

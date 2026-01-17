@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StorageService } from "./storage/StorageService";
 import {
   getCrashlytics,
   setUserId,
@@ -44,17 +44,17 @@ function generateUUID(): string {
 const CrashlyticsService = {
   /**
    * Initializes Crashlytics with anonymous user identification.
-   * Generates or retrieves a persistent UUID from AsyncStorage.
+   * Generates or retrieves a persistent UUID from MMKV.
    */
   async initialize(): Promise<void> {
     if (!isAvailable()) return;
 
     try {
-      let userId = await AsyncStorage.getItem(USER_ID_KEY);
+      let userId = await StorageService.getItem<string>(USER_ID_KEY);
 
       if (!userId) {
         userId = generateUUID();
-        await AsyncStorage.setItem(USER_ID_KEY, userId);
+        await StorageService.setItem(USER_ID_KEY, userId);
       }
 
       const crashlytics = getCrashlytics();

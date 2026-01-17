@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
-import { logError } from "../utils/errorUtils";
+import { logErrorWithCrashlytics } from "../utils/errorUtils";
 import { StorageService } from "../services/storage";
 import i18n from "../i18n/i18n";
 import {
@@ -323,7 +323,7 @@ export function NotificationProvider({
         await scheduleAllEnabledNotifications(finalSettings);
       }
     } catch (error) {
-      logError("NotificationContext.loadSettingsAndCheckPermission", error);
+      await logErrorWithCrashlytics("NotificationContext.loadSettingsAndCheckPermission", error);
     } finally {
       setIsLoading(false);
     }
@@ -350,7 +350,7 @@ export function NotificationProvider({
     try {
       await StorageService.setItem(NOTIFICATION_SETTINGS_KEY, newSettings);
     } catch (error) {
-      logError("NotificationContext.saveSettings", error);
+      await logErrorWithCrashlytics("NotificationContext.saveSettings", error);
     }
   };
 
@@ -387,7 +387,7 @@ export function NotificationProvider({
 
       return granted;
     } catch (error) {
-      logError("NotificationContext.requestPermission", error);
+      await logErrorWithCrashlytics("NotificationContext.requestPermission", error);
       return false;
     }
   }, [settings]);

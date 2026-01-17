@@ -3,7 +3,7 @@ import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
 import { Alert, Platform } from "react-native";
 import { Book } from "../context/BooksContext";
-import { logError } from "../utils/errorUtils";
+import { logErrorWithCrashlytics } from "../utils/errorUtils";
 
 export const BackupService = {
   /**
@@ -33,7 +33,7 @@ export const BackupService = {
         Alert.alert("Hata", "Paylaşım özelliği bu cihazda kullanılamıyor.");
       }
     } catch (error) {
-      logError("BackupService.shareBackup", error);
+      await logErrorWithCrashlytics("BackupService.shareBackup", error);
       Alert.alert("Hata", "Yedek paylaşılırken bir sorun oluştu.");
     }
   },
@@ -86,7 +86,7 @@ export const BackupService = {
         `Yedek dosyası başarıyla kaydedildi:\n${fileName}`,
       );
     } catch (error) {
-      logError("BackupService.saveToDevice", error);
+      await logErrorWithCrashlytics("BackupService.saveToDevice", error);
       Alert.alert("Hata", "Dosya kaydedilirken bir sorun oluştu.");
     }
   },
@@ -120,7 +120,7 @@ export const BackupService = {
 
       return parsedData.books;
     } catch (error) {
-      logError("BackupService.restoreBackup", error);
+      await logErrorWithCrashlytics("BackupService.restoreBackup", error);
       Alert.alert("Hata", "Yedek geri yüklenirken bir sorun oluştu.");
       return null;
     }

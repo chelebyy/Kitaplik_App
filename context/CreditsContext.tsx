@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
-import { logError } from "../utils/errorUtils";
+import { logErrorWithCrashlytics } from "../utils/errorUtils";
 import { StorageService } from "../services/storage";
 
 interface CreditsContextType {
@@ -73,7 +73,7 @@ export function CreditsProvider({
         setCredits(Number.parseInt(storedCredits, 10));
       }
     } catch (error) {
-      logError("CreditsContext.loadCredits", error);
+      await logErrorWithCrashlytics("CreditsContext.loadCredits", error);
     }
     // finally bloğu kaldırıldı - setIsLoading artık useEffect'te yapılıyor
   };
@@ -88,7 +88,7 @@ export function CreditsProvider({
       }
       setLastDailyClaimDate(storedDate);
     } catch (error) {
-      logError("CreditsContext.loadLastClaimDate", error);
+      await logErrorWithCrashlytics("CreditsContext.loadLastClaimDate", error);
     }
   };
 
@@ -103,7 +103,7 @@ export function CreditsProvider({
         );
       }
     } catch (error) {
-      logError("CreditsContext.saveCredits", error);
+      await logErrorWithCrashlytics("CreditsContext.saveCredits", error);
     }
   };
 
@@ -116,7 +116,7 @@ export function CreditsProvider({
       }
       setLastDailyClaimDate(date);
     } catch (error) {
-      logError("CreditsContext.saveLastClaimDate", error);
+      await logErrorWithCrashlytics("CreditsContext.saveLastClaimDate", error);
     }
   };
 

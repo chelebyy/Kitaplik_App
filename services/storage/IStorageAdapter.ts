@@ -24,4 +24,15 @@ export interface IStorageAdapter {
    * @param key Storage key
    */
   removeItem(key: string): Promise<void>;
+
+  /**
+   * Tüm storage key'lerini al
+   * @returns Tüm key listesi
+   */
+  getAllKeys(): Promise<string[]>;
+
+  /**
+   * Tüm storage'ı temizle
+   */
+  clear(): Promise<void>;
 }

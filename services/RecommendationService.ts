@@ -1,6 +1,6 @@
 import { Book } from "../context/BooksContext";
 import { fetchWithRetry, RetryPresets } from "../utils/fetchWithRetry";
-import { logError } from "../utils/errorUtils";
+import { logErrorWithCrashlytics } from "../utils/errorUtils";
 import { getSecureRandomInt } from "../utils/cryptoUtils";
 
 const GOOGLE_BOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes";
@@ -130,7 +130,7 @@ export const RecommendationService = {
     } catch (error) {
       // AbortError hariç hataları logla
       if (error instanceof Error && error.name !== "AbortError") {
-        logError("RecommendationService.getDiscoveryRecommendation", error);
+        await logErrorWithCrashlytics("RecommendationService.getDiscoveryRecommendation", error);
       }
       return null;
     }

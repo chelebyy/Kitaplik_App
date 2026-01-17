@@ -26,7 +26,7 @@ import {
 } from "../context/NotificationContext";
 import { NotificationPermissionModal } from "../components/NotificationPermissionModal";
 import { useEffect, useState, useCallback } from "react";
-import { View } from "react-native";
+import { View, ActivityIndicator, Text } from "react-native";
 import { AnimatedSplash } from "../components/AnimatedSplash";
 import { getAnalytics, logEvent } from "@react-native-firebase/analytics";
 import CrashlyticsService from "../services/CrashlyticsService";

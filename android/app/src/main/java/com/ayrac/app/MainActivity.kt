@@ -1,4 +1,4 @@
-package com.kitaplik.app
+package com.ayrac.app
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

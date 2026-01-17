@@ -8,7 +8,7 @@ import React, {
   useRef,
 } from "react";
 import { Alert } from "react-native";
-import { logError } from "../utils/errorUtils";
+import { logErrorWithCrashlytics } from "../utils/errorUtils";
 import CrashlyticsService from "../services/CrashlyticsService";
 import i18n from "../i18n/i18n";
 import {
@@ -144,7 +144,7 @@ export function BooksProvider({
           await StorageService.setItem(BOOKS_STORAGE_KEY, INITIAL_BOOKS);
         }
       } catch (error) {
-        logError("BooksContext.loadBooks", error);
+        await logErrorWithCrashlytics("BooksContext.loadBooks", error);
         Alert.alert(i18n.t("profile_error_title"), i18n.t("books_load_error"));
       } finally {
         setIsLoading(false);
@@ -162,7 +162,7 @@ export function BooksProvider({
       try {
         await StorageService.setItem(BOOKS_STORAGE_KEY, books);
       } catch (error) {
-        logError("BooksContext.saveBooks", error);
+        await logErrorWithCrashlytics("BooksContext.saveBooks", error);
       }
     }, 500);
 
@@ -395,7 +395,7 @@ export function BooksProvider({
         i18n.t("data_reset_success"),
       );
     } catch (error) {
-      logError("BooksContext.clearAllData", error);
+      await logErrorWithCrashlytics("BooksContext.clearAllData", error);
       Alert.alert(i18n.t("profile_error_title"), i18n.t("data_reset_error"));
     }
   }, []);
@@ -410,7 +410,7 @@ export function BooksProvider({
         i18n.t("books_restore_success", { count: restoredBooks.length }),
       );
     } catch (error) {
-      logError("BooksContext.restoreBooks", error);
+      await logErrorWithCrashlytics("BooksContext.restoreBooks", error);
       Alert.alert(i18n.t("profile_error_title"), i18n.t("data_restore_error"));
     }
   }, []);

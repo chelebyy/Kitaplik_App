@@ -1,5 +1,6 @@
 import { IStorageAdapter } from "./IStorageAdapter";
-import { AsyncStorageAdapter } from "./AsyncStorageAdapter";
+import { MMKVAdapter } from "./MMKVAdapter";
+// import { AsyncStorageAdapter } from "./AsyncStorageAdapter"; // Artık kullanılmıyor
 
 /**
  * StorageService - Storage Factory
@@ -23,9 +24,9 @@ class StorageServiceClass implements IStorageAdapter {
   private adapter: IStorageAdapter;
 
   constructor() {
-    // Varsayılan: AsyncStorage
-    // MMKV geçişinde: new MMKVAdapter()
-    this.adapter = new AsyncStorageAdapter();
+    // MMKV'ye geçiş
+    this.adapter = new MMKVAdapter();
+    // Rollback için: this.adapter = new AsyncStorageAdapter();
   }
 
   /**
@@ -53,6 +54,14 @@ class StorageServiceClass implements IStorageAdapter {
 
   async removeItem(key: string): Promise<void> {
     return this.adapter.removeItem(key);
+  }
+
+  async getAllKeys(): Promise<string[]> {
+    return this.adapter.getAllKeys();
+  }
+
+  async clear(): Promise<void> {
+    return this.adapter.clear();
   }
 }
 

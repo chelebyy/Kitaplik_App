@@ -1,5 +1,5 @@
 import { fetchWithRetry, RetryPresets } from "../utils/fetchWithRetry";
-import { logError } from "../utils/errorUtils";
+import { logErrorWithCrashlytics } from "../utils/errorUtils";
 import {
   convertISBN10ToISBN13,
   convertISBN13ToISBN10,
@@ -111,7 +111,7 @@ export const GoogleBooksService = {
 
       return finalResults;
     } catch (error) {
-      logError("GoogleBooksService.searchBooks", error);
+      await logErrorWithCrashlytics("GoogleBooksService.searchBooks", error);
       throw new Error("Kitap aranırken bir sorun oluştu.");
     }
   },
@@ -183,7 +183,7 @@ export const GoogleBooksService = {
 
       return null;
     } catch (error) {
-      logError("GoogleBooksService.searchByIsbn", error);
+      await logErrorWithCrashlytics("GoogleBooksService.searchByIsbn", error);
       throw new Error("Barkod taranırken bir sorun oluştu.");
     }
   },
@@ -212,7 +212,7 @@ async function tryISBNSearch(
   } catch (error) {
     // AbortError hariç hataları logla
     if (error instanceof Error && error.name !== "AbortError") {
-      logError("GoogleBooksService.searchByIsbn", error);
+      await logErrorWithCrashlytics("GoogleBooksService.searchByIsbn", error);
     }
     return null;
   }
@@ -252,7 +252,7 @@ async function searchWithPrefix(
   } catch (error) {
     // AbortError hariç hataları logla
     if (error instanceof Error && error.name !== "AbortError") {
-      logError("GoogleBooksService.searchWithPrefix", error);
+      await logErrorWithCrashlytics("GoogleBooksService.searchWithPrefix", error);
     }
     return [];
   }

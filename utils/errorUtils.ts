@@ -1,9 +1,10 @@
 /**
  * Güvenli hata işleme yardımcı fonksiyonları.
  * Stack trace'leri ve hassas bilgileri production'da gizler.
+ *
+ * NOT: Bu dosya Crashlytics'e bağımlı DEĞİLDİR.
+ * Crashlytics entegrasyonu için logErrorWithCrashlytics kullanın.
  */
-
-import CrashlyticsService from "../services/CrashlyticsService";
 
 /**
  * Hata nesnesinden güvenli mesaj çıkarır.
@@ -30,9 +31,11 @@ export function getErrorCode(error: unknown): string | undefined {
 }
 
 /**
- * Production-safe hata loglama.
+ * Production-safe hata loglama (Crashlytics OLMADAN).
  * Development modunda tam hata, production'da sadece mesaj loglanır.
- * Production'da Crashlytics'e de raporlar.
+ *
+ * Bu fonksiyon BAĞIMSIZDIR - döngüsel bağımlılık yaratmaz.
+ * Storage katmanı gibi alt seviye modüllerde kullanın.
  */
 export function logError(context: string, error: unknown): void {
   if (__DEV__) {
@@ -45,9 +48,35 @@ export function logError(context: string, error: unknown): void {
     // S4624: İç içe template literal yerine prefix hesaplaması kullanıldı
     const codePrefix = code ? `(${code}) ` : "";
     console.error(`[${context}] ${codePrefix}${message}`);
+  }
+}
 
-    // Production: Crashlytics'e raporla
+/**
+ * Crashlytics ile hata loglama (opsiyonel).
+ *
+ * KULLANIM: Application seviyesinde (Context, Service vb.)
+ * KULLANMAMA: Storage katmanında, utils'de (döngü yaratır)
+ *
+ * @example
+ * // ✅ DOĞRU - Context/Service seviyesinde
+ * import { logErrorWithCrashlytics } from '@/utils/errorUtils';
+ * logErrorWithCrashlytics('BooksContext.fetchBooks', error);
+ *
+ * @example
+ * // ✅ DOĞRU - Storage/utils seviyesinde
+ * import { logError } from '@/utils/errorUtils';
+ * logError('MMKVAdapter.getItem', error);
+ */
+export async function logErrorWithCrashlytics(context: string, error: unknown): Promise<void> {
+  // Önce basit log yap (bağımsız kısım)
+  logError(context, error);
+
+  // Production'da Crashlytics'e de raporla
+  if (!__DEV__) {
+    // Dinamik import ile döngüyü kır
+    const { default: CrashlyticsService } = await import("../services/CrashlyticsService");
+    const message = getErrorMessage(error);
     const errorObj = error instanceof Error ? error : new Error(message);
-    CrashlyticsService.recordError(errorObj, context);
+    await CrashlyticsService.recordError(errorObj, context);
   }
 }
