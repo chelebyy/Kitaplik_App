@@ -7,8 +7,8 @@ import { Book } from "../context/BooksContext";
 
 interface UseSettingsActionsProps {
   books: Book[];
-  clearAllData: () => void;
-  restoreBooks: (books: Book[]) => void;
+  clearAllData: () => void | Promise<void>;
+  restoreBooks: (books: Book[]) => void | Promise<void>;
 }
 
 interface UseSettingsActionsReturn {

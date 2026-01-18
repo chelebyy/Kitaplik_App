@@ -12,25 +12,24 @@ import { ManualFormFields } from "./ManualFormFields";
 
 interface ManualTabProps {
   // Form state
-  title: string;
-  author: string;
-  genre: GenreType | "";
-  pageCount: string;
-  currentPage: string;
-  coverUrl: string | null;
-  status: BookStatus;
+  readonly title: string;
+  readonly author: string;
+  readonly genre: GenreType | "";
+  readonly pageCount: string;
+  readonly currentPage: string;
+  readonly coverUrl: string | null;
+  readonly status: BookStatus;
   // Form handlers
-  onTitleChange: (value: string) => void;
-  onAuthorChange: (value: string) => void;
-  onGenreChange?: (value: GenreType | "") => void;
-  onPageCountChange: (value: string) => void;
-  onCurrentPageChange: (value: string) => void;
-  onCoverChange: (url: string | null) => void;
-  onStatusChange: (status: BookStatus) => void;
+  readonly onTitleChange: (value: string) => void;
+  readonly onAuthorChange: (value: string) => void;
+  readonly onPageCountChange: (value: string) => void;
+  readonly onCurrentPageChange: (value: string) => void;
+  readonly onCoverChange: (url: string | null) => void;
+  readonly onStatusChange: (status: BookStatus) => void;
   // Actions
-  onGenrePress: () => void;
-  onBarcodePress: () => void;
-  onSave: () => void;
+  readonly onGenrePress: () => void;
+  readonly onBarcodePress: () => void;
+  readonly onSave: () => void;
 }
 
 /**

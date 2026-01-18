@@ -10,10 +10,10 @@ import { useTheme } from "../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 
 interface DataManagementSectionProps {
-  isLoading: boolean;
-  onBackup: () => void;
-  onRestore: () => void;
-  onResetData: () => void;
+  readonly isLoading: boolean;
+  readonly onBackup: () => void;
+  readonly onRestore: () => void;
+  readonly onResetData: () => void;
 }
 
 export function DataManagementSection({

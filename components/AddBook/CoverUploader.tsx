@@ -14,8 +14,8 @@ import { useTheme } from "../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 
 interface CoverUploaderProps {
-  coverUrl: string | null;
-  onCoverChange: (url: string | null) => void;
+  readonly coverUrl: string | null;
+  readonly onCoverChange: (url: string | null) => void;
 }
 
 /**

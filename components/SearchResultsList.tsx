@@ -135,10 +135,15 @@ export default function SearchResultsList({
 
   // Memoized renderItem
   const renderItem = useCallback(
-    ({ item }: { item: GoogleBookResult }) => {
-      const handleAdd = () => onAddBook(item);
+    ({ item: _item }: { item: GoogleBookResult }) => {
+      const handleAdd = () => onAddBook(_item);
       return (
-        <SearchResultItem item={item} onAdd={handleAdd} colors={colors} t={t} />
+        <SearchResultItem
+          item={_item}
+          onAdd={handleAdd}
+          colors={colors}
+          t={t}
+        />
       );
     },
     [onAddBook, colors, t],

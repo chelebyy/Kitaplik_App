@@ -26,7 +26,7 @@ import {
 } from "../context/NotificationContext";
 import { NotificationPermissionModal } from "../components/NotificationPermissionModal";
 import { useEffect, useState, useCallback } from "react";
-import { View, ActivityIndicator, Text } from "react-native";
+import { View } from "react-native";
 import { AnimatedSplash } from "../components/AnimatedSplash";
 import { getAnalytics, logEvent } from "@react-native-firebase/analytics";
 import CrashlyticsService from "../services/CrashlyticsService";
@@ -69,8 +69,10 @@ function RootLayoutContent({ fontsLoaded }: { readonly fontsLoaded: boolean }) {
       try {
         const analyticsInstance = getAnalytics();
         await logEvent(analyticsInstance, "app_open");
-      } catch {
-        // Analytics is non-critical, silently ignore failures
+      } catch (error) {
+        if (__DEV__) {
+          console.warn("[Analytics] Failed to log app_open:", error);
+        }
       }
     };
     trackAppOpen();
@@ -81,8 +83,10 @@ function RootLayoutContent({ fontsLoaded }: { readonly fontsLoaded: boolean }) {
     const initCrashlytics = async () => {
       try {
         await CrashlyticsService.initialize();
-      } catch {
-        // Crashlytics is non-critical, silently ignore failures
+      } catch (error) {
+        if (__DEV__) {
+          console.warn("[Crashlytics] Failed to initialize:", error);
+        }
       }
     };
     initCrashlytics();

@@ -161,11 +161,11 @@ export default function BooksScreen() {
   );
 
   const renderBookItem = React.useCallback(
-    ({ item }: { item: Book }) => {
+    ({ item: _item }: { item: Book }) => {
       return (
         <View style={{ width: viewMode === "grid" ? COLUMN_WIDTH : "100%" }}>
           <BookCard
-            book={item}
+            book={_item}
             variant={viewMode}
             onPressId={handleBookPress}
           />

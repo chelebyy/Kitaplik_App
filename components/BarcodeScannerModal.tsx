@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  Dimensions,
-  StyleSheet,
-} from "react-native";
+import { Text, View, Modal, TouchableOpacity, Dimensions } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { X } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
@@ -19,12 +12,6 @@ interface BarcodeScannerModalProps {
 
 const { width } = Dimensions.get("window");
 const scanSize = width * 0.7;
-
-const styles = StyleSheet.create({
-  cameraView: {
-    flex: 1,
-  },
-});
 
 export default function BarcodeScannerModal({
   visible,
@@ -97,7 +84,7 @@ export default function BarcodeScannerModal({
     >
       <View className="flex-1 bg-black">
         <CameraView
-          style={styles.cameraView}
+          className="flex-1"
           facing="back"
           mute={true}
           onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}

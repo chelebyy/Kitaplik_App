@@ -5,8 +5,8 @@ import { useTheme } from "../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 
 interface AboutModalProps {
-  visible: boolean;
-  onClose: () => void;
+  readonly visible: boolean;
+  readonly onClose: () => void;
 }
 
 export function AboutModal({ visible, onClose }: AboutModalProps) {

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   Modal,
   View,
@@ -360,7 +360,7 @@ export default function RecommendationModal({
     return new Set(books.map((b) => b.title));
   }, [books]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Ads are native-only
     if (!isNative) return;
 
@@ -405,7 +405,17 @@ export default function RecommendationModal({
       unsubscribeError();
       adInstanceRef.current = null;
     };
-  }, [addCredits, isNative]);
+  }, [addCredits]);
+
+  // Unmount kontrolü için ref
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const handleEarnCredit = () => {
     const adInstance = adInstanceRef.current;
@@ -447,7 +457,11 @@ export default function RecommendationModal({
     setStep("loading");
     setSource("library");
     setTimeout(async () => {
+      if (!isMounted.current) return;
+
       const book = await RecommendationService.getRandomFromLibrary(books);
+      if (!isMounted.current) return;
+
       if (book) {
         setRecommendedBook(book);
         setStep("result");
@@ -485,6 +499,9 @@ export default function RecommendationModal({
         favoriteGenre,
         excludedTitles,
       );
+
+      if (!isMounted.current) return;
+
       if (book) {
         setRecommendedBook(book);
         setStep("result");
@@ -493,6 +510,7 @@ export default function RecommendationModal({
         setStep("result");
       }
     } catch {
+      if (!isMounted.current) return;
       setError(t("recommendation_error_generic"));
       setStep("result");
     }

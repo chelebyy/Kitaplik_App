@@ -390,10 +390,7 @@ export function BooksProvider({
     try {
       await StorageService.removeItem(BOOKS_STORAGE_KEY);
       setBooks(INITIAL_BOOKS);
-      Alert.alert(
-        i18n.t("success_title"),
-        i18n.t("data_reset_success"),
-      );
+      Alert.alert(i18n.t("success_title"), i18n.t("data_reset_success"));
     } catch (error) {
       await logErrorWithCrashlytics("BooksContext.clearAllData", error);
       Alert.alert(i18n.t("profile_error_title"), i18n.t("data_reset_error"));

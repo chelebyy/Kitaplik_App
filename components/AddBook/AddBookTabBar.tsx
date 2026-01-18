@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next";
 export type InputMode = "manual" | "search";
 
 interface AddBookTabBarProps {
-  mode: InputMode;
-  onModeChange: (mode: InputMode) => void;
+  readonly mode: InputMode;
+  readonly onModeChange: (mode: InputMode) => void;
 }
 
 /**
@@ -57,6 +57,7 @@ export function AddBookTabBar({ mode, onModeChange }: AddBookTabBarProps) {
           onPress={() => onModeChange("manual")}
           accessibilityRole="tab"
           accessibilityState={{ selected: mode === "manual" }}
+          accessibilityLabel={t("add_book_manual")}
         >
           <PenTool
             size={16}
@@ -80,6 +81,7 @@ export function AddBookTabBar({ mode, onModeChange }: AddBookTabBarProps) {
           onPress={() => onModeChange("search")}
           accessibilityRole="tab"
           accessibilityState={{ selected: mode === "search" }}
+          accessibilityLabel={t("add_book_search")}
         >
           <Search
             size={16}

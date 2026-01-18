@@ -323,7 +323,10 @@ export function NotificationProvider({
         await scheduleAllEnabledNotifications(finalSettings);
       }
     } catch (error) {
-      await logErrorWithCrashlytics("NotificationContext.loadSettingsAndCheckPermission", error);
+      await logErrorWithCrashlytics(
+        "NotificationContext.loadSettingsAndCheckPermission",
+        error,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -387,7 +390,10 @@ export function NotificationProvider({
 
       return granted;
     } catch (error) {
-      await logErrorWithCrashlytics("NotificationContext.requestPermission", error);
+      await logErrorWithCrashlytics(
+        "NotificationContext.requestPermission",
+        error,
+      );
       return false;
     }
   }, [settings]);

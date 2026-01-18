@@ -13,13 +13,13 @@ AsyncStorage'dan react-native-mmkv'ye geçiş planı. Bu geçiş ~30x performans
 
 ### Neden MMKV?
 
-| Özellik | AsyncStorage | MMKV |
-|---------|--------------|------|
-| `getItem` hızı | ~5-10ms | ~0.1ms |
-| `setItem` hızı | ~8-15ms | ~0.2ms |
-| API tipi | Asenkron (Promise) | Senkron |
-| Kapasite | ~1.000 kitap | ~10.000 kitap |
-| Teknoloji | JSON dosyası | C++ Memory Mapping |
+| Özellik        | AsyncStorage       | MMKV               |
+| -------------- | ------------------ | ------------------ |
+| `getItem` hızı | ~5-10ms            | ~0.1ms             |
+| `setItem` hızı | ~8-15ms            | ~0.2ms             |
+| API tipi       | Asenkron (Promise) | Senkron            |
+| Kapasite       | ~1.000 kitap       | ~10.000 kitap      |
+| Teknoloji      | JSON dosyası       | C++ Memory Mapping |
 
 ---
 
@@ -27,22 +27,22 @@ AsyncStorage'dan react-native-mmkv'ye geçiş planı. Bu geçiş ~30x performans
 
 ### Storage Soyutlama Katmanı Durumu
 
-| Dosya | Durum | Eksik |
-|------|--------|-------|
-| `IStorageAdapter.ts` | ⚠️ Kısmi | `getAllKeys()`, `clear()` |
+| Dosya                    | Durum    | Eksik                       |
+| ------------------------ | -------- | --------------------------- |
+| `IStorageAdapter.ts`     | ⚠️ Kısmi | `getAllKeys()`, `clear()`   |
 | `AsyncStorageAdapter.ts` | ⚠️ Kısmi | Metod implementasyonu eksik |
-| `StorageService.ts` | ⚠️ Kısmi | Delegasyon eksik |
-| `index.ts` | ⚠️ Kısmi | Export eksik |
+| `StorageService.ts`      | ⚠️ Kısmi | Delegasyon eksik            |
+| `index.ts`               | ⚠️ Kısmi | Export eksik                |
 
 ### Context Kullanımları
 
-| Dosya | StorageService Çağrısı |
-|-------|------------------------|
-| `BooksContext.tsx` | 7 |
-| `CreditsContext.tsx` | 5 |
-| `NotificationContext.tsx` | 6 |
-| `LanguageContext.tsx` | 4 |
-| **Toplam** | **22 çağrı** |
+| Dosya                     | StorageService Çağrısı |
+| ------------------------- | ---------------------- |
+| `BooksContext.tsx`        | 7                      |
+| `CreditsContext.tsx`      | 5                      |
+| `NotificationContext.tsx` | 6                      |
+| `LanguageContext.tsx`     | 4                      |
+| **Toplam**                | **22 çağrı**           |
 
 **Sonuç:** Tüm context'ler zaten StorageService kullanıyor. Context değişikliği gerektirmiyor.
 
@@ -157,13 +157,14 @@ npx expo run:android
 **Dosya:** `services/storage/MMKVAdapter.ts` (YENİ - TAMAMLANDI)
 
 > **⚠️ API DÜZELTMESİ:** Orijinal planda hatalı API vardı. Gerçek `react-native-mmkv` v4.1.1 API'si:
+>
 > - ❌ Yanlış: `new MMKV()` → ✅ Doğru: `createMMKV()`
 > - ❌ Yanlış: `storage.delete()` → ✅ Doğru: `storage.remove()`
 
 ```typescript
-import { createMMKV } from 'react-native-mmkv';
-import { IStorageAdapter } from './IStorageAdapter';
-import { logError } from '../../utils/errorUtils';
+import { createMMKV } from "react-native-mmkv";
+import { IStorageAdapter } from "./IStorageAdapter";
+import { logError } from "../../utils/errorUtils";
 
 const storage = createMMKV();
 
@@ -200,7 +201,7 @@ export class MMKVAdapter implements IStorageAdapter {
     try {
       return storage.getAllKeys();
     } catch (error) {
-      logError('MMKVAdapter.getAllKeys', error);
+      logError("MMKVAdapter.getAllKeys", error);
       return [];
     }
   }
@@ -209,7 +210,7 @@ export class MMKVAdapter implements IStorageAdapter {
     try {
       storage.clearAll();
     } catch (error) {
-      logError('MMKVAdapter.clear', error);
+      logError("MMKVAdapter.clear", error);
       throw error;
     }
   }
@@ -227,12 +228,12 @@ export class MMKVAdapter implements IStorageAdapter {
 **Dosya:** `services/storage/MigrationService.ts` (YENİ - TAMAMLANDI)
 
 ```typescript
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createMMKV } from 'react-native-mmkv';
-import { logError } from '../../utils/errorUtils';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createMMKV } from "react-native-mmkv";
+import { logError } from "../../utils/errorUtils";
 
 const mmkvStorage = createMMKV();
-const MIGRATION_FLAG_KEY = 'mmkv_migration_completed';
+const MIGRATION_FLAG_KEY = "mmkv_migration_completed";
 
 /**
  * Migration durumunu kontrol et
@@ -246,11 +247,11 @@ export function hasMigratedToMMKV(): boolean {
  */
 export async function migrateFromAsyncStorage(): Promise<void> {
   if (hasMigratedToMMKV()) {
-    console.log('[Migration] Zaten tamamlandı, atlanıyor...');
+    console.log("[Migration] Zaten tamamlandı, atlanıyor...");
     return;
   }
 
-  console.log('[Migration] Başlatılıyor...');
+  console.log("[Migration] Başlatılıyor...");
   const startTime = Date.now();
 
   try {
@@ -272,9 +273,8 @@ export async function migrateFromAsyncStorage(): Promise<void> {
     mmkvStorage.set(MIGRATION_FLAG_KEY, true);
     const duration = Date.now() - startTime;
     console.log(`[Migration] Tamamlandı: ${duration}ms`);
-
   } catch (error) {
-    logError('MigrationService.migrateFromAsyncStorage', error);
+    logError("MigrationService.migrateFromAsyncStorage", error);
     throw error;
   }
 }
@@ -298,8 +298,8 @@ export function clearMigrationFlag(): void {
 **Dosya:** `services/storage/StorageService.ts`
 
 ```typescript
-import { IStorageAdapter } from './IStorageAdapter';
-import { MMKVAdapter } from './MMKVAdapter';
+import { IStorageAdapter } from "./IStorageAdapter";
+import { MMKVAdapter } from "./MMKVAdapter";
 // import { AsyncStorageAdapter } from './AsyncStorageAdapter'; // Artık kullanılmıyor
 
 class StorageServiceClass implements IStorageAdapter {
@@ -316,7 +316,7 @@ class StorageServiceClass implements IStorageAdapter {
 
 ---
 
-#### Adım 5.2: app/_layout.tsx'e Migration Ekle
+#### Adım 5.2: app/\_layout.tsx'e Migration Ekle
 
 **Dosya:** `app/_layout.tsx`
 
@@ -364,7 +364,7 @@ export default function RootLayout() {
 
 ```javascript
 // MMKV Mock
-jest.mock('react-native-mmkv', () => {
+jest.mock("react-native-mmkv", () => {
   const mockStorage = new Map();
 
   return {
@@ -389,11 +389,15 @@ jest.mock('react-native-mmkv', () => {
 **Dosya:** `services/storage/index.ts`
 
 ```typescript
-export { IStorageAdapter } from './IStorageAdapter';
-export { AsyncStorageAdapter } from './AsyncStorageAdapter';
-export { MMKVAdapter } from './MMKVAdapter';
-export { StorageService } from './StorageService';
-export { hasMigratedToMMKV, migrateFromAsyncStorage, clearMigrationFlag } from './MigrationService';
+export { IStorageAdapter } from "./IStorageAdapter";
+export { AsyncStorageAdapter } from "./AsyncStorageAdapter";
+export { MMKVAdapter } from "./MMKVAdapter";
+export { StorageService } from "./StorageService";
+export {
+  hasMigratedToMMKV,
+  migrateFromAsyncStorage,
+  clearMigrationFlag,
+} from "./MigrationService";
 ```
 
 **Doğrulama:** `npx tsc --noEmit` geçmeli
@@ -450,13 +454,13 @@ this.adapter = new AsyncStorageAdapter(); // Geri al
 
 ### Manuel Test Senaryoları
 
-| # | Senaryo | Beklenen Sonuç |
-|---|---------|----------------|
-| 1 | Temiz kurulum (ilk açılış) | Migration atlanır, MMKV direkt kullanılır |
-| 2 | Mevcut kullanıcı (verili) | Migration çalışır, veriler korunur |
-| 3 | Kitap ekleme | MMKV'ye yazılır, hızlı kaydeder |
-| 4 | Uygulama yeniden başlatma | Veriler MMKV'den okunur |
-| 5 | 1000+ kitap performansı | Takılma olmadan açılır |
+| #   | Senaryo                    | Beklenen Sonuç                            |
+| --- | -------------------------- | ----------------------------------------- |
+| 1   | Temiz kurulum (ilk açılış) | Migration atlanır, MMKV direkt kullanılır |
+| 2   | Mevcut kullanıcı (verili)  | Migration çalışır, veriler korunur        |
+| 3   | Kitap ekleme               | MMKV'ye yazılır, hızlı kaydeder           |
+| 4   | Uygulama yeniden başlatma  | Veriler MMKV'den okunur                   |
+| 5   | 1000+ kitap performansı    | Takılma olmadan açılır                    |
 
 ### Otomatik Testler
 
@@ -487,16 +491,16 @@ npm test -- --testPathPattern="context"
 
 ## Dosya Değişikliği Özeti
 
-| Dosya | Tür | Değişiklik |
-|------|-----|-----------|
-| `IStorageAdapter.ts` | Edit | 2 metod ekle |
-| `AsyncStorageAdapter.ts` | Edit | 2 metod implementasyonu |
-| `StorageService.ts` | Edit | 2 metod + adapter değişikliği |
-| `MMKVAdapter.ts` | Yeni | Oluştur |
-| `MigrationService.ts` | Yeni | Oluştur |
-| `index.ts` | Edit | Export ekle |
-| `app/_layout.tsx` | Edit | Migration UI ekle |
-| `jest.setup.js` | Edit | MMKV mock ekle |
+| Dosya                    | Tür  | Değişiklik                    |
+| ------------------------ | ---- | ----------------------------- |
+| `IStorageAdapter.ts`     | Edit | 2 metod ekle                  |
+| `AsyncStorageAdapter.ts` | Edit | 2 metod implementasyonu       |
+| `StorageService.ts`      | Edit | 2 metod + adapter değişikliği |
+| `MMKVAdapter.ts`         | Yeni | Oluştur                       |
+| `MigrationService.ts`    | Yeni | Oluştur                       |
+| `index.ts`               | Edit | Export ekle                   |
+| `app/_layout.tsx`        | Edit | Migration UI ekle             |
+| `jest.setup.js`          | Edit | MMKV mock ekle                |
 
 **Toplam:** 3 yeni dosya, 5 düzenlenen dosya
 
@@ -537,10 +541,10 @@ npm test -- --testPathPattern="context"
 
 ## Geçmiş
 
-| Tarih | Değişiklik |
-|-------|------------|
-| 2026-01-17 | ✅ **ASYNC STORAGE KALDIRILDI** - Tam temizlik, migration kodları silindi |
+| Tarih      | Değişiklik                                                                  |
+| ---------- | --------------------------------------------------------------------------- |
+| 2026-01-17 | ✅ **ASYNC STORAGE KALDIRILDI** - Tam temizlik, migration kodları silindi   |
 | 2026-01-17 | ✅ **IMPLEMENTASYON TAMAMLANDI** - 7 fazın tamamı uygulandı, 340 test geçti |
-| 2026-01-17 | MMKV API düzeltmesi (createMMKV → new MMKV, remove → delete) |
-| 2026-01-17 | Kapsamlı implementasyon planı tamamlandı, 7 faz ayrıntılandırıldı |
-| 2026-01-17 | İlk plan oluşturuldu |
+| 2026-01-17 | MMKV API düzeltmesi (createMMKV → new MMKV, remove → delete)                |
+| 2026-01-17 | Kapsamlı implementasyon planı tamamlandı, 7 faz ayrıntılandırıldı           |
+| 2026-01-17 | İlk plan oluşturuldu                                                        |

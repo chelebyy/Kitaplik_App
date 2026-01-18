@@ -6,17 +6,17 @@ import { useTranslation } from "react-i18next";
 import { GenreType } from "../../utils/genreTranslator";
 
 interface ManualFormFieldsProps {
-  title: string;
-  author: string;
-  genre: GenreType | "";
-  pageCount: string;
-  currentPage: string;
-  onTitleChange: (value: string) => void;
-  onAuthorChange: (value: string) => void;
-  onPageCountChange: (value: string) => void;
-  onCurrentPageChange: (value: string) => void;
-  onGenrePress: () => void;
-  onBarcodePress: () => void;
+  readonly title: string;
+  readonly author: string;
+  readonly genre: GenreType | "";
+  readonly pageCount: string;
+  readonly currentPage: string;
+  readonly onTitleChange: (value: string) => void;
+  readonly onAuthorChange: (value: string) => void;
+  readonly onPageCountChange: (value: string) => void;
+  readonly onCurrentPageChange: (value: string) => void;
+  readonly onGenrePress: () => void;
+  readonly onBarcodePress: () => void;
 }
 
 /**

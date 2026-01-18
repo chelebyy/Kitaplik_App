@@ -67,14 +67,18 @@ export function logError(context: string, error: unknown): void {
  * import { logError } from '@/utils/errorUtils';
  * logError('MMKVAdapter.getItem', error);
  */
-export async function logErrorWithCrashlytics(context: string, error: unknown): Promise<void> {
+export async function logErrorWithCrashlytics(
+  context: string,
+  error: unknown,
+): Promise<void> {
   // Önce basit log yap (bağımsız kısım)
   logError(context, error);
 
   // Production'da Crashlytics'e de raporla
   if (!__DEV__) {
     // Dinamik import ile döngüyü kır
-    const { default: CrashlyticsService } = await import("../services/CrashlyticsService");
+    const { default: CrashlyticsService } =
+      await import("../services/CrashlyticsService");
     const message = getErrorMessage(error);
     const errorObj = error instanceof Error ? error : new Error(message);
     await CrashlyticsService.recordError(errorObj, context);

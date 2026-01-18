@@ -49,11 +49,7 @@ export const BookNotes = ({ notes, onNotesChange }: BookNotesProps) => {
                 ? "bg-slate-800/50 border-slate-700"
                 : "bg-white/80 border-slate-200",
             )}
-            accessibilityLabel={
-              copied
-                ? t("notes_copied")
-                : t("notes_copy")
-            }
+            accessibilityLabel={copied ? t("notes_copied") : t("notes_copy")}
             accessibilityRole="button"
           >
             {copied ? (

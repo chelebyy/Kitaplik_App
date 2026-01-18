@@ -3,7 +3,7 @@
  *
  * Başlık, Yazar, Tür ve Kapak düzenleme imkanı sağlar.
  */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Modal,
   View,
@@ -57,6 +57,14 @@ export default function BookEditModal({
   );
   const [editCoverUrl, setEditCoverUrl] = useState(book.coverUrl);
   const [genrePickerVisible, setGenrePickerVisible] = useState(false);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   // Book değiştiğinde state'leri sıfırla
   useEffect(() => {
@@ -116,6 +124,7 @@ export default function BookEditModal({
     });
 
     if (!result.canceled && result.assets[0]) {
+      if (!isMounted.current) return;
       setEditCoverUrl(result.assets[0].uri);
     }
   };
@@ -135,6 +144,7 @@ export default function BookEditModal({
     });
 
     if (!result.canceled && result.assets[0]) {
+      if (!isMounted.current) return;
       setEditCoverUrl(result.assets[0].uri);
     }
   };

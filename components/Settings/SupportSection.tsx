@@ -5,7 +5,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 
 interface SupportSectionProps {
-  onFeedback: () => void;
+  readonly onFeedback: () => void;
 }
 
 export function SupportSection({ onFeedback }: SupportSectionProps) {

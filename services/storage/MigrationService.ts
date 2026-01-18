@@ -1,7 +1,7 @@
-import { createMMKV } from 'react-native-mmkv';
+import { createMMKV } from "react-native-mmkv";
 
 const mmkvStorage = createMMKV();
-const MIGRATION_FLAG_KEY = 'mmkv_migration_completed';
+const MIGRATION_FLAG_KEY = "mmkv_migration_completed";
 
 /**
  * Migration durumunu kontrol et

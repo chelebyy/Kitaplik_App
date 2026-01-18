@@ -8,16 +8,16 @@ import { BookStatus } from "../../context/BooksContext";
 import SearchResultsList from "../SearchResultsList";
 
 interface SearchTabProps {
-  searchQuery: string;
-  searchType: "book" | "author";
-  searchResults: GoogleBookResult[];
-  isLoading: boolean;
-  status: BookStatus;
-  onQueryChange: (query: string) => void;
-  onSearchTypeChange: (type: "book" | "author") => void;
-  onSearch: () => void;
-  onClearSearch: () => void;
-  onAddBook: (book: GoogleBookResult) => void;
+  readonly searchQuery: string;
+  readonly searchType: "book" | "author";
+  readonly searchResults: GoogleBookResult[];
+  readonly isLoading: boolean;
+  readonly status: BookStatus;
+  readonly onQueryChange: (query: string) => void;
+  readonly onSearchTypeChange: (type: "book" | "author") => void;
+  readonly onSearch: () => void;
+  readonly onClearSearch: () => void;
+  readonly onAddBook: (book: GoogleBookResult) => void;
 }
 
 /**

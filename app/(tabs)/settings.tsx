@@ -25,13 +25,13 @@ import {
 
 export default function SettingsScreen() {
   const { colors } = useTheme();
-  const { books } = useBooks();
+  const { books, clearAllData, restoreBooks } = useBooks();
   const { t } = useTranslation();
   const { isLoading, handleBackup, handleRestore, handleResetData } =
     useSettingsActions({
       books,
-      clearAllData: useBooks().clearAllData,
-      restoreBooks: useBooks().restoreBooks,
+      clearAllData,
+      restoreBooks,
     });
   const [isAboutVisible, setAboutVisible] = useState<boolean>(false);
 
@@ -91,7 +91,11 @@ ${t("feedback_body_message")}
         />
 
         {/* Section: DESTEK & İLETİŞİM */}
-        <SupportSection onFeedback={handleFeedback} />
+        <SupportSection
+          onFeedback={() => {
+            handleFeedback();
+          }}
+        />
 
         {/* Section: HAKKINDA & YASAL */}
         <LegalSection onAboutOpen={() => setAboutVisible(true)} />

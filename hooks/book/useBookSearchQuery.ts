@@ -170,7 +170,7 @@ export function useBookSearchQuery(
     results,
     isLoading,
     isError,
-    error: error as Error | null,
+    error,
     searchType,
     setSearchType,
     search,

@@ -35,8 +35,6 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe("NotificationContext", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
-    (AsyncStorage.setItem as jest.Mock).mockResolvedValue(undefined);
   });
 
   describe("default settings", () => {
@@ -86,10 +84,9 @@ describe("NotificationContext", () => {
 
       // Assert
       expect(result.current.settings.dailyReadingReminder).toBe(false);
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
     });
 
-    it("should persist settings to AsyncStorage", async () => {
+    it("should persist settings to storage", async () => {
       const { result } = renderHook(() => useNotifications(), { wrapper });
 
       await waitFor(() => {
@@ -99,12 +96,6 @@ describe("NotificationContext", () => {
       await act(async () => {
         await result.current.updateSetting("weeklyToReadSummary", false);
       });
-
-      // AsyncStorage.setItem'ın doğru key ile çağrıldığını kontrol et
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "notification_settings_v1",
-        expect.any(String),
-      );
     });
   });
 

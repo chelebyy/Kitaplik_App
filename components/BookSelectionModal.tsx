@@ -53,8 +53,14 @@ export default function BookSelectionModal({
   const { t } = useTranslation();
 
   const renderBookItem = useCallback(
-    ({ item, index }: { item: GoogleBookResult; index: number }) => {
-      const info = item.volumeInfo;
+    ({
+      item: _item,
+      index: _index,
+    }: {
+      item: GoogleBookResult;
+      index: number;
+    }) => {
+      const info = _item.volumeInfo;
       // Fallback görsel - listede de göster
       const coverUrl =
         info.imageLinks?.thumbnail ||
@@ -64,10 +70,10 @@ export default function BookSelectionModal({
 
       return (
         <Pressable
-          onPress={() => onSelect(item)}
+          onPress={() => onSelect(_item)}
           accessibilityRole="button"
           accessibilityLabel={`${t("barcode_select")} ${info.title}`}
-          testID={`book-selection-item-${index}`}
+          testID={`book-selection-item-${_index}`}
           className="flex-row bg-white dark:bg-slate-800 rounded-2xl p-4 mb-4 border border-slate-100 dark:border-slate-700 shadow-lg active:scale-[0.98]"
           style={{
             shadowColor: "#000",

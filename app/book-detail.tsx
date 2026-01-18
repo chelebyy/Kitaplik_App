@@ -56,8 +56,8 @@ export default function BookDetailScreen() {
   } = useBookDetails(bookId || "");
 
   // Modal states
-  const [isPriceModalVisible, setPriceModalVisible] = useState<boolean>(false);
-  const [isEditModalVisible, setEditModalVisible] = useState<boolean>(false);
+  const [isPriceModalVisible, setPriceModalVisible] = useState(false);
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
 
   // Kitap silindiğinde veya bulunamadığında
   if (!book) {

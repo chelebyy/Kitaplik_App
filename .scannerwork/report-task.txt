@@ -2,5 +2,5 @@ projectKey=ayrac
 serverUrl=http://localhost:9000
 serverVersion=25.12.0.117093
 dashboardUrl=http://localhost:9000/dashboard?id=ayrac
-ceTaskId=6675499e-d26c-4393-8334-9ae9e1f9aa82
-ceTaskUrl=http://localhost:9000/api/ce/task?id=6675499e-d26c-4393-8334-9ae9e1f9aa82
+ceTaskId=32000336-4a37-4088-b284-71c1dab67716
+ceTaskUrl=http://localhost:9000/api/ce/task?id=32000336-4a37-4088-b284-71c1dab67716

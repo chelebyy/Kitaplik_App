@@ -259,13 +259,13 @@ export function translateGenre(englishGenre: string | undefined): GenreType {
 
     // A. Direct Match
     const directMatch = GENRE_MAP[part];
-    if (directMatch) return directMatch as GenreType;
+    if (directMatch) return directMatch;
 
     // B. Case-insensitive exact match
     const lowerPart = part.toLowerCase();
     for (const [key, value] of Object.entries(GENRE_MAP)) {
       if (key.toLowerCase() === lowerPart) {
-        return value as GenreType;
+        return value;
       }
     }
   }

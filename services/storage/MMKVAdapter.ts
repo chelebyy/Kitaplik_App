@@ -1,6 +1,6 @@
-import { createMMKV } from 'react-native-mmkv';
-import { IStorageAdapter } from './IStorageAdapter';
-import { logError } from '../../utils/errorUtils';
+import { createMMKV } from "react-native-mmkv";
+import { IStorageAdapter } from "./IStorageAdapter";
+import { logError } from "../../utils/errorUtils";
 
 // MMKV instance - şifreleme yok (kullanıcı kararı)
 const storage = createMMKV();
@@ -56,7 +56,7 @@ export class MMKVAdapter implements IStorageAdapter {
     try {
       return storage.getAllKeys();
     } catch (error) {
-      logError('MMKVAdapter.getAllKeys', error);
+      logError("MMKVAdapter.getAllKeys", error);
       return [];
     }
   }
@@ -68,7 +68,7 @@ export class MMKVAdapter implements IStorageAdapter {
     try {
       storage.clearAll();
     } catch (error) {
-      logError('MMKVAdapter.clear', error);
+      logError("MMKVAdapter.clear", error);
       throw error;
     }
   }

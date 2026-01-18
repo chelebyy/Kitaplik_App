@@ -10,14 +10,14 @@
 
 ### 📊 İlerleme Durumu
 
-| Madde | Durum | Not |
-|-------|--------|-----|
-| Paralel Arama | ✅ Tamamlandı | `SearchEngine.ts` içinde `Promise.all`/`Promise.allSettled` |
-| Testler | ✅ Tamamlandı | `services/__tests__/SearchEngine.test.ts` mevcut |
-| MultiSourceBookService.ts | ❌ Yapılmadı | Ayrı servis yerine SearchEngine'de implement edildi |
-| UI Kaynak Gösterimi | ❌ Yapılmadı | Kaynak bilgisi UI'da gösterilmiyor |
-| Kaynak Tercih Sistemi | ❌ Yapılmadı | Ayarlarda kaynak seçimi yok |
-| Analytics Kaynak Ayrımı | ❌ Yapılmadı | Kaynak bilgisi loglanmıyor |
+| Madde                     | Durum         | Not                                                         |
+| ------------------------- | ------------- | ----------------------------------------------------------- |
+| Paralel Arama             | ✅ Tamamlandı | `SearchEngine.ts` içinde `Promise.all`/`Promise.allSettled` |
+| Testler                   | ✅ Tamamlandı | `services/__tests__/SearchEngine.test.ts` mevcut            |
+| MultiSourceBookService.ts | ❌ Yapılmadı  | Ayrı servis yerine SearchEngine'de implement edildi         |
+| UI Kaynak Gösterimi       | ❌ Yapılmadı  | Kaynak bilgisi UI'da gösterilmiyor                          |
+| Kaynak Tercih Sistemi     | ❌ Yapılmadı  | Ayarlarda kaynak seçimi yok                                 |
+| Analytics Kaynak Ayrımı   | ❌ Yapılmadı  | Kaynak bilgisi loglanmıyor                                  |
 
 ---
 
@@ -351,7 +351,7 @@ analytics().logEvent("book_found", {
 ### Gün 1 (2-3 saat)
 
 - [x] `MultiSourceBookService.ts` oluştur → SearchEngine.ts içinde implemente edildi
-- [x] Unit testler yaz → services/__tests__/SearchEngine.test.ts mevcut
+- [x] Unit testler yaz → services/**tests**/SearchEngine.test.ts mevcut
 - [x] Basic paralel arama implement et → Promise.all/Promise.allSettled kullanılıyor
 
 ### Gün 2 (2 saat)
@@ -395,20 +395,23 @@ git merge feature/parallel-api-search
 
 **Son Güncelleme:** 2026-01-17
 **Durum:** ⚠️ Kısmen Tamamlandı (%50)
+
 - ✅ Paralel arama ve testler tamamlandı
 - ❌ UI iyileştirmeleri bekliyor (kaynak gösterimi, tercihler, analytics)
-**Öncelik:** İsteğe bağlı (Şu an %80-85 başarı oranı yeterli)
+  **Öncelik:** İsteğe bağlı (Şu an %80-85 başarı oranı yeterli)
 
 ---
 
 ## 📝 Uygulama Notları
 
 ### Tamamlananlar
+
 - Paralel arama `SearchEngine.ts` içinde `Promise.all()` ve `Promise.allSettled()` kullanılarak implemente edildi
 - Testler `services/__tests__/SearchEngine.test.ts` dosyasında mevcut
 - `MultiSourceBookService.ts` ayrı bir servis olarak oluşturulmadı (işlevsellik SearchEngine'de)
 
 ### Yapılmayanlar (İsteğe Bağlı)
+
 - **UI Kaynak Gösterimi:** `app/add-book.tsx`'de kitabın hangi kaynaktan geldiği gösterilmiyor
 - **Kaynak Tercih Sistemi:** Ayarlarda Google/OpenLibrary önceliği seçimi yok
 - **Analytics:** Kaynak bilgisi Firebase Analytics'te loglanmıyor

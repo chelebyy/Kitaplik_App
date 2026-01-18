@@ -1,5 +1,5 @@
 import { fetchWithRetry, RetryPresets } from "../utils/fetchWithRetry";
-import { logErrorWithCrashlytics } from "../utils/errorUtils";
+import { logError, logErrorWithCrashlytics } from "../utils/errorUtils";
 import {
   convertISBN10ToISBN13,
   convertISBN13ToISBN10,
@@ -252,7 +252,10 @@ async function searchWithPrefix(
   } catch (error) {
     // AbortError hariç hataları logla
     if (error instanceof Error && error.name !== "AbortError") {
-      await logErrorWithCrashlytics("GoogleBooksService.searchWithPrefix", error);
+      await logErrorWithCrashlytics(
+        "GoogleBooksService.searchWithPrefix",
+        error,
+      );
     }
     return [];
   }

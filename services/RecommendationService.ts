@@ -130,7 +130,10 @@ export const RecommendationService = {
     } catch (error) {
       // AbortError hariç hataları logla
       if (error instanceof Error && error.name !== "AbortError") {
-        await logErrorWithCrashlytics("RecommendationService.getDiscoveryRecommendation", error);
+        await logErrorWithCrashlytics(
+          "RecommendationService.getDiscoveryRecommendation",
+          error,
+        );
       }
       return null;
     }

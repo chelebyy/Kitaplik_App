@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import * as Linking from "expo-linking";
 
 interface LegalSectionProps {
-  onAboutOpen: () => void;
+  readonly onAboutOpen: () => void;
 }
 
 export function LegalSection({ onAboutOpen }: LegalSectionProps) {

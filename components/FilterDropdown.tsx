@@ -6,6 +6,7 @@ import {
   Modal,
   Pressable,
   FlatList,
+  ListRenderItemInfo,
 } from "react-native";
 import { ChevronDown, Check, X } from "lucide-react-native";
 import { useTheme } from "../context/ThemeContext";
@@ -40,8 +41,8 @@ function FilterDropdown({
 
   // Memoized renderItem for FlashList
   const renderItem = useCallback(
-    ({ item: listItem }: { item: string }) => {
-      const isSelected = listItem === selectedValue;
+    ({ item }: ListRenderItemInfo<string>) => {
+      const isSelected = item === selectedValue;
       return (
         <TouchableOpacity
           className={cn("flex-row justify-between items-center py-3.5 px-5")}
@@ -50,7 +51,11 @@ function FilterDropdown({
               ? { backgroundColor: colors.selectedBackground }
               : undefined
           }
-          onPress={() => handleSelect(listItem)}
+          onPress={() => handleSelect(item)}
+          accessibilityRole="button"
+          accessibilityLabel={
+            isSelected ? t("selected_option", { option: item }) : item
+          }
         >
           <Text
             className={cn(
@@ -63,13 +68,13 @@ function FilterDropdown({
               color: isSelected ? colors.primary : colors.text,
             }}
           >
-            {listItem}
+            {item}
           </Text>
           {isSelected && <Check size={18} color={colors.primary} />}
         </TouchableOpacity>
       );
     },
-    [colors, handleSelect, selectedValue, isDarkMode],
+    [colors, handleSelect, selectedValue, isDarkMode, t],
   );
 
   return (

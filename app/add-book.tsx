@@ -67,9 +67,10 @@ export default function AddBookScreen() {
   } = useBookSearchQuery();
 
   // Modal States
-  const [isScannerVisible, setIsScannerVisible] = useState(false);
+  const [isScannerVisible, setIsScannerVisible] = useState<boolean>(false);
   const [isGenrePickerVisible, setGenrePickerVisible] = useState(false);
-  const [isSelectionModalVisible, setIsSelectionModalVisible] = useState(false);
+  const [isSelectionModalVisible, setIsSelectionModalVisible] =
+    useState<boolean>(false);
   const [candidateBooks, setCandidateBooks] = useState<GoogleBookResult[]>([]);
   const [scannedIsbn, setScannedIsbn] = useState<string | null>(null);
 

@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { BookStatus } from "../../context/BooksContext";
 
 interface StatusSelectorProps {
-  status: BookStatus;
-  onStatusChange: (status: BookStatus) => void;
+  readonly status: BookStatus;
+  readonly onStatusChange: (status: BookStatus) => void;
 }
 
 /**

@@ -20,7 +20,7 @@
 
 > **Legend:** `file.ts <- A.tsx, B.tsx` = This file is **imported by** A.tsx and B.tsx.
 > Directories with `[N files: ...]` are summarized to reduce size.
-> [STATS] Showing 560 files. 17 dirs summarized, 8 dirs excluded (node_modules, etc.)
+> [STATS] Showing 540 files. 15 dirs summarized, 8 dirs excluded (node_modules, etc.)
 
 
 ```
@@ -468,7 +468,7 @@
   web/
     cache/
       production/
-        images/ [70 files: 70 .png]
+        images/ [75 files: 75 .png]
 .github/ [1 files: 1 .yml]
 .opencode/
   .gitignore
@@ -545,8 +545,6 @@ android/
   .gradle/
     8.14.3/
       gc.properties
-    9.0.0/
-      gc.properties
     buildOutputCleanup/
       cache.properties
     file-system.probe
@@ -557,7 +555,6 @@ android/
       Debug/
         3b65m5d3/
           arm64-v8a/ [164 files: 90 .o, 30 .json, 15 .cmake]
-          armeabi-v7a/ [165 files: 90 .o, 30 .json, 15 .cmake]
           hash_key.txt
           prefab/
             arm64-v8a/
@@ -574,46 +571,8 @@ android/
                       hermes-engine/
                         hermes-engineConfig.cmake
                         hermes-engineConfigVersion.cmake
-                      react-native-reanimated/
-                        react-native-reanimatedConfig.cmake
-                        react-native-reanimatedConfigVersion.cmake
-                      react-native-worklets/
-                        react-native-workletsConfig.cmake
-                        react-native-workletsConfigVersion.cmake
-            armeabi-v7a/
-              prefab/
-                lib/
-                  arm-linux-androideabi/
-                    cmake/
-                      ReactAndroid/
-                        ReactAndroidConfig.cmake
-                        ReactAndroidConfigVersion.cmake
-                      fbjni/
-                        fbjniConfig.cmake
-                        fbjniConfigVersion.cmake
-                      hermes-engine/
-                        hermes-engineConfig.cmake
-                        hermes-engineConfigVersion.cmake
-                      react-native-reanimated/
-                        react-native-reanimatedConfig.cmake
-                        react-native-reanimatedConfigVersion.cmake
-                      react-native-worklets/
-                        react-native-workletsConfig.cmake
-                        react-native-workletsConfigVersion.cmake
-            x86/
-              prefab/
-                lib/
-                  i686-linux-android/
-                    cmake/
-                      ReactAndroid/
-                        ReactAndroidConfig.cmake
-                        ReactAndroidConfigVersion.cmake
-                      fbjni/
-                        fbjniConfig.cmake
-                        fbjniConfigVersion.cmake
-                      hermes-engine/
-                        hermes-engineConfig.cmake
-                        hermes-engineConfigVersion.cmake
+                      react-native-nitro-modules/
+                        react-native-nitro-modulesConfig.cmake
                       react-native-reanimated/
                         react-native-reanimatedConfig.cmake
                         react-native-reanimatedConfigVersion.cmake
@@ -634,21 +593,18 @@ android/
                       hermes-engine/
                         hermes-engineConfig.cmake
                         hermes-engineConfigVersion.cmake
+                      react-native-nitro-modules/
+                        react-native-nitro-modulesConfig.cmake
                       react-native-reanimated/
                         react-native-reanimatedConfig.cmake
                         react-native-reanimatedConfigVersion.cmake
                       react-native-worklets/
                         react-native-workletsConfig.cmake
                         react-native-workletsConfigVersion.cmake
-          x86/ [163 files: 90 .o, 30 .json, 15 .cmake]
           x86_64/ [164 files: 90 .o, 30 .json, 15 .cmake]
       tools/
         debug/
           arm64-v8a/
-            compile_commands.json
-          armeabi-v7a/
-            compile_commands.json
-          x86/
             compile_commands.json
           x86_64/
             compile_commands.json
@@ -665,7 +621,7 @@ android/
         AndroidManifest.xml
         java/
           com/
-            kitaplik/
+            ayrac/
               app/
                 MainActivity.kt
                 MainApplication.kt
@@ -682,8 +638,6 @@ android/
             styles.xml
           values-night/
             colors.xml
-          xml/
-            network_security_config.xml
   build.gradle
   gradle/
     wrapper/
@@ -706,6 +660,8 @@ app/
   add-book.tsx
   book-detail.tsx
 assets/ [30 files: 25 .png, 4 .json, 1 .storyboard]
+codeql/
+  Kitaplik_Analiz.sarif
 codeql-custom-queries-javascript/
   codeql-pack.lock.yml
   codeql-pack.yml
@@ -800,7 +756,7 @@ hooks/
     useAddBookForm.ts ← add-book.tsx, useAddBookForm.test.ts
     useBookDetails.ts ← book-detail.tsx, useBookDetails.test.ts
     useBookSearch.ts ← useBookSearch.test.ts
-    useBookSearchQuery.ts ← add-book.tsx, useBookSearch.ts, useBookSearchQuery.cache.test.ts +1 more
+    useBookSearchQuery.ts ← add-book.tsx, useBookSearch.ts, useBookSearch.ts +2 more
     useIsbnSearchQuery.ts ← add-book.tsx, useIsbnSearchQuery.test.tsx
     useRecommendation.ts ← useRecommendation.test.ts
   useBackup.ts ← useBackup.test.ts
@@ -820,7 +776,7 @@ services/
   AGENTS.md
   BackupService.ts ← useBackup.ts, useSettingsActions.ts, useSettingsActions.test.ts
   BookMergeService.ts ← SearchEngine.ts, BookMergeService.test.ts
-  CrashlyticsService.ts ← _layout.tsx, BooksContext.tsx, errorUtils.ts
+  CrashlyticsService.ts ← _layout.tsx, BooksContext.tsx
   GoogleBooksService.ts ← add-book.tsx, SearchResultsList.tsx, BookMergeService.ts +6 more
   NotificationService.ts ← BooksContext.tsx, NotificationContext.tsx, NotificationService.test.ts
   OpenLibraryService.ts ← GoogleBooksService.ts, SearchEngine.test.ts, SearchEngine.ts
@@ -829,9 +785,10 @@ services/
   SearchEngine.ts ← SearchEngine.test.ts, useBookSearchQuery.ts, useIsbnSearchQuery.ts +4 more
   __tests__/ [4 files: 4 .ts]
   storage/
-    AsyncStorageAdapter.ts ← index.ts, StorageService.ts
-    IStorageAdapter.ts ← AsyncStorageAdapter.ts, index.ts, StorageService.ts
-    StorageService.ts ← index.ts
+    IStorageAdapter.ts ← index.ts, MMKVAdapter.ts, StorageService.ts
+    MMKVAdapter.ts ← index.ts, StorageService.ts
+    MigrationService.ts ← index.ts
+    StorageService.ts ← CrashlyticsService.ts, index.ts
     index.ts ← add-book.tsx, book-detail.tsx, _layout.tsx +33 more
 utils/
   AGENTS.md
@@ -860,7 +817,7 @@ web/
 
 ## File Dependencies
 
-> Scanned 161 files
+> Scanned 162 files
 
 ### High-Impact Files
 

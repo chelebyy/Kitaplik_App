@@ -18,7 +18,7 @@ jest.mock("react-native-reanimated", function mockReanimated() {
 });
 
 // MMKV Mock
-jest.mock('react-native-mmkv', () => {
+jest.mock("react-native-mmkv", () => {
   const mockStorage = new Map();
 
   return {

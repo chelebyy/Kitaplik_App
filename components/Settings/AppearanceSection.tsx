@@ -63,6 +63,9 @@ export function AppearanceSection() {
           className="flex-row items-center py-3 min-h-[56px]"
           activeOpacity={0.7}
           onPress={() => changeLanguage(language === "tr" ? "en" : "tr")}
+          accessibilityRole="button"
+          accessibilityLabel={t("settings_language")}
+          accessibilityHint={t("language_change_hint") || "Dil değiştirmek için tıklayın"}
         >
           <View
             className="w-10 h-10 rounded-xl justify-center items-center mr-4"

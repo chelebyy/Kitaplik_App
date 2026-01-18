@@ -5,4 +5,4 @@ import { useBookSearchQuery } from "./useBookSearchQuery";
  * Uses the new React Query implementation under the hood.
  * @deprecated Use useBookSearchQuery directly
  */
-export const useBookSearch = useBookSearchQuery;
+export { useBookSearchQuery as useBookSearch } from "./useBookSearchQuery";
